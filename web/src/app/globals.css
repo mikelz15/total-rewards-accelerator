@@ -5,6 +5,11 @@
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;
+  /* Brand from TRA logo */
+  --brand-teal: #0f6b6d;
+  --brand-teal-deep: #0a4f52;
+  --brand-gold: #d4a017;
+  --brand-gold-bright: #f0b429;
 }
 
 body {

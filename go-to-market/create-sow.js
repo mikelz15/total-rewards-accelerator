@@ -3,11 +3,18 @@
  */
 const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
         Header, Footer, AlignmentType, BorderStyle, WidthType, ShadingType,
-        PageNumber, LevelFormat } = require("docx");
+        PageNumber, LevelFormat, ImageRun, VerticalAlign } = require("docx");
 const fs = require("fs");
 const path = require("path");
 
 const outDir = __dirname;
+const logoPath = path.join(__dirname, "../web/public/brand/tra-logo-sow.png");
+const logoPng = fs.existsSync(logoPath)
+  ? fs.readFileSync(logoPath)
+  : fs.readFileSync(path.join(__dirname, "../web/public/brand/tra-logo-256.png"));
+// Aspect ~1408x768 → header width 160px → height ~87
+const logoW = 160;
+const logoH = 87;
 const border = { style: BorderStyle.SINGLE, size: 4, color: "CBD5E1" };
 const borders = { top: border, bottom: border, left: border, right: border };
 const noBorder = { style: BorderStyle.NONE, size: 0, color: "FFFFFF" };
@@ -103,14 +110,63 @@ const doc = new Document({
       headers: {
         default: new Header({
           children: [
-            new Paragraph({
-              alignment: AlignmentType.RIGHT,
-              children: [
-                new TextRun({
-                  text: "Total Rewards Accelerator v0.3  ·  Design Partner Pilot SOW",
-                  font: "Arial",
-                  size: 14,
-                  color: "64748B",
+            new Table({
+              width: { size: 10880, type: WidthType.DXA },
+              columnWidths: [3200, 7680],
+              rows: [
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      borders: noBorders,
+                      width: { size: 3200, type: WidthType.DXA },
+                      children: [
+                        new Paragraph({
+                          children: [
+                            new ImageRun({
+                              type: "png",
+                              data: logoPng,
+                              transformation: { width: logoW, height: logoH },
+                              altText: {
+                                name: "TRA logo",
+                                description: "Total Rewards Accelerator logo",
+                                title: "Total Rewards Accelerator",
+                              },
+                            }),
+                          ],
+                        }),
+                      ],
+                    }),
+                    new TableCell({
+                      borders: noBorders,
+                      width: { size: 7680, type: WidthType.DXA },
+                      verticalAlign: VerticalAlign.CENTER,
+                      children: [
+                        new Paragraph({
+                          alignment: AlignmentType.RIGHT,
+                          children: [
+                            new TextRun({
+                              text: "Design Partner Pilot SOW  ·  v0.3",
+                              font: "Arial",
+                              size: 14,
+                              color: "64748B",
+                            }),
+                          ],
+                        }),
+                        new Paragraph({
+                          alignment: AlignmentType.RIGHT,
+                          children: [
+                            new TextRun({
+                              text: "Making compensation easy",
+                              font: "Arial",
+                              size: 12,
+                              italics: true,
+                              color: "0F6B6D",
+                            }),
+                          ],
+                        }),
+                      ],
+                    }),
+                  ],
                 }),
               ],
             }),

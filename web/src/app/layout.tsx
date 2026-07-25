@@ -15,9 +15,21 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://tra-web.onrender.com"
+  ),
   title: "Total Rewards Accelerator",
   description:
-    "Stop crunching rows. Start designing strategy. Comp engineering toolkit by Mikéz.",
+    "Making compensation easy. Stop crunching rows — start designing strategy. Comp engineering toolkit by Mikéz.",
+  icons: {
+    icon: [{ url: "/icon.png", type: "image/png" }],
+    apple: [{ url: "/icon.png" }],
+  },
+  openGraph: {
+    title: "Total Rewards Accelerator",
+    description: "Making compensation easy. Comp engineering toolkit by Mikéz.",
+    images: [{ url: "/brand/tra-logo.png" }],
+  },
 };
 
 export default function RootLayout({

@@ -1,149 +1,238 @@
-# Loom script — Total Rewards Accelerator v0.3 (line-by-line)
+# Loom script — Total Rewards Accelerator v0.3
 
-**Product version:** 0.3.0 — includes **Placement Engine** (YOE + education)  
-**Target length:**  
-- **Version A:** ~90 seconds (LinkedIn)  
-- **Version B:** ~4 minutes (DEMO replies)
+**Product:** Total Rewards Accelerator v0.3.1 (Placement Engine: YOE + education)  
+**Demo:** https://tra-web.onrender.com · password `TRA-pilot-2026` (do **not** say the password on camera)
 
-**Setup before record**
-1. Browser only; hide bookmarks  
-2. Open app (local or public demo URL)  
-3. API running (v0.3.0)  
-4. Zoom ~110%  
-5. Path: Home → Cleaner → Equity + Merit → Closer  
+**Lengths**
+- **Version A:** ~90 seconds — LinkedIn / first comment  
+- **Version B:** ~4 minutes — DEMO replies / 1:1 follow-up  
 
-**Click path (full)**  
-Home → **Cleaner** → Load messy HRIS sample → note placement stats → **Equity + Merit** → Run equity + flight risk → show mid vs expected → Fund toward **Expected placement** → Fix parity → **Closer** → set YOE/edu/ranges → Project → placement card → PDF  
+---
+
+## Setup before record
+
+1. Incognito or clean browser profile; hide bookmarks and extensions  
+2. Log in once (password off-camera), then start Loom  
+3. Zoom browser ~110%; window only — no desktop clutter  
+4. Prefetch if free tier may be cold: open demo, Load sample once, leave on Home  
+5. Mic: quiet room, slightly slower than normal conversation  
+6. Optional: camera bubble top-right for cold open only, then shrink/hide for clicks  
+
+**Click path (both versions)**  
+Home → **Cleaner** → **Load messy HRIS sample** → placement stats → **Equity + Merit** → **Run equity + flight risk** → dual stats → Fund toward **Expected placement** → **Fix parity** → **Closer** → Project → CTA  
+
+---
+
+# Cold open — delivery notes (read once)
+
+**Job of the first 8 seconds:** name the pain so Comp / TR people feel seen — then name the product.  
+Do **not** start with “Hey guys,” features, or “I built a tool.”
+
+| Do | Don’t |
+|----|--------|
+| Lead with a Tuesday-night truth | Lead with your title |
+| One breath, then product name | Feature list in sentence one |
+| Look at camera for open + close | Read while clicking open |
+| Smile slightly on CTA | Apologize or over-qualify |
+
+**Energy:** calm operator, not startup hype. You’re showing a toolkit you used on real work.
 
 ---
 
 # Version A — LinkedIn (~90 seconds)
 
-| Time | On screen | Say exactly (or close) |
-|------|-----------|-------------------------|
-| 0:00–0:08 | Home | “If you work in Total Rewards, you know the job isn’t living in Excel — it’s cleaning messy HRIS data, spotting equity risk, and funding merit that actually retains people.” |
-| 0:08–0:15 | Home modules | “I built the Total Rewards Accelerator — Comp Engineering from real healthcare and enterprise work. Version point-three adds my wage-calculator mindset: experience and education.” |
-| 0:15–0:32 | **Cleaner** → Load messy sample | “Step one: Market Data Cleaner. Messy Workday-style export — dollar signs, text ratings, years of experience, education. One click: columns map, inactive rows drop, and the Placement Engine computes expected rates.” |
-| 0:32–0:52 | **Equity + Merit** → Run audit | “Step two: dual lens. Classic mid-compa heatmap — who’s under market mid. And below expected placement — where YOE and degree say they should sit in range. Flight risk shows plain-English drivers, including placement gaps.” |
-| 0:52–1:10 | Merit: Fund toward → Expected placement → Fix parity | “Step three: Remediation. Set a merit pool, fund toward expected placement — or mid, or the max of both — hit Fix Parity. Highest-priority gaps funded first.” |
-| 1:10–1:22 | **Closer** → Project | “For TA: Candidate Closer uses the same engine — YOE, education, range — recommends an offer rate and builds a four-year total-wealth PDF.” |
-| 1:22–1:32 | Home / face | “Design-partner pilots are open. Comment DEMO or DM PILOT. Thanks for watching.” |
+### Timed table
 
-**Loom CTA text:**  
-`Comment DEMO or DM PILOT · Design Partner seats limited · TRA v0.3`
+| Time | On screen | Say (close enough) |
+|------|-----------|---------------------|
+| **0:00–0:10** | **You** (camera) or Home | *Cold open* — see teleprompter block below |
+| 0:10–0:16 | Home modules | “So I productized it. **Total Rewards Accelerator** — Comp Engineering from real healthcare and enterprise work.” |
+| 0:16–0:32 | **Cleaner** → Load messy sample | “Step one: messy HRIS — dollars, text ratings, YOE, education. One click: columns map, junk drops, and the Placement Engine sets expected rates.” |
+| 0:32–0:50 | **Equity + Merit** → Run audit | “Step two: dual lens. Who’s under market mid — and who’s below where experience and degree say they should sit. Flight risk with plain-English drivers.” |
+| 0:50–1:05 | Fund → Expected placement → Fix parity | “Step three: put a real merit pool on it. Fund to mid, to expected placement, or the max of both. Highest-priority gaps first.” |
+| 1:05–1:18 | **Closer** → Project | “For TA: same engine — recommended offer rate and a four-year total-wealth PDF. Not just base pay.” |
+| **1:18–1:30** | Home or **you** | “Design-partner pilots are open — small seats, hands-on with me. Comment **DEMO** or DM **PILOT**. Thanks for watching.” |
+
+---
+
+### Teleprompter — Version A (paste full screen)
+
+Line breaks = natural breath points. Don’t rush the open.
+
+```
+Ninety percent of Total Rewards still lives in spreadsheets.
+
+Cleaning messy HRIS exports at ten p.m.
+Finding who’s under mid before they resign.
+Stretching a merit pool that has to do too much.
+Closing candidates who only see base pay.
+
+I built what I kept rebuilding by hand.
+
+This is the Total Rewards Accelerator —
+Comp Engineering from real healthcare and enterprise work.
+
+Step one — Market Data Cleaner.
+Messy export: YOE, education, dollar signs, text ratings.
+One click: map, clean, expected rates.
+
+Step two — dual lens.
+Classic mid-compa… and expected placement from experience and degree.
+Flight risk with drivers a CHRO can read.
+
+Step three — remediation.
+A real merit pool. Fund to mid, expected placement, or both.
+Priority gaps get funded first.
+
+For Talent Acquisition — Candidate Closer.
+Same engine. Recommended rate. Four-year total-wealth PDF.
+
+Design-partner pilots are open.
+Comment DEMO… or DM PILOT.
+Thanks for watching.
+```
+
+**Shorter cold open only** (if 90s feels tight — swap the first 6 lines):
+
+```
+Compensation work still runs on heroics and spreadsheets.
+I productized the toolkit I used in real merit and equity cycles.
+```
+
+---
+
+### Loom metadata (Version A)
+
+**Title**  
+`Stop crunching rows — Total Rewards Accelerator (90 sec)`
+
+**Description**  
+```
+Comp Engineering toolkit: clean messy HRIS → equity + placement + flight risk → merit pool → total-wealth PDF.
+
+Demo (sample data): https://tra-web.onrender.com
+Comment DEMO or DM PILOT for a design-partner seat.
+Built by Michael Lopez / Mikéz.
+```
+
+**CTA sticker / end card**  
+`DEMO or PILOT · Sample data only · Design partners limited`
 
 ---
 
 # Version B — Full demo (~4 minutes)
 
-### Cold open (0:00–0:25)
+### Cold open (0:00–0:22) — camera preferred
 
-| Time | Click / show | Script |
-|------|----------------|--------|
-| 0:00 | Camera or home | “Hey — Michael Lopez. Thanks for wanting a look at the Total Rewards Accelerator.” |
-| 0:08 | Home modules | “I’ll walk the full loop: clean messy HRIS data with experience and education, audit market mid-compa and expected placement, allocate a merit pool, and close with a total-wealth PDF.” |
-| 0:20 | — | “Three-click philosophy. Shared Placement Engine across every module. Let’s go.” |
+| Time | Screen | Script |
+|------|--------|--------|
+| 0:00–0:08 | **You** | “Hey — Michael Lopez. Quick walkthrough of the Total Rewards Accelerator — the Comp Engineering toolkit I built from real healthcare and enterprise work.” |
+| 0:08–0:18 | Home | “In about four minutes: clean a messy HRIS file with years of experience and education, dual-lens equity, allocate a merit pool, and close with a total-wealth PDF.” |
+| 0:18–0:22 | — | “Three-click philosophy. One shared Placement Engine. Let’s go.” |
 
-### Module 1 — Cleaner + Placement (0:25–1:10)
-
-| Time | Click / show | Script |
-|------|----------------|--------|
-| 0:25 | Nav → **Cleaner** | “Market Data Cleaner — real exports, not perfect CSVs.” |
-| 0:32 | **Load messy HRIS sample** | “Messy sample: metadata row, Worker ID, annualized pay, text ratings like Exceeds Expectations, FTE as percent, terminated employee — plus years of experience, highest education, required education.” |
-| 0:48 | Mapping + quality + placement stats | “Columns map automatically. Quality score goes green. Placement summary: how many people are below expected placement for their YOE and degree, and total dollars of placement gap.” |
-| 1:00 | Preview table if useful | “Each row now carries expected rate, actual mid-compa, and placement gap — same fields every downstream module will use.” |
-| 1:05 | **Pay Equity + Merit Pool** | “Send that into the auditor.” |
-
-### Module 2 — Equity dual lens + Flight risk (1:10–2:20)
-
-| Time | Click / show | Script |
-|------|----------------|--------|
-| 1:10 | **Run equity + flight risk** | “One click runs equity and flight risk together on the enriched file.” |
-| 1:18 | Stats row | “Snapshot: under mid, dollars to mid parity, people below expected placement, dollars to expected, average flight risk.” |
-| 1:30 | Heatmap | “Scatter is performance versus classic compa-ratio — pay divided by range mid. Red is under mid. This is the market lens leaders already know.” |
-| 1:45 | Top raise targets (to mid) | “Top raise targets to mid — with YOE and education on each card, plus expected rate for context.” |
-| 1:55 | Below expected placement list | “Second list: largest gaps to expected placement. Same person can be at mid on market and still below where experience says they should sit — or the reverse. That’s why we keep both lenses.” |
-| 2:05 | Flight risk panel | “Flight risk is rules-based: low compa, high performer underpaid, tenure, and now large gaps below expected placement. Drivers are readable for a CHRO.” |
-
-### Module 3 — Merit pool modes (2:20–3:05)
-
-| Time | Click / show | Script |
-|------|----------------|--------|
-| 2:20 | Scroll to Remediation | “Fix Parity sandbox.” |
-| 2:25 | Set pool $250,000 | “Two hundred fifty thousand dollar pool. Cap increases at fifteen percent so we stay policy-realistic.” |
-| 2:35 | **Fund toward** dropdown | “Three modes: market mid with target compa; expected placement from YOE and education; or max of mid and expected — the more protective of the two.” |
-| 2:45 | Choose **Expected placement** → **Fix parity** | “I’ll fund toward expected placement.” |
-| 2:52 | Allocation table | “Who gets funded, dollars, percent, new pay, new mid-compa — plus expected rate on the row so Finance and Comp share one artifact.” |
-| 3:00 | — | “Switch the mode and re-run to compare scenarios in under a minute.” |
-
-### Module 4 — Closer + placement offer (3:05–3:45)
-
-| Time | Click / show | Script |
-|------|----------------|--------|
-| 3:05 | **Closer** | “Candidate Closer for offer storytelling.” |
-| 3:10 | Base / bonus / LTI | “Base, bonus, LTI as usual.” |
-| 3:15 | YOE, education, required edu, range min/mid/max | “Same Placement Engine: years of experience, education, required education, and the job’s range.” |
-| 3:25 | **Project total wealth** | “Expected rate, placement gap, credit years — then a four-year stacked wealth projection.” |
-| 3:35 | Optional: check “recommended base” | “You can project wealth on the recommended base instead of the stated offer — useful when TA is negotiating into range.” |
-| 3:40 | PDF | “One-page PDF for the candidate conversation.” |
-
-### Close (3:45–4:00)
-
-| Time | Click / show | Script |
-|------|----------------|--------|
-| 3:45 | Home | “That’s the Accelerator v0.3: Cleaner, Placement Engine, Equity, Flight Risk, Merit modes, Tracker, Closer.” |
-| 3:52 | — | “Design-partner pilots — fixed scope, hands-on with me. Reply PILOT with headcount and whether pain is merit, equity, or offers. Thanks.” |
-
----
-
-# Teleprompter — Version A only
+### Teleprompter — Version B cold open only
 
 ```
-If you work in Total Rewards, you know the job isn’t living in Excel —
-it’s cleaning messy HRIS data, spotting equity risk,
-and funding merit that actually retains people.
+Hey — Michael Lopez.
 
-I built the Total Rewards Accelerator —
-Comp Engineering from real healthcare and enterprise work.
-Version point-three adds my wage-calculator mindset: experience and education.
+Quick walkthrough of the Total Rewards Accelerator —
+the Comp Engineering toolkit I built from real healthcare
+and enterprise work.
 
-Step one: Market Data Cleaner.
-Messy export with YOE and education — one click: map, clean, expected rates.
+In about four minutes:
+clean a messy HRIS file with years of experience and education…
+dual-lens equity…
+allocate a merit pool…
+and close with a total-wealth PDF.
 
-Step two: dual lens.
-Classic mid-compa heatmap, and below expected placement for YOE and degree.
-Flight risk with plain-English drivers.
+Three-click philosophy.
+One shared Placement Engine.
+Let’s go.
+```
 
-Step three: Remediation.
-Merit pool funded toward expected placement, mid, or max of both.
+### Module 1 — Cleaner + Placement (0:22–1:05)
 
-For TA: Closer uses the same engine — recommended offer rate and a four-year wealth PDF.
+| Time | Click / show | Script |
+|------|----------------|--------|
+| 0:22 | **Cleaner** | “Market Data Cleaner — real exports, not perfect CSVs.” |
+| 0:28 | **Load messy HRIS sample** | “Messy sample: metadata row, Worker ID, annualized pay, text ratings like Exceeds Expectations, FTE as percent, a terminated employee — plus YOE, highest education, required education.” |
+| 0:45 | Quality + placement stats | “Columns map. Quality score goes green. Placement summary: how many people sit below expected for their YOE and degree — and the dollar gap.” |
+| 0:55 | Preview (optional) | “Each row carries expected rate, mid-compa, placement gap — same fields every module uses.” |
+| 1:00 | **Equity + Merit** | “Into the auditor.” |
 
-Design-partner pilots are open.
-Comment DEMO or DM PILOT. Thanks for watching.
+### Module 2 — Equity + flight risk (1:05–2:15)
+
+| Time | Click / show | Script |
+|------|----------------|--------|
+| 1:05 | **Run equity + flight risk** | “One click: equity and flight risk on the enriched file.” |
+| 1:12 | Stats row | “Under mid… dollars to mid… below expected placement… dollars to expected… average flight risk.” |
+| 1:25 | Heatmap | “Performance versus classic mid-compa. Red is under mid — the market lens leaders already know.” |
+| 1:40 | Top raise targets | “Top raises to mid — YOE and education on the card, expected rate for context.” |
+| 1:50 | Below expected list | “Second list: largest gaps to expected placement. You can look ‘fine’ on mid and still sit below experience. That’s why we keep both lenses.” |
+| 2:00 | Flight risk | “Rules-based flight risk: low compa, high performer underpaid, tenure, placement gaps. Drivers a CHRO can read — not a black box.” |
+
+### Module 3 — Merit pool (2:15–3:00)
+
+| Time | Click / show | Script |
+|------|----------------|--------|
+| 2:15 | Remediation | “Fix Parity sandbox.” |
+| 2:20 | Pool $250k, max 15% | “Two hundred fifty thousand. Cap increases at fifteen percent so it stays policy-real.” |
+| 2:30 | Fund toward dropdown | “Three modes: market mid… expected placement… or max of both.” |
+| 2:40 | **Expected placement** → **Fix parity** | “Funding toward expected placement.” |
+| 2:48 | Allocation table | “Who’s funded, dollars, percent, new pay, new compa — one artifact Comp and Finance can defend.” |
+| 2:55 | — | “Change the mode, re-run — scenario compare in under a minute.” |
+
+### Module 4 — Closer (3:00–3:40)
+
+| Time | Click / show | Script |
+|------|----------------|--------|
+| 3:00 | **Closer** | “Candidate Closer for offer storytelling.” |
+| 3:05 | Base / bonus / LTI | “Base, bonus, LTI as usual.” |
+| 3:10 | YOE / edu / range | “Same Placement Engine: experience, education, required education, range min mid max.” |
+| 3:20 | **Project total wealth** | “Expected rate, placement gap, credit years — then four-year stacked wealth.” |
+| 3:30 | Optional recommended base | “You can project on recommended base when TA is negotiating into range.” |
+| 3:35 | PDF | “One-page PDF for the candidate conversation.” |
+
+### Close (3:40–4:00)
+
+| Time | Screen | Script |
+|------|--------|--------|
+| 3:40 | Home or you | “That’s the Accelerator: Cleaner, Placement, Equity, Flight Risk, Merit, Closer.” |
+| 3:48 | You | “Design-partner pilots — fixed scope, hands-on with me. Reply **PILOT** with headcount and whether pain is merit, equity, or offers. Thanks.” |
+
+### Teleprompter — Version B close only
+
+```
+That’s the Accelerator:
+Cleaner, Placement, Equity, Flight Risk, Merit, Closer.
+
+Design-partner pilots — fixed scope, hands-on with me.
+Reply PILOT with headcount
+and whether pain is merit, equity, or offers.
+Thanks.
 ```
 
 ---
 
 # Click checklist (print)
 
-- [ ] Home  
+- [ ] Logged in (password off-camera)  
+- [ ] Home — cold open to camera  
 - [ ] Cleaner → Load messy HRIS sample  
-- [ ] Point at quality + **below expected placement** stats  
+- [ ] Point: quality + **below expected placement**  
 - [ ] Equity + Merit → Run equity + flight risk  
-- [ ] Point mid gap vs expected gap  
-- [ ] Top placement gaps list  
+- [ ] Point: mid gap vs expected gap  
 - [ ] Fund toward → Expected placement → Fix parity  
-- [ ] Closer → YOE/edu/range → Project → placement card  
+- [ ] Closer → Project → placement card  
 - [ ] Optional PDF  
-- [ ] CTA: DEMO / PILOT  
+- [ ] CTA to camera: DEMO / PILOT  
 
 ---
 
-# Title / description for Loom
+# One-take tips
 
-**Title:**  
-`Total Rewards Accelerator v0.3 — YOE + Education Placement, Equity, Merit, Offers`
-
-**Description:**  
-`Comp Engineering toolkit. Dual lens: market mid-compa + expected placement from years of experience and education. Design partner pilots: reply DEMO or PILOT. Built by Michael Lopez / Mikéz.`
+1. **Record open twice** if needed — splice only if Loom forces it; clean open matters more than perfect clicks.  
+2. If free tier spins: start recording *after* sample already loaded once, or keep a tab warm.  
+3. Don’t say “password,” “Render,” or “free tier” on the LinkedIn cut.  
+4. End on **face + CTA** — freeze 1 second after “Thanks for watching.”  
+5. First comment under LinkedIn: demo link + Loom + “DM for access” (see `05-post-hosting-copy.md`).  

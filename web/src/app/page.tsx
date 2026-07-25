@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const modules = [
   {
@@ -34,14 +35,17 @@ const modules = [
 export default function HomePage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
-      <section className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+      <section className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
-            Comp Engineering Toolkit
+            Comp Engineering Toolkit · Mikéz
           </p>
           <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl text-balance">
             The Total Rewards Accelerator
           </h1>
+          <p className="mt-2 text-sm font-medium tracking-wide text-teal-800">
+            Making compensation easy
+          </p>
           <p className="mt-4 max-w-xl text-lg text-slate-600">
             Stop crunching rows. Start designing strategy. Cleaner → equity & flight risk → merit
             remediation → candidate pipeline → close with total wealth.
@@ -73,6 +77,9 @@ export default function HomePage() {
         </div>
 
         <div className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm">
+          <div className="mb-5 flex justify-center border-b border-slate-100 pb-5">
+            <BrandLogo variant="hero" href={null} priority />
+          </div>
           <p className="text-sm font-medium text-slate-900">Three-Click Philosophy</p>
           <ol className="mt-4 space-y-3 text-sm text-slate-600">
             <li className="flex gap-3">

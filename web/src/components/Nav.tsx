@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "@/lib/api";
 import { resetDemoSession, saveCleanResult } from "@/lib/session";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const links = [
   { href: "/", label: "Home" },
@@ -42,14 +43,14 @@ export function Nav() {
 
   return (
     <header className="border-b border-slate-200 bg-white/90 backdrop-blur sticky top-0 z-50">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <Link href="/" className="group flex flex-col">
-          <span className="text-sm font-semibold tracking-tight text-slate-900 group-hover:text-teal-700">
-            Total Rewards Accelerator
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5">
+        <div className="flex min-w-0 items-center gap-3">
+          <BrandLogo variant="nav" priority />
+          <span className="hidden text-[11px] text-slate-500 sm:block sm:max-w-[9rem] leading-snug">
+            Mikéz Comp Engineering Toolkit
           </span>
-          <span className="text-[11px] text-slate-500">Mikéz Comp Engineering Toolkit</span>
-        </Link>
-        <nav className="flex flex-wrap items-center gap-1">
+        </div>
+        <nav className="flex flex-wrap items-center justify-end gap-1">
           {links.map((link) => {
             const active = pathname === link.href;
             return (

@@ -1,8 +1,8 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { BrandLogo } from "@/components/BrandLogo";
 
 function LoginForm() {
   const router = useRouter();
@@ -38,13 +38,11 @@ function LoginForm() {
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-4 py-12">
       <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
+        <BrandLogo variant="login" href={null} priority />
+        <p className="mt-5 text-center text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
           Design partner demo
         </p>
-        <h1 className="mt-2 text-2xl font-semibold text-slate-900">
-          Total Rewards Accelerator
-        </h1>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-center text-sm text-slate-600">
           Enter the demo password shared for this pilot. Sample data only — do not upload
           real unscrubbed employee files.
         </p>
