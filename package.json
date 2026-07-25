@@ -1,0 +1,14 @@
+{
+  "name": "total-rewards-accelerator",
+  "version": "0.3.1",
+  "private": true,
+  "description": "Total Rewards Accelerator — Mikéz Comp Engineering Toolkit",
+  "scripts": {
+    "dev": "bash scripts/dev.sh",
+    "dev:web": "npm --prefix web run dev -- --hostname 127.0.0.1 --port 3000",
+    "dev:api": "cd api && PYTHONPATH=. python3 -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000",
+    "build:web": "npm --prefix web run build",
+    "install:web": "npm --prefix web install",
+    "install:api": "python3 -m pip install --user -r api/requirements.txt"
+  }
+}

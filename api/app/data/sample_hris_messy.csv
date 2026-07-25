@@ -1,0 +1,25 @@
+Export generated 03/12/2025 08:14 AM - Confidential
+Worker ID,Legal Name,Business Title,Supervisory Organization,Location,Total Base Pay Annualized,Compensation Grade,Pay Range Minimum,Pay Range Midpoint,Pay Range Maximum,Overall Rating,Original Hire Date,FTE %,FLSA Status,Worker Status,Manager,Job Code,Years of Experience,Highest Education,Required Education
+W-1001,Jane Doe,Software Engineer,Engineering - Platform,Denver CO,"$92,000",G08,"$95,000","$110,000","$125,000",Exceeds Expectations,03/15/2019,100,Exempt,Active,Grace Kim,SE-II,6,Bachelors,Bachelors
+W-1002,Marcus Chen,Software Engineer,Engineering - Platform,Denver CO,"88,500",G08,95000,110000,125000,Meets Expectations,07/01/2020,1.0,Exempt,Active,Grace Kim,SE-II,4,Bachelors,Bachelors
+W-1003,Aisha Rahman,Senior Software Engineer,Engineering - Platform,Remote,"$128,000",G10,120000,140000,160000,Outstanding,01/10/2017,100%,Exempt,Active,Grace Kim,SE-SR,10,Masters,Bachelors
+W-1004,Luis Ortega,Software Engineer,Engineering - Platform,Denver CO,$78000,G08,95000,110000,125000,Exceeds,11/22/2021,100,Exempt,Active,Grace Kim,SE-II,2,Associates,Associates
+W-1005,Priya Shah,Data Analyst,Analytics COE,Chicago IL,"$72,000",G06,70000,82000,94000,Meets,05/04/2022,100,Exempt,Active,Tom Nguyen,DA-I,3,Bachelors,Bachelors
+W-1006,Tom Nguyen,Data Analyst,Analytics COE,Chicago IL,81000,G06,70000,82000,94000,Fully Meets,09/18/2018,1,Exempt,Active,Elena Brooks,DA-I,7,Masters,Bachelors
+W-1007,Elena Brooks,HR Business Partner,Human Resources,Denver CO,"$95,000",G09,90000,105000,120000,Exceeds Expectations,02/28/2016,100,Exempt,Active,Chris Patel,HRBP,9,Bachelors,Bachelors
+W-1008,Chris Patel,HR Business Partner,Human Resources,Denver CO,89000,G09,90000,105000,120000,Meets Expectations,08/12/2020,100,Exempt,Active,Elena Brooks,HRBP,5,Bachelors,Bachelors
+W-1009,Sofia Alvarez,Nurse Manager,Nursing - Inpatient,Main Campus,$118000,G11,110000,128000,146000,Outstanding,04/03/2014,1.0,Exempt,Active,Deb Gardner,NM-01,12,Masters,Bachelors
+W-1010,Derek Hill,Registered Nurse,Nursing - Emergency,Main Campus,$71000,G05,68000,78000,88000,Meets,06/30/2019,0.9,Non-Exempt,Active,Sommer Walker,RN-II,5,Associates,Associates
+W-1011,Amara Okonkwo,Registered Nurse,Nursing - Emergency,Main Campus,$69000,G05,68000,78000,88000,Exceeds Expectations,12/01/2021,100,Non-Exempt,Active,Sommer Walker,RN-II,3,Bachelors,Associates
+W-1012,Jon Walsh,Registered Nurse,Nursing - MedSurg,Main Campus,$82000,G05,68000,78000,88000,Developing,10/15/2015,1,Non-Exempt,Active,Lisa Vogel,RN-II,11,Associates,Associates
+W-1013,Nina Petrov,Compensation Analyst,Human Resources - Comp,Denver CO,$84000,G07,80000,92000,104000,Exceeds,03/09/2020,100,Exempt,Active,Kimberly Hudson,COMP-A,6,Bachelors,Bachelors
+W-1014,Samir Khan,Compensation Analyst,Human Resources - Comp,Denver CO,$76000,G07,80000,92000,104000,Meets Expectations,01/20/2023,100,Exempt,Active,Kimberly Hudson,COMP-A,2,Bachelors,Bachelors
+W-1015,Riley Quinn,Program Manager,Operations,Boulder CO,$102000,G09,98000,115000,132000,Fully Meets,07/07/2018,1,Exempt,Active,Harper Lee,PM-II,8,Masters,Bachelors
+W-1016,Harper Lee,Program Manager,Operations,Boulder CO,$98000,G09,98000,115000,132000,Meets,05/19/2021,100,Exempt,Active,Riley Quinn,PM-II,4,Bachelors,Bachelors
+W-1017,Olivia Grant,Administrative Assistant,Operations Admin,Denver CO,$48000,G03,42000,50000,58000,Meets Expectations,09/01/2019,100,Non-Exempt,Active,Riley Quinn,AA-I,5,Associates,High School/GED
+W-1018,Ben Torres,Administrative Assistant,Operations Admin,Denver CO,$41000,G03,42000,50000,58000,Exceeds Expectations,02/14/2022,1.0,Non-Exempt,Active,Riley Quinn,AA-I,2,High School/GED,High School/GED
+W-1019,Grace Kim,Senior Software Engineer,Engineering - Platform,Remote,$135000,G10,120000,140000,160000,Outstanding,08/08/2015,100,Exempt,Active,CTO Office,SE-SR,12,Masters,Bachelors
+W-1020,Ethan Brooks,Data Analyst,Analytics COE,Chicago IL,$65000,G06,70000,82000,94000,Exceeds,11/11/2022,100,Exempt,Active,Tom Nguyen,DA-I,1,Bachelors,Bachelors
+W-1021,Former Employee,Software Engineer,Engineering - Platform,Denver CO,$90000,G08,95000,110000,125000,Meets,01/01/2018,100,Exempt,Terminated,Grace Kim,SE-II,8,Bachelors,Bachelors
+W-1022,Hourly Demo,Unit Clerk,Nursing - Emergency,Main Campus,,G02,,,,Meets Expectations,06/01/2024,80,Non-Exempt,Active,Sommer Walker,UC-I,1,Associates,High School/GED
+,Extra Note Row Should Be Skipped,,,,,

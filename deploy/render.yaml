@@ -1,0 +1,42 @@
+# Render Blueprint — monorepo root = Total_Rewards_Accelerator
+# https://render.com/docs/blueprint-spec
+#
+# After first deploy:
+# 1. Copy tra-api URL → set tra-web env NEXT_PUBLIC_API_URL
+# 2. Optionally set DEMO_PASSWORD on both services
+# 3. Set CORS_ORIGINS on tra-api to the tra-web URL
+
+services:
+  - type: web
+    name: tra-api
+    runtime: python
+    rootDir: api
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: PYTHONPATH=. uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      - key: CORS_ORIGINS
+        sync: false
+      - key: DEMO_PASSWORD
+        sync: false
+
+  - type: web
+    name: tra-web
+    runtime: node
+    rootDir: web
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: "20.18.1"
+      - key: NEXT_PUBLIC_API_URL
+        # Set to https://tra-api-xxxx.onrender.com after API is live
+        sync: false
+      - key: DEMO_PASSWORD
+        sync: false
+      - key: NEXT_PUBLIC_API_DEMO_PASSWORD
+        sync: false
