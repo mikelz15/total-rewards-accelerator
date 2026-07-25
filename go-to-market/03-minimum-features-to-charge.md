@@ -25,7 +25,7 @@ Most of your near-term revenue should be **Bar A**.
 - [x] Merit pool remediation with allocation table  
 - [x] Candidate tracker (basic)  
 - [x] Candidate closer + PDF  
-- [ ] **Hosted demo URL** (not “my laptop localhost”) — *do this before paid pilots* (configs ready: `deploy/`)  
+- [x] **Hosted demo URL** (not “my laptop localhost”) — https://tra-web.onrender.com  
 - [x] **One-click demo dataset** always works  
 - [x] **Reset demo** button / fresh sample path  
 
