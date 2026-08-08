@@ -21,15 +21,13 @@
 
 ## Access
 
-| Item | Value |
-|------|--------|
-| **Demo password** | `TRA-pilot-2026` |
-| Share password | **DM only** — do not put in public LinkedIn body |
+**Open public demo — no password.**  
+Sample data only; Cleaner uploads capped (10 rows, PHI header scan, rate limit). Tracker/Closer are sample-only.
 
 Web env (Vercel production):
 
-- `DEMO_PASSWORD` / `NEXT_PUBLIC_API_DEMO_PASSWORD`
 - `NEXT_PUBLIC_API_URL=https://tra-api-starter.onrender.com`
+- `DEMO_PASSWORD` **unset** (open access)
 
 ## Demo path
 
@@ -70,4 +68,4 @@ After DNS propagates (often 5–60 min), share:
 
 > Try Total Rewards Accelerator (YOE + education placement):  
 > https://trytra.vercel.app  
-> Sample data demo. DM **PILOT** for password + guided walkthrough + SOW.
+> Sample data demo — no login. DM **PILOT** for a guided walkthrough + SOW.

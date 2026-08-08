@@ -31,7 +31,7 @@ You already have **`tra-api`** (`https://tra-api-n0mh.onrender.com`).
 |-----|--------|
 | `CORS_ORIGINS` | `https://YOUR-APP.vercel.app` (or `*` temporarily) |
 | `CORS_ORIGIN_REGEX` | `https://.*\.vercel\.app` |
-| `DEMO_PASSWORD` | `TRA-pilot-2026` (or your chosen gate) |
+| `DEMO_PASSWORD` | leave **unset** for open public demo |
 
 5. Smoke-test:
 
@@ -52,8 +52,8 @@ Blueprint at repo root `render.yaml` describes the paid API-only layout for new 
 | Name | Value |
 |------|--------|
 | `NEXT_PUBLIC_API_URL` | `https://tra-api-n0mh.onrender.com` |
-| `DEMO_PASSWORD` | same as API (optional gate) |
-| `NEXT_PUBLIC_API_DEMO_PASSWORD` | same as API `DEMO_PASSWORD` |
+| `DEMO_PASSWORD` | leave **unset** (open demo) |
+| `NEXT_PUBLIC_API_DEMO_PASSWORD` | leave **unset** unless API is gated |
 
 4. Deploy → copy production URL  
 5. Optional: add custom domain under Project → Settings → Domains  
@@ -92,7 +92,7 @@ CORS_ORIGIN_REGEX=https://.*\.vercel\.app
 - [ ] Login + Cleaner sample works from Vercel URL (private window)  
 - [ ] Update `go-to-market/LIVE-DEMO-URLS.md` with Vercel URL  
 - [ ] Suspend free **tra-web** on Render (optional cost/cleanup)  
-- [ ] LinkedIn blurb uses Vercel URL; password still DM-only  
+- [ ] LinkedIn blurb uses short Vercel URL (open access)  
 
 ---
 
@@ -100,7 +100,7 @@ CORS_ORIGIN_REGEX=https://.*\.vercel\.app
 
 - Custom upload/paste: max **10 rows**, **5 / IP / week**, PHI **header** scan  
 - Tracker / Closer: **sample data only**  
-- Optional `DEMO_PASSWORD` gate (header `X-Demo-Password`)  
+- Optional `DEMO_PASSWORD` gate is **off** for public demo  
 
 ---
 
