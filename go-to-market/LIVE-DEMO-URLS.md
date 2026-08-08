@@ -3,12 +3,12 @@
 **Target stack:** Vercel (web) + Render **Starter** API (always-on)  
 **Legacy (free tier, cold starts):** still listed until cutover is complete
 
-## Primary (after cutover — fill in)
+## Primary (share this)
 
 | Service | Public URL | Status |
 |---------|------------|--------|
-| **Web app (share this)** | _Set after Vercel deploy_ | pending |
-| **API** | https://tra-api-n0mh.onrender.com | upgrade plan → **Starter** |
+| **Web app (share this)** | https://total-rewards-accelerator.vercel.app | **live** |
+| **API** | https://tra-api-n0mh.onrender.com | upgrade plan → **Starter** (still free until you change it) |
 | Health | https://tra-api-n0mh.onrender.com/health | — |
 | API docs | https://tra-api-n0mh.onrender.com/docs | — |
 
@@ -52,5 +52,5 @@ Set the same password on Vercel as:
 ## LinkedIn / DM blurb
 
 > Try Total Rewards Accelerator (YOE + education placement):  
-> https://YOUR-PROJECT.vercel.app  
+> https://total-rewards-accelerator.vercel.app  
 > Sample data demo. DM **PILOT** for password + guided walkthrough + SOW.
