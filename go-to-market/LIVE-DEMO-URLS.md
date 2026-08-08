@@ -1,25 +1,16 @@
 # Live demo URLs — Total Rewards Accelerator
 
-**Target stack:** Vercel (web) + Render **Starter** API (always-on)  
-**Legacy (free tier, cold starts):** still listed until cutover is complete
+**Stack:** Vercel (web) + Render **Starter** API (always-on)  
+**Updated:** 2026-08-07
 
 ## Primary (share this)
 
 | Service | Public URL | Status |
 |---------|------------|--------|
 | **Web app (share this)** | https://total-rewards-accelerator.vercel.app | **live** |
-| **API** | https://tra-api-n0mh.onrender.com | upgrade plan → **Starter** (still free until you change it) |
-| Health | https://tra-api-n0mh.onrender.com/health | — |
-| API docs | https://tra-api-n0mh.onrender.com/docs | — |
-
-## Legacy free-tier hosts (temporary)
-
-| Service | Public URL |
-|---------|------------|
-| Web (Render free) | https://tra-web.onrender.com |
-| API | https://tra-api-n0mh.onrender.com |
-
-Free services **spin down when idle** — first load can take 30–60s. Prefer paid API + Vercel web.
+| **API (Starter / paid)** | https://tra-api-starter.onrender.com | **live · always-on** |
+| Health | https://tra-api-starter.onrender.com/health | — |
+| API docs | https://tra-api-starter.onrender.com/docs | — |
 
 ## Access
 
@@ -28,25 +19,25 @@ Free services **spin down when idle** — first load can take 30–60s. Prefer p
 | **Demo password** | `TRA-pilot-2026` |
 | Share password | **DM only** — do not put in public LinkedIn body |
 
-Set the same password on Vercel as:
+Web env (Vercel production):
 
-- `DEMO_PASSWORD`
-- `NEXT_PUBLIC_API_DEMO_PASSWORD` (must match API `DEMO_PASSWORD`)
+- `DEMO_PASSWORD` / `NEXT_PUBLIC_API_DEMO_PASSWORD`
+- `NEXT_PUBLIC_API_URL=https://tra-api-starter.onrender.com`
 
 ## Demo path
 
-1. **Cleaner** → Load messy HRIS sample (≤10 rows; PHI scan; sample preferred)  
-2. **Equity + Merit** → Run equity + flight risk → merit toward expected placement  
-3. **Candidate Tracker** → sample pipeline only → Open in Closer  
-4. **Closer** → Project four-year total wealth / PDF  
-5. **Pricing** → SaaS + one-time bands  
+1. **Cleaner** → Load messy HRIS sample  
+2. **Equity + Merit** → Run equity + flight risk → merit  
+3. **Candidate Tracker** → sample pipeline → Open in Closer  
+4. **Closer** → four-year total wealth / PDF  
+5. **Pricing**  
 
 ## Important
 
-- **Share the web URL only** (Vercel after cutover).  
-- Render API should be **Starter (paid)** so cold opens stay fast.  
-- **Sample data only** — do not upload real unscrubbed employee files.  
-- Deploy runbook: `../deploy/README.md`  
+- Share the **Vercel** URL only.  
+- API is **Starter** (~$7/mo) so cold opens stay fast.  
+- **Sample data only** — do not upload real employee files.  
+- Free-tier `tra-api` / `tra-web` were superseded (suspend in dashboard if still listed).  
 - Repo: [mikelz15/total-rewards-accelerator](https://github.com/mikelz15/total-rewards-accelerator)
 
 ## LinkedIn / DM blurb
