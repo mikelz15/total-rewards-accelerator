@@ -8,13 +8,13 @@
 | **API** (FastAPI) | [Render](https://render.com) | **Starter (paid)** | Always-on — no 30–60s cold start |
 
 ```
-Browser  →  https://your-app.vercel.app  (Next.js)
+Browser  →  https://totalrewardsaccelerator.com  (Next.js · Vercel)
                 │  NEXT_PUBLIC_API_URL
                 ▼
-         https://tra-api-n0mh.onrender.com  (FastAPI · Starter)
+         https://tra-api-starter.onrender.com  (FastAPI · Starter)
 ```
 
-Existing free `tra-web` on Render can stay until Vercel is live, then suspend it.
+Aliases (`trytra.vercel.app`, etc.) redirect to the custom domain.
 
 ---
 
@@ -29,7 +29,7 @@ You already have **`tra-api`** (`https://tra-api-n0mh.onrender.com`).
 
 | Key | Value |
 |-----|--------|
-| `CORS_ORIGINS` | `https://YOUR-APP.vercel.app` (or `*` temporarily) |
+| `CORS_ORIGINS` | `https://totalrewardsaccelerator.com,https://www.totalrewardsaccelerator.com,...` |
 | `CORS_ORIGIN_REGEX` | `https://.*\.vercel\.app` |
 | `DEMO_PASSWORD` | leave **unset** for open public demo |
 
@@ -51,7 +51,7 @@ Blueprint at repo root `render.yaml` describes the paid API-only layout for new 
 
 | Name | Value |
 |------|--------|
-| `NEXT_PUBLIC_API_URL` | `https://tra-api-n0mh.onrender.com` |
+| `NEXT_PUBLIC_API_URL` | `https://tra-api-starter.onrender.com` |
 | `DEMO_PASSWORD` | leave **unset** (open demo) |
 | `NEXT_PUBLIC_API_DEMO_PASSWORD` | leave **unset** unless API is gated |
 
@@ -79,7 +79,7 @@ vercel --prod
 Render → tra-api → Environment:
 
 ```text
-CORS_ORIGINS=https://YOUR-APP.vercel.app
+CORS_ORIGINS=https://totalrewardsaccelerator.com,https://www.totalrewardsaccelerator.com
 CORS_ORIGIN_REGEX=https://.*\.vercel\.app
 ```
 
@@ -92,7 +92,7 @@ CORS_ORIGIN_REGEX=https://.*\.vercel\.app
 - [ ] Login + Cleaner sample works from Vercel URL (private window)  
 - [ ] Update `go-to-market/LIVE-DEMO-URLS.md` with Vercel URL  
 - [ ] Suspend free **tra-web** on Render (optional cost/cleanup)  
-- [ ] LinkedIn blurb uses short Vercel URL (open access)  
+- [ ] LinkedIn blurb uses https://totalrewardsaccelerator.com (open access)  
 
 ---
 

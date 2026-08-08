@@ -1,7 +1,7 @@
 # Copy pack — hosted demo is live
 
-**Demo URL:** https://tra-web.onrender.com  
-**Pilot password (DM only):** `TRA-pilot-2026`  
+**Demo URL:** https://totalrewardsaccelerator.com  
+**Access:** open public demo (no password)  
 **Loom URL:** _(paste after you record — see `04-loom-script.md`)_
 
 ---
@@ -12,8 +12,8 @@
 Quick context: I’m a Compensation Partner / HR Systems Strategist (healthcare + consulting). This started as tools I used in real merit and equity work — not a weekend experiment.
 
 Try the early-access demo (sample data only):
-https://tra-web.onrender.com
-(DM me for the password)
+https://totalrewardsaccelerator.com
+(Sample data demo — no login)
 
 90-second walkthrough:
 [LOOM_URL]
@@ -29,8 +29,8 @@ Comment DEMO or DM PILOT for a guided session.
 ```
 Appreciate you. Here’s the demo (sample HRIS data only — please don’t upload real unscrubbed employee files):
 
-https://tra-web.onrender.com
-Password: TRA-pilot-2026
+https://totalrewardsaccelerator.com
+No password — open sample demo
 
 Path: Cleaner → Load messy sample → Equity + Merit → Run audit → Fix parity → Closer.
 (First load after idle can take ~30–60s on free hosting.)
@@ -60,7 +60,7 @@ Quick fit questions:
 ```
 Total Rewards Accelerator v0.3 — Clean messy HRIS → equity + placement + flight risk → merit pool → total-wealth PDF.
 
-Demo: https://tra-web.onrender.com
+Demo: https://totalrewardsaccelerator.com
 Comment DEMO or DM PILOT for a design-partner seat.
 Sample data only.
 ```

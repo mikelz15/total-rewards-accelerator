@@ -24,7 +24,7 @@
 ## Product
 
 - Nav, login, home: `BrandLogo` component  
-- Demo: https://tra-web.onrender.com  
+- Demo: https://totalrewardsaccelerator.com  
 
 ## SOW
 

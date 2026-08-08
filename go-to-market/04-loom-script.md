@@ -1,7 +1,7 @@
 # Loom script — Total Rewards Accelerator v0.3
 
 **Product:** Total Rewards Accelerator v0.3.1 (Placement Engine: YOE + education)  
-**Demo:** https://tra-web.onrender.com · password `TRA-pilot-2026` (do **not** say the password on camera)
+**Demo:** https://totalrewardsaccelerator.com — open demo, no password
 
 **Lengths**
 - **Version A:** ~90 seconds — LinkedIn / first comment  
@@ -110,7 +110,7 @@ I productized the toolkit I used in real merit and equity cycles.
 ```
 Comp Engineering toolkit: clean messy HRIS → equity + placement + flight risk → merit pool → total-wealth PDF.
 
-Demo (sample data): https://tra-web.onrender.com
+Demo (sample data): https://totalrewardsaccelerator.com
 Comment DEMO or DM PILOT for a design-partner seat.
 Built by Michael Lopez / Mikéz.
 ```

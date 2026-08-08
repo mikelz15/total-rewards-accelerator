@@ -2,7 +2,7 @@
 
 **North star (90 days):** first paid design partners, not SaaS scale.  
 **Primary offer:** Design Partner Pilot **$3,000** (first 3) · **$4,500** standard · Workshop **$2,000–$3,500**.  
-**Demo:** https://tra-web.onrender.com · password via DM only.
+**Demo:** https://totalrewardsaccelerator.com · open demo (no password).
 
 **Planning target (base case):** **$12,000–$18,000** closed in 90 days  
 = e.g. **3 early pilots @ $3–4.5k** *or* **2 pilots + 1–2 workshops**.
