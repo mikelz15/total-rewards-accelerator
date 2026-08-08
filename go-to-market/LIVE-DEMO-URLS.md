@@ -1,14 +1,25 @@
-# Live demo URLs (Render production)
+# Live demo URLs — Total Rewards Accelerator
 
-**Generated:** 2026-07-25  
-**Hosts:** Render free tier (API + Web)
+**Target stack:** Vercel (web) + Render **Starter** API (always-on)  
+**Legacy (free tier, cold starts):** still listed until cutover is complete
+
+## Primary (after cutover — fill in)
+
+| Service | Public URL | Status |
+|---------|------------|--------|
+| **Web app (share this)** | _Set after Vercel deploy_ | pending |
+| **API** | https://tra-api-n0mh.onrender.com | upgrade plan → **Starter** |
+| Health | https://tra-api-n0mh.onrender.com/health | — |
+| API docs | https://tra-api-n0mh.onrender.com/docs | — |
+
+## Legacy free-tier hosts (temporary)
 
 | Service | Public URL |
 |---------|------------|
-| **Web app (share this)** | https://tra-web.onrender.com |
-| **API** | https://tra-api-n0mh.onrender.com |
-| API health | https://tra-api-n0mh.onrender.com/health |
-| API docs | https://tra-api-n0mh.onrender.com/docs |
+| Web (Render free) | https://tra-web.onrender.com |
+| API | https://tra-api-n0mh.onrender.com |
+
+Free services **spin down when idle** — first load can take 30–60s. Prefer paid API + Vercel web.
 
 ## Access
 
@@ -17,19 +28,29 @@
 | **Demo password** | `TRA-pilot-2026` |
 | Share password | **DM only** — do not put in public LinkedIn body |
 
+Set the same password on Vercel as:
+
+- `DEMO_PASSWORD`
+- `NEXT_PUBLIC_API_DEMO_PASSWORD` (must match API `DEMO_PASSWORD`)
+
+## Demo path
+
+1. **Cleaner** → Load messy HRIS sample (≤10 rows; PHI scan; sample preferred)  
+2. **Equity + Merit** → Run equity + flight risk → merit toward expected placement  
+3. **Candidate Tracker** → sample pipeline only → Open in Closer  
+4. **Closer** → Project four-year total wealth / PDF  
+5. **Pricing** → SaaS + one-time bands  
+
 ## Important
 
-- **Sample data only** — do not upload real unscrubbed employee files.
-- Free tier **spins down when idle**; first load after sleep can take ~30–60 seconds.
-- Auto-deploys from `main` on [mikelz15/total-rewards-accelerator](https://github.com/mikelz15/total-rewards-accelerator).
+- **Share the web URL only** (Vercel after cutover).  
+- Render API should be **Starter (paid)** so cold opens stay fast.  
+- **Sample data only** — do not upload real unscrubbed employee files.  
+- Deploy runbook: `../deploy/README.md`  
+- Repo: [mikelz15/total-rewards-accelerator](https://github.com/mikelz15/total-rewards-accelerator)
 
 ## LinkedIn / DM blurb
 
-> Try the Total Rewards Accelerator demo:  
-> https://tra-web.onrender.com  
-> (Early access — sample data. DM me for the password + guided walkthrough. Comment DEMO or DM PILOT.)
-
-## Dashboard
-
-- API: https://dashboard.render.com/web/srv-d9ibl4rrjlhs73emqgn0  
-- Web: https://dashboard.render.com/web/srv-d9ibld3h2c0s738huvm0  
+> Try Total Rewards Accelerator (YOE + education placement):  
+> https://YOUR-PROJECT.vercel.app  
+> Sample data demo. DM **PILOT** for password + guided walkthrough + SOW.

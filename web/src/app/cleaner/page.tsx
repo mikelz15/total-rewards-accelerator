@@ -69,12 +69,28 @@ export default function CleanerPage() {
       title="Market Data Cleaner"
       description="Built for real HRIS exports — including years of experience and education. Maps pay ranges, then runs the shared Placement Engine (wage-calc mindset) so Auditor, Merit, Flight Risk, and Closer all share one expected-rate model."
     >
+      <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50/90 px-4 py-3 text-sm text-amber-950">
+        <p className="font-semibold">Public demo — data policy</p>
+        <ul className="mt-1 list-inside list-disc space-y-0.5 text-amber-900/90">
+          <li>
+            Custom uploads / paste: max <strong>10 data rows</strong>,{" "}
+            <strong>5 per IP per week</strong>
+          </li>
+          <li>
+            Headers scanned for sensitive fields (SSN, DOB, address, phone, email, MRN, etc.)
+          </li>
+          <li>
+            Prefer <strong>Load messy HRIS sample</strong> — do not upload real employee files
+          </li>
+        </ul>
+      </div>
+
       <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
         <Card>
           <h2 className="text-sm font-semibold text-slate-900">1. Import data</h2>
           <p className="mt-1 text-sm text-slate-500">
             Handles metadata rows, BOM, tab/CSV, $, text performance ratings, hourly vs annual, and terminated status.
-            Use <strong>Reset demo</strong> in the nav anytime for a fresh sample path.
+            Use <strong>Reset demo</strong> in the nav anytime for a fresh sample path. Demo: first 10 rows only.
           </p>
 
           <div className="mt-4 flex flex-wrap gap-2">
@@ -86,7 +102,7 @@ export default function CleanerPage() {
               {loading ? "Cleaning…" : "Load messy HRIS sample"}
             </Button>
             <label className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50">
-              Upload CSV / TSV
+              Upload CSV / TSV (≤10 rows)
               <input
                 type="file"
                 accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values"

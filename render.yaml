@@ -1,5 +1,10 @@
-# Same as root render.yaml — Blueprint prefers repo root.
-# Optimal demo: Render Starter API + Vercel web (not free dual-host).
+# Render Blueprint — optimal public demo
+# Web on Vercel; API here on paid Starter (always-on).
+# https://render.com/docs/blueprint-spec
+#
+# Existing free tra-web can stay until Vercel cutover, then suspend it.
+# Upgrade existing tra-api plan to Starter in the Render dashboard if Blueprint
+# does not re-plan an already-created service.
 
 services:
   - type: web
@@ -15,9 +20,11 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: "3.11.0"
+      # After Vercel deploy, set to https://your-app.vercel.app (comma-separated for custom domain)
       - key: CORS_ORIGINS
         sync: false
       - key: CORS_ORIGIN_REGEX
         value: "https://.*\\.vercel\\.app"
+      # Optional shared gate — match web DEMO_PASSWORD / NEXT_PUBLIC_API_DEMO_PASSWORD
       - key: DEMO_PASSWORD
         sync: false

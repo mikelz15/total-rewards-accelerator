@@ -1,91 +1,129 @@
-# Hosting Total Rewards Accelerator
+# Host Total Rewards Accelerator (optimal demo stack)
 
-## Recommended production split
+**Target architecture**
 
-| Service | Host | Notes |
-|---------|------|--------|
-| **API** | Render / Railway / Fly | Python FastAPI (`deploy/Dockerfile.api` or `api/` root) |
-| **Web** | Vercel (preferred) or Render | Next.js 14 (`web/`) |
+| Piece | Host | Plan | Why |
+|-------|------|------|-----|
+| **Web** (Next.js) | [Vercel](https://vercel.com) | Hobby (free) or Pro | CDN, fast first paint, custom domain |
+| **API** (FastAPI) | [Render](https://render.com) | **Starter (paid)** | Always-on — no 30–60s cold start |
 
-Set `NEXT_PUBLIC_API_URL` on the web service to the **public API origin** (no trailing slash).
+```
+Browser  →  https://your-app.vercel.app  (Next.js)
+                │  NEXT_PUBLIC_API_URL
+                ▼
+         https://tra-api-n0mh.onrender.com  (FastAPI · Starter)
+```
 
-Optional password gate:
-- Web: `DEMO_PASSWORD` → login page via middleware
-- API: `DEMO_PASSWORD` → requires `X-Demo-Password` header
-- Web also needs `NEXT_PUBLIC_API_DEMO_PASSWORD` if API password is set
+Existing free `tra-web` on Render can stay until Vercel is live, then suspend it.
 
 ---
 
-## Option A — Local + Cloudflare quick tunnels (temporary)
+## 1. Upgrade API on Render (paid)
 
-Requires local API (8000) + Next.js (3000) + `cloudflared`.
+You already have **`tra-api`** (`https://tra-api-n0mh.onrender.com`).
+
+1. [Render Dashboard](https://dashboard.render.com) → **tra-api**  
+2. **Settings** → **Instance type / Plan** → **Starter** (not Free)  
+3. Confirm auto-deploy from `main` is on  
+4. Env vars (recommended after Vercel URL is known):
+
+| Key | Value |
+|-----|--------|
+| `CORS_ORIGINS` | `https://YOUR-APP.vercel.app` (or `*` temporarily) |
+| `CORS_ORIGIN_REGEX` | `https://.*\.vercel\.app` |
+| `DEMO_PASSWORD` | `TRA-pilot-2026` (or your chosen gate) |
+
+5. Smoke-test:
 
 ```bash
-# Terminal 1 — API
-cd api && PYTHONPATH=. python3 -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+curl -sS https://tra-api-n0mh.onrender.com/health
+```
 
-# Terminal 2 — Web
-export PATH="$HOME/.local/node/bin:$PATH"   # if using local Node install
+Blueprint at repo root `render.yaml` describes the paid API-only layout for new environments.
+
+---
+
+## 2. Deploy web on Vercel
+
+1. [vercel.com/new](https://vercel.com/new) → Import **mikelz15/total-rewards-accelerator**  
+2. **Root Directory** = **`web`**  
+3. Environment variables (Production):
+
+| Name | Value |
+|------|--------|
+| `NEXT_PUBLIC_API_URL` | `https://tra-api-n0mh.onrender.com` |
+| `DEMO_PASSWORD` | same as API (optional gate) |
+| `NEXT_PUBLIC_API_DEMO_PASSWORD` | same as API `DEMO_PASSWORD` |
+
+4. Deploy → copy production URL  
+5. Optional: add custom domain under Project → Settings → Domains  
+
+CLI alternative:
+
+```bash
+cd web
+vercel login
+vercel link   # root directory web
+vercel env add NEXT_PUBLIC_API_URL production
+vercel env add DEMO_PASSWORD production
+vercel env add NEXT_PUBLIC_API_DEMO_PASSWORD production
+vercel --prod
+```
+
+`NEXT_PUBLIC_*` is baked in at **build** time — redeploy after changing API URL or API password.
+
+---
+
+## 3. Lock CORS
+
+Render → tra-api → Environment:
+
+```text
+CORS_ORIGINS=https://YOUR-APP.vercel.app
+CORS_ORIGIN_REGEX=https://.*\.vercel\.app
+```
+
+---
+
+## 4. Cutover checklist
+
+- [ ] tra-api plan = **Starter**  
+- [ ] Vercel production live with correct env  
+- [ ] Login + Cleaner sample works from Vercel URL (private window)  
+- [ ] Update `go-to-market/LIVE-DEMO-URLS.md` with Vercel URL  
+- [ ] Suspend free **tra-web** on Render (optional cost/cleanup)  
+- [ ] LinkedIn blurb uses Vercel URL; password still DM-only  
+
+---
+
+## Demo guardrails (API)
+
+- Custom upload/paste: max **10 rows**, **5 / IP / week**, PHI **header** scan  
+- Tracker / Closer: **sample data only**  
+- Optional `DEMO_PASSWORD` gate (header `X-Demo-Password`)  
+
+---
+
+## Local development
+
+```bash
+# API
+cd api && PYTHONPATH=. python3 -m uvicorn app.main:app --reload --port 8000
+
+# Web
 cd web
 echo 'NEXT_PUBLIC_API_URL=http://127.0.0.1:8000' > .env.local
 npm run dev
-
-# Terminal 3/4 — tunnels (share web URL)
-cloudflared tunnel --url http://127.0.0.1:8000
-cloudflared tunnel --url http://localhost:3000
-# Point web NEXT_PUBLIC_API_URL at the API tunnel for remote browsers
-```
-
-Tunnels change each restart. Sample data only.
-
----
-
-## Option B — Render Blueprint
-
-1. Push this folder to a GitHub repo (root = `Total_Rewards_Accelerator`).
-2. Render → **New** → **Blueprint** → select `deploy/render.yaml`.
-3. After `tra-api` is live, set on `tra-web`:
-   - `NEXT_PUBLIC_API_URL=https://tra-api-xxxx.onrender.com`
-4. On `tra-api` set `CORS_ORIGINS` to the web URL (or `*` for early demos).
-5. Optionally set the same `DEMO_PASSWORD` on both; if API is gated, also set
-   `NEXT_PUBLIC_API_DEMO_PASSWORD` on web.
-
-Free tier spins down after idle — first request may be slow.
-
----
-
-## Option C — Vercel (web) + Render (API)
-
-### API (Render)
-- Root directory: `api`
-- Build: `pip install -r requirements.txt`
-- Start: `PYTHONPATH=. uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-- Health: `/health`
-
-### Web (Vercel)
-```bash
-cd web
-npx vercel
-# Production env:
-#   NEXT_PUBLIC_API_URL=https://your-api.onrender.com
-#   DEMO_PASSWORD=...   (optional)
-```
-
-Or connect the monorepo in Vercel UI with **Root Directory = `web`**.
-
----
-
-## Docker (API)
-
-```bash
-# from repo root
-docker build -f deploy/Dockerfile.api -t tra-api .
-docker run -p 8000:8000 -e CORS_ORIGINS=* tra-api
 ```
 
 ---
 
-## Security note
+## Troubleshooting
 
-Demo hosting is for **sample data** and design-partner demos.  
-Do not upload real unscrubbed employee files to a public demo.
+| Symptom | Fix |
+|---------|-----|
+| CORS errors from Vercel | Set `CORS_ORIGINS` to exact HTTPS origin; redeploy API |
+| 401 from API | Align `NEXT_PUBLIC_API_DEMO_PASSWORD` with API `DEMO_PASSWORD`; redeploy web |
+| Slow first request | Confirm API plan is **Starter**, not Free |
+| Wrong API on site | Redeploy Vercel after changing `NEXT_PUBLIC_API_URL` |
+| Vercel 404 monorepo | Root Directory must be `web` |

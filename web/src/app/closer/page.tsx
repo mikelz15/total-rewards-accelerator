@@ -120,13 +120,22 @@ export default function CloserPage() {
 
   return (
     <ModuleShell
-      eyebrow="Module 03"
+      eyebrow="Module 04"
       title="Candidate Closer"
-      description="Translate base, bonus, and LTI into a multi-year total wealth trajectory. Generate a one-page PDF that turns offer letters into closing tools."
+      description="Translate base, bonus, and LTI into a multi-year total wealth trajectory. Generate a one-page PDF that turns offer letters into closing tools — the four-year view most market tools skip."
     >
+      <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50/90 px-4 py-3 text-sm text-rose-950">
+        <p className="font-semibold">Sample data only (public demo)</p>
+        <p className="mt-1 text-rose-900/90">
+          Use the default synthetic persona or open a sample from Candidate Tracker. Do not enter
+          real candidate names or compensation. Full production use is available via pilot / paid
+          Closer module.
+        </p>
+      </div>
+
       <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
         <Card>
-          <h2 className="text-sm font-semibold text-slate-900">Compensation inputs</h2>
+          <h2 className="text-sm font-semibold text-slate-900">Compensation inputs (sample)</h2>
           <div className="mt-4 space-y-3">
             <Field label="Candidate name">
               <input

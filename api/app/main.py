@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import pandas as pd
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
@@ -24,27 +24,54 @@ from app.services.candidates import (
 )
 from app.services.cleaner import clean_dataframe, parse_tabular_text
 from app.services.closer import build_wealth_pdf, project_total_wealth
+from app.services.demo_guard import (
+    DEMO_DISCLAIMER,
+    DEMO_MAX_ROWS,
+    client_ip,
+    enforce_demo_clean,
+)
 from app.services.flight_risk import assess_flight_risk
 from app.services.placement import enrich_records, place_person, placement_summary
 from app.services.remediation import remediate
 
+# Public demo: Candidate Tracker + Closer stay on synthetic sample data only
+DEMO_SAMPLE_ONLY_PIPELINE = True
+
+
+def _cors_config() -> Dict[str, Any]:
+    """
+    CORS_ORIGINS — comma-separated list, or * (default) for open demo.
+    CORS_ORIGIN_REGEX — optional, e.g. https://.*\\.vercel\\.app
+    After Vercel cutover, set CORS_ORIGINS to the exact production web URL.
+    """
+    raw = os.environ.get("CORS_ORIGINS", "*").strip()
+    regex = os.environ.get("CORS_ORIGIN_REGEX", "").strip() or None
+    on_render = bool(os.environ.get("RENDER") or os.environ.get("RENDER_SERVICE_ID"))
+
+    if raw == "*":
+        return {"allow_origins": ["*"], "allow_origin_regex": regex}
+    origins = [o.strip().rstrip("/") for o in raw.split(",") if o.strip()]
+    if on_render and not regex:
+        regex = r"https://.*\.vercel\.app"
+    return {"allow_origins": origins or ["*"], "allow_origin_regex": regex}
+
+
+_cors = _cors_config()
+
 app = FastAPI(
     title="Total Rewards Accelerator API",
     description=(
-        "Comp Engineering Toolkit — Cleaner, Pay Equity Auditor, Remediation/Merit Pool, "
-        "Flight Risk, Candidate Tracker, Candidate Closer"
+        "Comp Engineering Toolkit — Cleaner, Equity + Merit, Candidate Tracker, Closer. "
+        "Shared Placement Engine (YOE + education). Public demo enforces row caps, "
+        "PHI header scan, and upload rate limits."
     ),
-    version="0.3.1",
+    version="0.4.0",
 )
-
-# Comma-separated origins, or * for open demo
-_cors = os.environ.get("CORS_ORIGINS", "*").strip()
-_cors_origins = ["*"] if _cors == "*" else [o.strip() for o in _cors.split(",") if o.strip()]
 
 app.add_middleware(
     CORSMiddleware,
-    # Local dev + hosted web (Vercel / Render) + tunnels
-    allow_origins=_cors_origins,
+    allow_origins=_cors["allow_origins"],
+    allow_origin_regex=_cors.get("allow_origin_regex"),
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -167,17 +194,67 @@ def _read_text_bytes(content: bytes) -> str:
     return content.decode("latin-1", errors="replace")
 
 
-def _clean_from_text(text: str) -> Dict[str, Any]:
+def _parse_to_df(text: str) -> pd.DataFrame:
     try:
         df = parse_tabular_text(text)
     except Exception as exc:  # noqa: BLE001
-        # fallback simple pandas
         try:
             df = pd.read_csv(io.StringIO(text))
         except Exception as exc2:  # noqa: BLE001
-            raise HTTPException(status_code=400, detail=f"Could not parse tabular data: {exc2}") from exc2
+            raise HTTPException(
+                status_code=400, detail=f"Could not parse tabular data: {exc2}"
+            ) from exc2
     if df.empty:
         raise HTTPException(status_code=400, detail="CSV is empty")
+    return df
+
+
+def _clean_user_dataframe(
+    df: pd.DataFrame,
+    *,
+    request: Request,
+    count_toward_rate_limit: bool,
+) -> Dict[str, Any]:
+    ip = client_ip(
+        {k.lower(): v for k, v in request.headers.items()},
+        request.client.host if request.client else None,
+    )
+    try:
+        demo_meta = enforce_demo_clean(
+            list(df.columns),
+            len(df),
+            count_toward_rate_limit=count_toward_rate_limit,
+            ip=ip,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    issues_prefix: List[Dict[str, Any]] = []
+    if demo_meta.get("truncated_to_max_rows"):
+        issues_prefix.append(
+            {
+                "level": "warning",
+                "message": (
+                    f"Demo limit: only the first {DEMO_MAX_ROWS} data rows were processed "
+                    f"({demo_meta['rows_submitted']} submitted)."
+                ),
+                "row": None,
+            }
+        )
+        df = df.head(DEMO_MAX_ROWS).copy()
+
+    result = clean_dataframe(df)
+    result["demo"] = demo_meta
+    result.setdefault("issues", [])
+    result["issues"] = issues_prefix + list(result["issues"])
+    return result
+
+
+def _clean_from_text(text: str) -> Dict[str, Any]:
+    """Sample path / internal: no rate limit (still caps rows for parity)."""
+    df = _parse_to_df(text)
+    if len(df) > DEMO_MAX_ROWS:
+        df = df.head(DEMO_MAX_ROWS).copy()
     return clean_dataframe(df)
 
 
@@ -186,8 +263,14 @@ def health() -> Dict[str, Any]:
     return {
         "status": "ok",
         "service": "total-rewards-accelerator",
-        "version": "0.3.1",
+        "version": "0.4.0",
         "demo_password_required": bool(_DEMO_PASSWORD),
+        "demo": {
+            "max_upload_rows": DEMO_MAX_ROWS,
+            "uploads_per_week": 5,
+            "sample_only_pipeline": DEMO_SAMPLE_ONLY_PIPELINE,
+            "disclaimer": DEMO_DISCLAIMER,
+        },
     }
 
 
@@ -207,25 +290,27 @@ def get_sample() -> Dict[str, Any]:
 
 
 @app.post("/api/cleaner/upload")
-async def cleaner_upload(file: UploadFile = File(...)) -> Dict[str, Any]:
+async def cleaner_upload(request: Request, file: UploadFile = File(...)) -> Dict[str, Any]:
     content = await file.read()
     text = _read_text_bytes(content)
-    result = _clean_from_text(text)
+    df = _parse_to_df(text)
+    result = _clean_user_dataframe(df, request=request, count_toward_rate_limit=True)
     result["source"] = {"filename": file.filename, "type": "upload"}
     return result
 
 
 @app.post("/api/cleaner/paste")
-def cleaner_paste(payload: CleanJsonRequest) -> Dict[str, Any]:
+def cleaner_paste(request: Request, payload: CleanJsonRequest) -> Dict[str, Any]:
     if payload.csv_text:
-        result = _clean_from_text(payload.csv_text)
+        df = _parse_to_df(payload.csv_text)
+        result = _clean_user_dataframe(df, request=request, count_toward_rate_limit=True)
         result["source"] = {"type": "paste"}
         return result
     if payload.records:
         df = pd.DataFrame(payload.records)
         if df.empty:
             raise HTTPException(status_code=400, detail="No data rows found")
-        result = clean_dataframe(df)
+        result = _clean_user_dataframe(df, request=request, count_toward_rate_limit=True)
         result["source"] = {"type": "paste"}
         return result
     raise HTTPException(status_code=400, detail="Provide csv_text or records")
@@ -238,7 +323,18 @@ def cleaner_sample() -> Dict[str, Any]:
         raise HTTPException(status_code=404, detail="Sample data not found")
     text = path.read_text(encoding="utf-8")
     result = _clean_from_text(text)
+    result["demo"] = {
+        "demo_mode": True,
+        "disclaimer": DEMO_DISCLAIMER,
+        "max_rows": DEMO_MAX_ROWS,
+        "source_type": "sample",
+        "rate_limit": {"limit_per_week": 5, "remaining": None, "counted": False},
+    }
     result["source"] = {"filename": path.name, "type": "sample"}
+    result.setdefault("issues", [])
+    result["issues"] = [
+        {"level": "info", "message": DEMO_DISCLAIMER, "row": None}
+    ] + list(result["issues"])
     return result
 
 
@@ -316,7 +412,16 @@ def remediation_run(payload: RemediationRequest) -> Dict[str, Any]:
 
 @app.post("/api/closer/project")
 def closer_project(payload: CloserRequest) -> Dict[str, Any]:
-    return project_total_wealth(**payload.model_dump())
+    projection = project_total_wealth(**payload.model_dump())
+    if DEMO_SAMPLE_ONLY_PIPELINE:
+        projection["demo"] = {
+            "sample_only": True,
+            "disclaimer": (
+                "Public demo: Closer is for synthetic sample offers only. "
+                "Do not enter real candidate compensation. " + DEMO_DISCLAIMER
+            ),
+        }
+    return projection
 
 
 @app.post("/api/closer/pdf")
@@ -336,11 +441,29 @@ def closer_pdf(payload: CloserRequest) -> Response:
 
 @app.get("/api/candidates")
 def candidates_list() -> Dict[str, Any]:
-    return {"candidates": list_candidates(), "summary": pipeline_summary()}
+    return {
+        "candidates": list_candidates(),
+        "summary": pipeline_summary(),
+        "demo": {
+            "sample_only": DEMO_SAMPLE_ONLY_PIPELINE,
+            "disclaimer": (
+                "Public demo: Candidate Tracker shows synthetic sample pipeline only. "
+                "Create / delete disabled. " + DEMO_DISCLAIMER
+            ),
+        },
+    }
 
 
 @app.post("/api/candidates")
 def candidates_create(payload: CandidateCreate) -> Dict[str, Any]:
+    if DEMO_SAMPLE_ONLY_PIPELINE:
+        raise HTTPException(
+            status_code=403,
+            detail=(
+                "Public demo: Candidate Tracker is sample-data only. "
+                "Use the seeded pipeline, then open Closer. " + DEMO_DISCLAIMER
+            ),
+        )
     return create_candidate(payload.model_dump())
 
 
@@ -354,7 +477,22 @@ def candidates_get(candidate_id: str) -> Dict[str, Any]:
 
 @app.patch("/api/candidates/{candidate_id}")
 def candidates_patch(candidate_id: str, payload: CandidateUpdate) -> Dict[str, Any]:
-    row = update_candidate(candidate_id, payload.model_dump(exclude_unset=True))
+    if DEMO_SAMPLE_ONLY_PIPELINE:
+        data = payload.model_dump(exclude_unset=True)
+        allowed = {k: v for k, v in data.items() if k == "stage"}
+        if set(data.keys()) - {"stage"}:
+            raise HTTPException(
+                status_code=403,
+                detail=(
+                    "Public demo: only stage changes are allowed on sample candidates. "
+                    + DEMO_DISCLAIMER
+                ),
+            )
+        if not allowed:
+            raise HTTPException(status_code=400, detail="No allowed fields to update")
+        row = update_candidate(candidate_id, allowed)
+    else:
+        row = update_candidate(candidate_id, payload.model_dump(exclude_unset=True))
     if not row:
         raise HTTPException(status_code=404, detail="Candidate not found")
     return row
@@ -362,6 +500,11 @@ def candidates_patch(candidate_id: str, payload: CandidateUpdate) -> Dict[str, A
 
 @app.delete("/api/candidates/{candidate_id}")
 def candidates_delete(candidate_id: str) -> Dict[str, Any]:
+    if DEMO_SAMPLE_ONLY_PIPELINE:
+        raise HTTPException(
+            status_code=403,
+            detail="Public demo: sample candidates cannot be deleted. " + DEMO_DISCLAIMER,
+        )
     ok = delete_candidate(candidate_id)
     if not ok:
         raise HTTPException(status_code=404, detail="Candidate not found")
@@ -373,15 +516,18 @@ def root() -> Dict[str, Any]:
     return {
         "name": "Total Rewards Accelerator API",
         "tagline": "Stop crunching rows. Start designing strategy.",
-        "version": "0.3.1",
+        "version": "0.4.0",
         "modules": [
             "Market Data Cleaner",
             "Placement Engine (YOE + Education)",
-            "Pay Equity Auditor",
-            "Remediation / Merit Pool",
-            "Flight Risk",
+            "Equity + Merit",
             "Candidate Tracker",
             "Candidate Closer",
         ],
+        "demo": {
+            "max_upload_rows": DEMO_MAX_ROWS,
+            "uploads_per_week": 5,
+            "sample_only_pipeline": DEMO_SAMPLE_ONLY_PIPELINE,
+        },
         "docs": "/docs",
     }

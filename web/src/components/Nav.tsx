@@ -13,6 +13,7 @@ const links = [
   { href: "/auditor", label: "Equity + Merit" },
   { href: "/candidates", label: "Candidate Tracker" },
   { href: "/closer", label: "Closer" },
+  { href: "/pricing", label: "Pricing" },
 ];
 
 export function Nav() {

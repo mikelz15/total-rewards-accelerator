@@ -12,15 +12,6 @@ export default function CandidatesPage() {
   const [data, setData] = useState<CandidateList | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState({
-    name: "",
-    role: "",
-    stage: "sourced",
-    base_salary: 100000,
-    target_bonus_pct: 10,
-    lti_target_value: 0,
-    notes: "",
-  });
 
   async function refresh() {
     setLoading(true);
@@ -38,35 +29,33 @@ export default function CandidatesPage() {
     refresh();
   }, []);
 
-  async function addCandidate() {
-    if (!form.name.trim()) return;
+  async function setStage(c: Candidate, stage: string) {
     setLoading(true);
+    setError(null);
     try {
-      await api.candidatesCreate(form);
-      setForm({ ...form, name: "", notes: "" });
+      await api.candidatesUpdate(c.id, { stage });
       await refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Create failed");
+      setError(err instanceof Error ? err.message : "Stage update failed");
       setLoading(false);
     }
   }
 
-  async function setStage(c: Candidate, stage: string) {
-    await api.candidatesUpdate(c.id, { stage });
-    await refresh();
-  }
-
-  async function remove(c: Candidate) {
-    await api.candidatesDelete(c.id);
-    await refresh();
-  }
-
   return (
     <ModuleShell
-      eyebrow="Module 04"
+      eyebrow="Module 03"
       title="Candidate Tracker"
       description="Recruiting pipeline tracker — separate from Candidate Closer (wealth PDF). Track stages, offer packages, and jump into Closer to generate a total-wealth statement."
     >
+      <div className="mb-6 rounded-2xl border border-violet-200 bg-violet-50/90 px-4 py-3 text-sm text-violet-950">
+        <p className="font-semibold">Sample data only (public demo)</p>
+        <p className="mt-1 text-violet-900/90">
+          Synthetic recruiting pipeline only. Creating or deleting candidates is disabled. Move
+          stages to explore the flow, then open a sample offer in Closer. Do not enter real candidate
+          PII.
+        </p>
+      </div>
+
       {error && (
         <p className="mb-4 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>
       )}
@@ -82,65 +71,16 @@ export default function CandidatesPage() {
 
       <div className="grid gap-6 lg:grid-cols-[1fr_1.4fr]">
         <Card>
-          <h2 className="text-sm font-semibold text-slate-900">Add candidate</h2>
-          <div className="mt-3 space-y-3">
-            <input
-              className={inputClass}
-              placeholder="Name"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-            />
-            <input
-              className={inputClass}
-              placeholder="Role"
-              value={form.role}
-              onChange={(e) => setForm({ ...form, role: e.target.value })}
-            />
-            <select
-              className={inputClass}
-              value={form.stage}
-              onChange={(e) => setForm({ ...form, stage: e.target.value })}
-            >
-              {STAGES.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
-            <input
-              type="number"
-              className={inputClass}
-              placeholder="Base salary"
-              value={form.base_salary}
-              onChange={(e) => setForm({ ...form, base_salary: Number(e.target.value) })}
-            />
-            <div className="grid grid-cols-2 gap-2">
-              <input
-                type="number"
-                className={inputClass}
-                placeholder="Bonus %"
-                value={form.target_bonus_pct}
-                onChange={(e) => setForm({ ...form, target_bonus_pct: Number(e.target.value) })}
-              />
-              <input
-                type="number"
-                className={inputClass}
-                placeholder="LTI $"
-                value={form.lti_target_value}
-                onChange={(e) => setForm({ ...form, lti_target_value: Number(e.target.value) })}
-              />
-            </div>
-            <textarea
-              className={inputClass}
-              rows={3}
-              placeholder="Notes"
-              value={form.notes}
-              onChange={(e) => setForm({ ...form, notes: e.target.value })}
-            />
-            <Button disabled={loading} onClick={addCandidate}>
-              Add to pipeline
-            </Button>
-          </div>
+          <h2 className="text-sm font-semibold text-slate-900">Demo pipeline</h2>
+          <p className="mt-2 text-sm text-slate-600">
+            Seeded personas illustrate stage tracking and Closer handoff. Full create / edit /
+            import unlocks on a design-partner pilot or paid module.
+          </p>
+          <ul className="mt-4 space-y-2 text-sm text-slate-600">
+            <li>· Stages: sourced → screen → interview → offer → accepted</li>
+            <li>· Offer package fields feed four-year wealth in Closer</li>
+            <li>· Placement Engine available when ranges + YOE are set in Closer</li>
+          </ul>
         </Card>
 
         <Card className="overflow-hidden p-0">
@@ -158,7 +98,8 @@ export default function CandidatesPage() {
                     <div className="font-medium text-slate-900">{c.name}</div>
                     <div className="text-sm text-slate-600">{c.role}</div>
                     <div className="mt-1 text-xs text-slate-500">
-                      {money(c.base_salary)} base · {c.target_bonus_pct}% bonus · LTI {money(c.lti_target_value)}
+                      {money(c.base_salary)} base · {c.target_bonus_pct}% bonus · LTI{" "}
+                      {money(c.lti_target_value)}
                     </div>
                     {c.notes && <p className="mt-1 text-xs text-slate-500">{c.notes}</p>}
                   </div>
@@ -166,6 +107,7 @@ export default function CandidatesPage() {
                     <select
                       className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
                       value={c.stage}
+                      disabled={loading}
                       onChange={(e) => setStage(c, e.target.value)}
                     >
                       {STAGES.map((s) => (
@@ -174,27 +116,20 @@ export default function CandidatesPage() {
                         </option>
                       ))}
                     </select>
-                    <div className="flex gap-2">
-                      <Link
-                        href={`/closer?name=${encodeURIComponent(c.name)}&role=${encodeURIComponent(c.role)}&base=${c.base_salary}&bonus=${c.target_bonus_pct}&lti=${c.lti_target_value}`}
-                        className="text-xs font-medium text-teal-700 hover:underline"
-                      >
-                        Open in Closer →
-                      </Link>
-                      <button
-                        type="button"
-                        className="text-xs text-rose-600 hover:underline"
-                        onClick={() => remove(c)}
-                      >
-                        Delete
-                      </button>
-                    </div>
+                    <Link
+                      href={`/closer?name=${encodeURIComponent(c.name)}&role=${encodeURIComponent(c.role)}&base=${c.base_salary}&bonus=${c.target_bonus_pct}&lti=${c.lti_target_value}`}
+                      className="text-xs font-medium text-teal-700 hover:underline"
+                    >
+                      Open in Closer →
+                    </Link>
                   </div>
                 </div>
               </li>
             ))}
             {!data?.candidates?.length && (
-              <li className="px-5 py-8 text-sm text-slate-500">No candidates yet.</li>
+              <li className="px-5 py-8 text-sm text-slate-500">
+                {loading ? "Loading sample pipeline…" : "No candidates yet."}
+              </li>
             )}
           </ul>
         </Card>
@@ -202,6 +137,3 @@ export default function CandidatesPage() {
     </ModuleShell>
   );
 }
-
-const inputClass =
-  "w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none focus:border-teal-600 focus:ring-2 focus:ring-teal-100";

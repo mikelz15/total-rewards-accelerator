@@ -40,6 +40,22 @@ export type PlacementSummary = {
   avg_actual_compa: number | null;
 };
 
+export type DemoMeta = {
+  demo_mode?: boolean;
+  disclaimer?: string;
+  max_rows?: number;
+  rows_submitted?: number | null;
+  rows_accepted?: number;
+  truncated_to_max_rows?: boolean;
+  sample_only?: boolean;
+  rate_limit?: {
+    limit_per_week: number;
+    remaining: number | null;
+    counted: boolean;
+  };
+  source_type?: string;
+};
+
 export type CleanResult = {
   stats: {
     rows_in: number;
@@ -57,6 +73,7 @@ export type CleanResult = {
   issues: { level: string; message: string; row?: number | null }[];
   records: Record<string, unknown>[];
   source?: { filename?: string; type: string };
+  demo?: DemoMeta;
 };
 
 export type AuditResult = {
@@ -245,6 +262,7 @@ export type CandidateList = {
     open_pipeline: number;
     offer_base_total: number;
   };
+  demo?: DemoMeta;
 };
 
 export const api = {
