@@ -17,7 +17,7 @@
 | [TRA-Design-Partner-Pilot-SOW.pdf](./TRA-Design-Partner-Pilot-SOW.pdf) | 2-page SOW (PDF — re-export from DOCX if outdated) |
 
 ## This week
-1. Open live demo → full click path (password in LIVE-DEMO-URLS)  
+1. Open live demo → full click path (https://totalrewardsaccelerator.com — no password)  
 2. Record Loom with `04-loom-script.md`  
 3. LinkedIn post + first comment from `05-post-hosting-copy.md`  
 4. Start Week 1 of `06-90-day-revenue-plan.md` (Calendly + 15 warm DMs)  

@@ -12,7 +12,7 @@
 ## Setup before record
 
 1. Incognito or clean browser profile; hide bookmarks and extensions  
-2. Log in once (password off-camera), then start Loom  
+2. Open the live site, then start Loom  
 3. Zoom browser ~110%; window only — no desktop clutter  
 4. Prefetch if free tier may be cold: open demo, Load sample once, leave on Home  
 5. Mic: quiet room, slightly slower than normal conversation  
@@ -216,7 +216,7 @@ Thanks.
 
 # Click checklist (print)
 
-- [ ] Logged in (password off-camera)  
+- [ ] Demo home open (no login)  
 - [ ] Home — cold open to camera  
 - [ ] Cleaner → Load messy HRIS sample  
 - [ ] Point: quality + **below expected placement**  
