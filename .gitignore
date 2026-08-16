@@ -41,3 +41,4 @@ npm-debug.log*
 
 # local login scratch
 api/.env.local-login
+api/render.env
