@@ -226,17 +226,52 @@ async def stripe_webhook(request: Request) -> Dict[str, Any]:
                         sub.modules_json = [product]
                         org.entitlements_json = [product]
                         org.plan = product
-        elif etype in ("customer.subscription.deleted", "customer.subscription.paused"):
+        elif etype in (
+            "customer.subscription.deleted",
+            "customer.subscription.paused",
+        ):
             sub_id = data.get("id")
             sub = session.scalar(
                 select(Subscription).where(Subscription.stripe_subscription_id == sub_id)
             )
             if sub:
-                sub.status = "canceled"
+                sub.status = "canceled" if "deleted" in etype else "paused"
                 from app.db.models import Organization
 
                 org = session.get(Organization, sub.org_id)
                 if org:
                     org.plan = "trial"
                     org.entitlements_json = None
+        elif etype == "customer.subscription.updated":
+            sub_id = data.get("id")
+            status = data.get("status") or "active"
+            sub = session.scalar(
+                select(Subscription).where(Subscription.stripe_subscription_id == sub_id)
+            )
+            if sub:
+                sub.status = status
+                meta = data.get("metadata") or {}
+                plan = meta.get("plan")
+                product = meta.get("product")
+                if plan or product:
+                    from app.db.models import Organization
+
+                    org = session.get(Organization, sub.org_id)
+                    if org and status in ("active", "trialing"):
+                        if plan:
+                            org.plan = plan
+                        if product == "suite":
+                            org.entitlements_json = None
+                            sub.modules_json = ["cleaner", "equity", "tracker", "closer"]
+                        elif product:
+                            org.plan = product
+                            org.entitlements_json = [product]
+                            sub.modules_json = [product]
+                if status in ("canceled", "unpaid", "incomplete_expired"):
+                    from app.db.models import Organization
+
+                    org = session.get(Organization, sub.org_id)
+                    if org:
+                        org.plan = "trial"
+                        org.entitlements_json = None
     return {"received": True}

@@ -125,6 +125,7 @@ async def demo_password_guard(request, call_next):  # type: ignore[no-untyped-de
     if path in ("/", "/health", "/docs", "/openapi.json", "/redoc"):
         return await call_next(request)
     # SaaS JWT auth owns /api/v1/* — do not require demo password there
+    # Stripe webhooks also hit /api/v1/billing/webhook without demo password
     if path.startswith("/api/v1"):
         return await call_next(request)
     provided = request.headers.get("X-Demo-Password") or request.headers.get("x-demo-password")
@@ -309,6 +310,14 @@ def health() -> Dict[str, Any]:
             "routes": "/api/v1/*",
             "auth": "supabase_jwt",
             "config": saas_config_status(),
+        },
+        "stripe": {
+            "configured": bool(os.environ.get("STRIPE_SECRET_KEY", "").strip()),
+            "webhook_configured": bool(os.environ.get("STRIPE_WEBHOOK_SECRET", "").strip()),
+            "prices": {
+                k: bool(os.environ.get(f"STRIPE_PRICE_{k.upper()}", "").strip())
+                for k in ("cleaner", "equity", "tracker", "closer", "suite")
+            },
         },
         "demo": {
             "max_upload_rows": DEMO_MAX_ROWS,

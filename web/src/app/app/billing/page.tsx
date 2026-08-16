@@ -12,6 +12,7 @@ export default function BillingPage() {
     Awaited<ReturnType<typeof saasApi.billingCatalog>> | null
   >(null);
   const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
 
   async function load() {
@@ -23,6 +24,17 @@ export default function BillingPage() {
 
   useEffect(() => {
     load().catch((e) => setError(e instanceof Error ? e.message : "Load failed"));
+    if (typeof window !== "undefined") {
+      const q = new URLSearchParams(window.location.search);
+      if (q.get("checkout") === "success") {
+        setInfo(
+          "Checkout complete. If modules are not unlocked yet, wait a few seconds and refresh — the webhook is activating your plan."
+        );
+      }
+      if (q.get("checkout") === "cancel") {
+        setInfo("Checkout canceled. No charge was made.");
+      }
+    }
   }, []);
 
   async function startCheckout(product: string) {
@@ -72,6 +84,9 @@ export default function BillingPage() {
 
       {error && (
         <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>
+      )}
+      {info && (
+        <p className="rounded-lg bg-teal-50 px-3 py-2 text-sm text-teal-900">{info}</p>
       )}
 
       <div className="grid gap-3 sm:grid-cols-3">
