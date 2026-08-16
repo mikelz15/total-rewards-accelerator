@@ -14,7 +14,9 @@
       "bundleIdentifier": "com.mikez.totalrewardsaccelerator",
       "buildNumber": "1",
       "infoPlist": {
-        "UIBackgroundModes": ["remote-notification"],
+        "UIBackgroundModes": [
+          "remote-notification"
+        ],
         "NSPhotoLibraryUsageDescription": "Optional: attach CSV/TSV exports for Market Data Cleaner.",
         "ITSAppUsesNonExemptEncryption": false
       },
@@ -74,8 +76,9 @@
     "extra": {
       "apiUrl": "https://tra-api-starter.onrender.com",
       "privacyPolicyUrl": "https://totalrewardsaccelerator.com/privacy",
+      "router": {},
       "eas": {
-        "projectId": "replace-with-eas-project-id"
+        "projectId": "3bd2110d-f225-4850-be64-d688d36caf0e"
       }
     },
     "owner": "mikelz15"
