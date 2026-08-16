@@ -21,7 +21,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
-from app.db.session import saas_enabled
+from app.db.session import saas_config_status, saas_enabled
 from app.routers.saas import analysis as saas_analysis
 from app.routers.saas import candidates as saas_candidates
 from app.routers.saas import cleaner as saas_cleaner
@@ -294,6 +294,7 @@ def health() -> Dict[str, Any]:
             "enabled": saas_enabled(),
             "routes": "/api/v1/*",
             "auth": "supabase_jwt",
+            "config": saas_config_status(),
         },
         "demo": {
             "max_upload_rows": DEMO_MAX_ROWS,

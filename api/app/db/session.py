@@ -14,17 +14,29 @@ _engine: Optional[Engine] = None
 _SessionLocal: Optional[sessionmaker] = None
 
 
-def saas_enabled() -> bool:
-    """True when DB + (JWT secret or Supabase URL for Auth API) are configured."""
-    has_db = bool(os.environ.get("DATABASE_URL", "").strip())
+def saas_config_status() -> dict:
+    """Booleans only — never expose secret values (for /health diagnostics)."""
     secret = os.environ.get("SUPABASE_JWT_SECRET", "").strip()
-    # eyJ… keys are anon/service_role JWTs, not the signing secret
-    has_real_secret = bool(secret) and not secret.startswith("eyJ")
-    has_auth_api = bool(os.environ.get("SUPABASE_URL", "").strip()) and bool(
+    anon = (
         os.environ.get("SUPABASE_ANON_KEY", "").strip()
         or os.environ.get("NEXT_PUBLIC_SUPABASE_ANON_KEY", "").strip()
     )
-    return has_db and (has_real_secret or has_auth_api)
+    has_real_secret = bool(secret) and not secret.startswith("eyJ")
+    has_db = bool(os.environ.get("DATABASE_URL", "").strip())
+    has_url = bool(os.environ.get("SUPABASE_URL", "").strip())
+    has_anon = bool(anon)
+    return {
+        "has_database_url": has_db,
+        "has_supabase_url": has_url,
+        "has_supabase_anon_key": has_anon,
+        "has_jwt_secret": has_real_secret,
+        "ready": has_db and (has_real_secret or (has_url and has_anon)),
+    }
+
+
+def saas_enabled() -> bool:
+    """True when DB + (JWT secret or Supabase URL for Auth API) are configured."""
+    return bool(saas_config_status()["ready"])
 
 
 def get_engine() -> Engine:

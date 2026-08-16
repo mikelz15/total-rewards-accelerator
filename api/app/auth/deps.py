@@ -33,11 +33,30 @@ class OrgContext:
 
 def require_saas() -> None:
     if not saas_enabled():
+        from app.db.session import saas_config_status
+
+        cfg = saas_config_status()
+        missing = [
+            name
+            for name, ok in (
+                ("DATABASE_URL", cfg["has_database_url"]),
+                ("SUPABASE_URL", cfg["has_supabase_url"]),
+                ("SUPABASE_ANON_KEY", cfg["has_supabase_anon_key"]),
+            )
+            if not ok
+        ]
+        # JWT secret optional when URL+anon present
+        hint = (
+            f"Missing env: {', '.join(missing)}. "
+            if missing
+            else "Set SUPABASE_JWT_SECRET or both SUPABASE_URL + SUPABASE_ANON_KEY. "
+        )
         raise HTTPException(
             status_code=503,
             detail=(
-                "SaaS mode is offline. Set DATABASE_URL and SUPABASE_JWT_SECRET "
-                "on the API, run migrations, then retry."
+                "SaaS mode is offline. "
+                + hint
+                + "Add vars on Render, then Manual Deploy."
             ),
         )
 
