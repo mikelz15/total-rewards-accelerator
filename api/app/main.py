@@ -15,6 +15,14 @@ try:
 except ImportError:
     pass
 
+# Optional composite secrets from TRA_SAAS_JSON (Render single-var workaround)
+try:
+    from app.db.session import apply_composite_saas_env
+
+    apply_composite_saas_env()
+except Exception:
+    pass
+
 import pandas as pd
 from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware

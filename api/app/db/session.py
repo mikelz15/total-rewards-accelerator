@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 from contextlib import contextmanager
 from typing import Generator, Optional
@@ -12,10 +13,43 @@ from sqlalchemy.orm import Session, sessionmaker
 
 _engine: Optional[Engine] = None
 _SessionLocal: Optional[sessionmaker] = None
+_composite_applied = False
+
+
+def apply_composite_saas_env() -> None:
+    """
+    Optional single-var bootstrap for hosts that only apply some dashboard secrets.
+
+    Set TRA_SAAS_JSON to a JSON object, e.g.:
+      {"DATABASE_URL":"...","SUPABASE_URL":"...","SUPABASE_ANON_KEY":"..."}
+
+    Existing process env wins (setdefault).
+    """
+    global _composite_applied
+    if _composite_applied:
+        return
+    _composite_applied = True
+    raw = os.environ.get("TRA_SAAS_JSON", "").strip()
+    if not raw:
+        return
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError:
+        return
+    if not isinstance(data, dict):
+        return
+    for key, value in data.items():
+        if not key or value is None:
+            continue
+        k = str(key).strip()
+        v = str(value).strip()
+        if k and v:
+            os.environ.setdefault(k, v)
 
 
 def saas_config_status() -> dict:
     """Booleans only — never expose secret values (for /health diagnostics)."""
+    apply_composite_saas_env()
     secret = os.environ.get("SUPABASE_JWT_SECRET", "").strip()
     anon = (
         os.environ.get("SUPABASE_ANON_KEY", "").strip()
@@ -30,7 +64,7 @@ def saas_config_status() -> dict:
         k
         for k in os.environ
         if k.upper().startswith(
-            ("DATABASE", "SUPABASE", "CORS", "DEMO", "RENDER_", "PYTHON")
+            ("DATABASE", "SUPABASE", "CORS", "DEMO", "TRA_SAAS", "RENDER_", "PYTHON")
         )
     )
     return {
@@ -38,6 +72,7 @@ def saas_config_status() -> dict:
         "has_supabase_url": has_url,
         "has_supabase_anon_key": has_anon,
         "has_jwt_secret": has_real_secret,
+        "has_tra_saas_json": bool(os.environ.get("TRA_SAAS_JSON", "").strip()),
         "ready": has_db and (has_real_secret or (has_url and has_anon)),
         "related_env_keys": related_keys,
     }
