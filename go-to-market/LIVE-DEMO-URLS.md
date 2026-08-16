@@ -8,9 +8,12 @@
 | Service | Public URL | Status |
 |---------|------------|--------|
 | **Web app (share this)** | **https://totalrewardsaccelerator.com** | **live · custom domain** |
+| **Privacy** | https://totalrewardsaccelerator.com/privacy | **live** (stores) |
 | **API (Starter / paid)** | https://tra-api-starter.onrender.com | **live · always-on** |
 | Health | https://tra-api-starter.onrender.com/health | — |
 | API docs | https://tra-api-starter.onrender.com/docs | — |
+| **Android (Play)** | Production AAB ready — see `mobile/ANDROID-SHIP.md` | upload to Play Console |
+| **iOS** | On hold | — |
 
 ### Also works (redirect → apex)
 

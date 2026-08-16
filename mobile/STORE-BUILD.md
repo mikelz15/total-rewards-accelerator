@@ -1,17 +1,24 @@
-# Ship Total Rewards Accelerator to App Store + Play Store
+# Ship Total Rewards Accelerator (Android first; iOS on hold)
+
+## Current priority
+
+| Platform | Status |
+|----------|--------|
+| **Web** | Live at https://totalrewardsaccelerator.com |
+| **Android** | Production AAB built — upload via Play Console (see `ANDROID-SHIP.md`) |
+| **iOS** | **On hold** |
 
 ## Status checklist
 
 | Step | Status |
 |------|--------|
-| Expo / EAS project config (`eas.json`, bundle IDs) | Ready in repo |
-| Privacy policy page | `/privacy` on web → https://totalrewardsaccelerator.com/privacy |
+| Expo / EAS project | Linked (`3bd2110d-f225-4850-be64-d688d36caf0e`) |
+| Privacy policy | https://totalrewardsaccelerator.com/privacy (**live**) |
 | Store listing copy | `store/listing-copy.md` |
-| EAS login | **You must complete** |
-| Apple Developer Program ($99/yr) | **You must have** |
-| Google Play Console (~$25 one-time) | **You must have** |
-| Production EAS builds | After login |
-| Store submit | After builds + listings |
+| EAS login | Done (`mikelz15`) |
+| Android production AAB | **Finished** (versionCode 3) — details in `ANDROID-SHIP.md` |
+| Google Play Console listing | **You create + upload AAB** |
+| Apple Developer / iOS build | **On hold** |
 
 ---
 
