@@ -38,3 +38,6 @@ npm-debug.log*
 # Large / local-only artifacts (keep go-to-market PDFs)
 # *.pdf  — allow GTM SOW PDFs in repo
 ~$*.docx
+
+# local login scratch
+api/.env.local-login

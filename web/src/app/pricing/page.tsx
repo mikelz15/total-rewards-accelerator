@@ -49,6 +49,26 @@ export default function PricingPage() {
           you need defendable remediation, or close offers with Tracker + Closer. Design-partner
           pilots available — ranges below are indicative SaaS and one-time licensing bands.
         </p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Link
+            href="/signup"
+            className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-medium text-white hover:bg-slate-800"
+          >
+            Create workspace
+          </Link>
+          <Link
+            href="/login"
+            className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          >
+            Sign in to app
+          </Link>
+          <a
+            href="https://totalrewardsaccelerator.com"
+            className="rounded-xl border border-teal-200 bg-teal-50 px-5 py-3 text-sm font-medium text-teal-900 hover:bg-teal-100"
+          >
+            Try public demo
+          </a>
+        </div>
       </div>
 
       <section className="mt-12">

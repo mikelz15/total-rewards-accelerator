@@ -1,38 +1,64 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
+import { updateSession } from "@/lib/supabase/middleware";
 
-const COOKIE = "tra_demo_auth";
+const DEMO_COOKIE = "tra_demo_auth";
 
 /**
- * Optional demo password gate.
- * Set DEMO_PASSWORD in the web env (and same value for API if used).
- * Leave unset for open local development.
- *
- * Public assets (/brand, icons, Next static) must stay open so the login
- * page can load the logo without a cookie.
+ * Dual gate:
+ * 1) /app/* → Supabase session when configured (SaaS)
+ * 2) Optional DEMO_PASSWORD for public demo routes (legacy pilot gate)
  */
-export function middleware(request: NextRequest) {
-  const password = process.env.DEMO_PASSWORD;
-  if (!password) {
-    return NextResponse.next();
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const { response, user, configured } = await updateSession(request);
+
+  // SaaS app shell
+  if (pathname.startsWith("/app")) {
+    if (!configured) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/signup";
+      url.searchParams.set("setup", "1");
+      return NextResponse.redirect(url);
+    }
+    if (!user) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      url.searchParams.set("next", pathname);
+      return NextResponse.redirect(url);
+    }
+    return response;
   }
 
-  const { pathname } = request.nextUrl;
+  // Optional shared demo password (does not apply to auth pages or SaaS)
+  const password = process.env.DEMO_PASSWORD;
+  if (!password) {
+    return response;
+  }
+
   if (
     pathname.startsWith("/login") ||
+    pathname.startsWith("/signup") ||
+    pathname.startsWith("/auth") ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/brand") ||
     pathname.startsWith("/favicon") ||
     pathname === "/icon.png" ||
     pathname === "/icon" ||
-    pathname.startsWith("/api/demo-auth")
+    pathname.startsWith("/api/demo-auth") ||
+    pathname.startsWith("/privacy") ||
+    pathname.startsWith("/pricing")
   ) {
-    return NextResponse.next();
+    return response;
   }
 
-  const unlocked = request.cookies.get(COOKIE)?.value;
+  const unlocked = request.cookies.get(DEMO_COOKIE)?.value;
   if (unlocked === "1") {
-    return NextResponse.next();
+    return response;
+  }
+
+  // If user has Supabase session, allow through even when DEMO_PASSWORD set
+  if (user) {
+    return response;
   }
 
   const loginUrl = request.nextUrl.clone();
@@ -43,9 +69,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Run on app routes, skip Next internals and static files in /public.
-     */
     "/((?!_next/static|_next/image|favicon.ico|brand/|icon.png|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };

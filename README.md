@@ -103,7 +103,10 @@ MVP demo-ready — domain logic and UI wired end-to-end with sample data.
 - **CSV export pack** (cleaned / audit / merit allocations)
 - Optional **demo password** (`DEMO_PASSWORD` on web; optional API header)
 
-**Not yet:** multi-tenant auth, persistence, real ML flight-risk, HRIS connectors, billing.
+**SaaS (in progress, v0.5):** Supabase Auth + Postgres multi-tenant scaffold — `/app` + `/api/v1/*`.  
+See `docs/SAAS-ROADMAP.md`. Public demo remains open.
+
+**Not yet:** Stripe billing, full `/app` Equity+Closer parity, real ML flight-risk, HRIS connectors.
 
 ### Hosting
 See `deploy/README.md` (Render blueprint, Vercel web + API, Docker).

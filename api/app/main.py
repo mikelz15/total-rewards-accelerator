@@ -7,12 +7,26 @@ import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+# Load api/.env for local SaaS (DATABASE_URL, SUPABASE_JWT_SECRET)
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv(Path(__file__).resolve().parents[1] / ".env")
+except ImportError:
+    pass
+
 import pandas as pd
 from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
+from app.db.session import saas_enabled
+from app.routers.saas import analysis as saas_analysis
+from app.routers.saas import candidates as saas_candidates
+from app.routers.saas import cleaner as saas_cleaner
+from app.routers.saas import datasets as saas_datasets
+from app.routers.saas import me as saas_me
 from app.services.auditor import audit_equity
 from app.services.candidates import (
     create_candidate,
@@ -63,10 +77,18 @@ app = FastAPI(
     description=(
         "Comp Engineering Toolkit — Cleaner, Equity + Merit, Candidate Tracker, Closer. "
         "Shared Placement Engine (YOE + education). Public demo enforces row caps, "
-        "PHI header scan, and upload rate limits."
+        "PHI header scan, and upload rate limits. SaaS routes under /api/v1 require "
+        "Supabase Bearer tokens when DATABASE_URL + SUPABASE_JWT_SECRET are set."
     ),
-    version="0.4.0",
+    version="0.5.0",
 )
+
+# Multi-tenant SaaS (no-op impact on demo routes)
+app.include_router(saas_me.router)
+app.include_router(saas_datasets.router)
+app.include_router(saas_candidates.router)
+app.include_router(saas_cleaner.router)
+app.include_router(saas_analysis.router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -87,6 +109,9 @@ async def demo_password_guard(request, call_next):  # type: ignore[no-untyped-de
         return await call_next(request)
     path = request.url.path
     if path in ("/", "/health", "/docs", "/openapi.json", "/redoc"):
+        return await call_next(request)
+    # SaaS JWT auth owns /api/v1/* — do not require demo password there
+    if path.startswith("/api/v1"):
         return await call_next(request)
     provided = request.headers.get("X-Demo-Password") or request.headers.get("x-demo-password")
     if provided != _DEMO_PASSWORD:
@@ -263,8 +288,13 @@ def health() -> Dict[str, Any]:
     return {
         "status": "ok",
         "service": "total-rewards-accelerator",
-        "version": "0.4.0",
+        "version": "0.5.0",
         "demo_password_required": bool(_DEMO_PASSWORD),
+        "saas": {
+            "enabled": saas_enabled(),
+            "routes": "/api/v1/*",
+            "auth": "supabase_jwt",
+        },
         "demo": {
             "max_upload_rows": DEMO_MAX_ROWS,
             "uploads_per_week": 5,

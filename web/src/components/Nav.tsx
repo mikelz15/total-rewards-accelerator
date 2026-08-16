@@ -38,7 +38,11 @@ export function Nav() {
     }
   }
 
-  if (pathname === "/login") {
+  if (
+    pathname === "/login" ||
+    pathname === "/signup" ||
+    pathname.startsWith("/app")
+  ) {
     return null;
   }
 
@@ -77,6 +81,12 @@ export function Nav() {
           >
             {resetting ? "Resetting…" : "Reset demo"}
           </button>
+          <Link
+            href="/app"
+            className="ml-1 rounded-full bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-800"
+          >
+            Open app
+          </Link>
         </nav>
       </div>
     </header>

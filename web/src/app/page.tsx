@@ -83,19 +83,19 @@ export default function HomePage() {
               href="/cleaner"
               className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-medium text-white hover:bg-slate-800"
             >
-              Start with Cleaner
+              Try public demo
+            </Link>
+            <Link
+              href="/signup"
+              className="rounded-xl border border-teal-200 bg-teal-50 px-5 py-3 text-sm font-medium text-teal-900 hover:bg-teal-100"
+            >
+              Create workspace
             </Link>
             <Link
               href="/pricing"
               className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
             >
               View pricing
-            </Link>
-            <Link
-              href="/auditor"
-              className="rounded-xl border border-teal-200 bg-teal-50 px-5 py-3 text-sm font-medium text-teal-900 hover:bg-teal-100"
-            >
-              Equity + Merit
             </Link>
           </div>
           <p className="mt-4 text-xs text-slate-500">
