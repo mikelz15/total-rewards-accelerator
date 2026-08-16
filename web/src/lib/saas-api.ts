@@ -32,16 +32,21 @@ async function saasRequest<T>(
   return res.json() as Promise<T>;
 }
 
+import type { Permissions } from "./permissions";
+
 export type MeResponse = {
-  user: { id: string; email: string | null };
+  user: { id: string; email: string | null; is_system_admin?: boolean };
   org: {
     id: string;
     name: string;
     slug: string;
     plan: string;
     max_upload_rows: number;
+    suspended?: boolean;
+    entitlements?: string[] | null;
   };
   membership: { role: string };
+  permissions?: Permissions;
   workspace: { id: string; name: string } | null;
 };
 
@@ -158,6 +163,103 @@ export const saasApi = {
     }
     return res.blob();
   },
+
+  team: (token: string) =>
+    saasRequest<{
+      members: { id: string; user_id: string; role: string; email?: string | null }[];
+      invites: { id: string; email: string; role: string; token: string; accept_path?: string }[];
+      roles: string[];
+      you: { user_id: string; role: string; email?: string | null };
+    }>("/api/v1/team", token),
+
+  invite: (token: string, body: { email: string; role: string }) =>
+    saasRequest<{ email: string; role: string; token: string; accept_path: string; note?: string }>(
+      "/api/v1/team/invites",
+      token,
+      { method: "POST", body: JSON.stringify(body) }
+    ),
+
+  acceptInvite: (token: string, inviteToken: string) =>
+    saasRequest<{ ok: boolean; org_id: string; role: string }>("/api/v1/team/invites/accept", token, {
+      method: "POST",
+      body: JSON.stringify({ token: inviteToken }),
+    }),
+
+  updateMemberRole: (token: string, userId: string, role: string) =>
+    saasRequest<Record<string, unknown>>(`/api/v1/team/members/${userId}`, token, {
+      method: "PATCH",
+      body: JSON.stringify({ role }),
+    }),
+
+  removeMember: (token: string, userId: string) =>
+    saasRequest<{ ok: boolean }>(`/api/v1/team/members/${userId}`, token, { method: "DELETE" }),
+
+  billingStatus: (token: string) =>
+    saasRequest<{
+      plan: string;
+      suspended: boolean;
+      permissions: Permissions;
+      subscription: Record<string, unknown> | null;
+      stripe_enabled: boolean;
+      can_manage_billing: boolean;
+    }>("/api/v1/billing/status", token),
+
+  billingCatalog: (token: string) =>
+    saasRequest<{
+      products: {
+        id: string;
+        name: string;
+        price_label: string;
+        checkout_ready: boolean;
+        modules?: string[];
+      }[];
+      stripe_enabled: boolean;
+      note?: string;
+    }>("/api/v1/billing/catalog", token),
+
+  checkout: (token: string, product: string) =>
+    saasRequest<{ url: string }>("/api/v1/billing/checkout", token, {
+      method: "POST",
+      body: JSON.stringify({ product }),
+    }),
+
+  portal: (token: string) =>
+    saasRequest<{ url: string }>("/api/v1/billing/portal", token, { method: "POST", body: "{}" }),
+
+  adminMe: (token: string) =>
+    saasRequest<{ is_system_admin: boolean; email: string | null }>("/api/v1/admin/me", token),
+
+  adminOrgs: (token: string) =>
+    saasRequest<{
+      orgs: {
+        id: string;
+        name: string;
+        plan: string;
+        suspended: boolean;
+        max_upload_rows: number;
+        entitlements: string[] | null;
+        member_count: number;
+        dataset_count: number;
+        effective_modules: string[];
+      }[];
+      modules: string[];
+    }>("/api/v1/admin/orgs", token),
+
+  adminPatchOrg: (
+    token: string,
+    orgId: string,
+    body: {
+      plan?: string;
+      suspended?: boolean;
+      max_upload_rows?: number;
+      entitlements?: string[] | null;
+      name?: string;
+    }
+  ) =>
+    saasRequest<Record<string, unknown>>(`/api/v1/admin/orgs/${orgId}`, token, {
+      method: "PATCH",
+      body: JSON.stringify(body),
+    }),
 };
 
 export async function getAccessToken(): Promise<string> {

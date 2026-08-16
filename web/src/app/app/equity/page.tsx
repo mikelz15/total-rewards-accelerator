@@ -17,6 +17,8 @@ import {
 import { getAccessToken, saasApi, type DatasetSummary } from "@/lib/saas-api";
 import { money, ratio } from "@/lib/format";
 import { Button, Card, Stat } from "@/components/ModuleShell";
+import { ModuleGate } from "@/components/ModuleGate";
+import { useWorkspace } from "@/lib/workspace-context";
 import { downloadCsv, stamp } from "@/lib/export";
 
 const FLAG_COLOR: Record<string, string> = {
@@ -114,6 +116,7 @@ type RemResult = {
 };
 
 export default function AppEquityPage() {
+  const { permissions } = useWorkspace();
   const [datasets, setDatasets] = useState<DatasetSummary[]>([]);
   const [datasetId, setDatasetId] = useState("");
   const [meritPool, setMeritPool] = useState(250000);
@@ -226,6 +229,7 @@ export default function AppEquityPage() {
   const thr = audit?.summary?.underpaid_threshold ?? 0.9;
 
   return (
+    <ModuleGate module="equity" permissions={permissions}>
     <div className="space-y-6">
       <div className="max-w-2xl">
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
@@ -549,5 +553,6 @@ export default function AppEquityPage() {
         </section>
       )}
     </div>
+    </ModuleGate>
   );
 }

@@ -30,11 +30,14 @@ from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
 from app.db.session import saas_config_status, saas_enabled
+from app.routers.saas import admin as saas_admin
 from app.routers.saas import analysis as saas_analysis
+from app.routers.saas import billing as saas_billing
 from app.routers.saas import candidates as saas_candidates
 from app.routers.saas import cleaner as saas_cleaner
 from app.routers.saas import datasets as saas_datasets
 from app.routers.saas import me as saas_me
+from app.routers.saas import team as saas_team
 from app.services.auditor import audit_equity
 from app.services.candidates import (
     create_candidate,
@@ -88,7 +91,7 @@ app = FastAPI(
         "PHI header scan, and upload rate limits. SaaS routes under /api/v1 require "
         "Supabase Bearer tokens when DATABASE_URL + SUPABASE_JWT_SECRET are set."
     ),
-    version="0.5.0",
+    version="0.6.0",
 )
 
 # Multi-tenant SaaS (no-op impact on demo routes)
@@ -97,6 +100,9 @@ app.include_router(saas_datasets.router)
 app.include_router(saas_candidates.router)
 app.include_router(saas_cleaner.router)
 app.include_router(saas_analysis.router)
+app.include_router(saas_team.router)
+app.include_router(saas_billing.router)
+app.include_router(saas_admin.router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -296,7 +302,7 @@ def health() -> Dict[str, Any]:
     return {
         "status": "ok",
         "service": "total-rewards-accelerator",
-        "version": "0.5.0",
+        "version": "0.6.0",
         "demo_password_required": bool(_DEMO_PASSWORD),
         "saas": {
             "enabled": saas_enabled(),

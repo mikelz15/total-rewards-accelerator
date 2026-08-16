@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 from app.auth.deps import CurrentUser, ensure_user_org, get_current_user
 from app.db.models import AnalysisRun, Dataset
 from app.db.session import get_session
+from app.services.access import require_module, require_write
 from app.services.auditor import audit_equity
 from app.services.closer import build_wealth_pdf, project_total_wealth
 from app.services.flight_risk import assess_flight_risk
@@ -110,6 +111,8 @@ def saas_auditor_run(
 ) -> Dict[str, Any]:
     with get_session() as session:
         ctx = ensure_user_org(session, user)
+        require_module(ctx.org, ctx.membership.role, "equity")
+        require_write(ctx.membership.role)
         records, dataset_id = _load_records(
             session, ctx.org.id, payload.records, payload.dataset_id
         )
@@ -174,6 +177,8 @@ def saas_remediation_run(
 ) -> Dict[str, Any]:
     with get_session() as session:
         ctx = ensure_user_org(session, user)
+        require_module(ctx.org, ctx.membership.role, "equity")
+        require_write(ctx.membership.role)
         records, dataset_id = _load_records(
             session, ctx.org.id, payload.records, payload.dataset_id
         )
@@ -218,6 +223,8 @@ def saas_closer_project(
 ) -> Dict[str, Any]:
     with get_session() as session:
         ctx = ensure_user_org(session, user)
+        require_module(ctx.org, ctx.membership.role, "closer")
+        require_write(ctx.membership.role)
         projection = project_total_wealth(**payload.model_dump(exclude={"save"}))
         projection["saas"] = {"org_id": str(ctx.org.id), "sample_only": False}
         if payload.save:
@@ -246,7 +253,8 @@ def saas_closer_pdf(
 ) -> Response:
     with get_session() as session:
         ctx = ensure_user_org(session, user)
-        _ = ctx  # auth + org bootstrap
+        require_module(ctx.org, ctx.membership.role, "closer")
+        require_write(ctx.membership.role)
         projection = project_total_wealth(**payload.model_dump(exclude={"save"}))
         pdf_bytes = build_wealth_pdf(projection)
         filename = f"total_wealth_{payload.candidate_name.replace(' ', '_').lower()}.pdf"

@@ -5,6 +5,8 @@ import { FormEvent, useEffect, useState } from "react";
 import { getAccessToken, saasApi } from "@/lib/saas-api";
 import { money } from "@/lib/format";
 import { Button, Card, Stat } from "@/components/ModuleShell";
+import { ModuleGate } from "@/components/ModuleGate";
+import { useWorkspace } from "@/lib/workspace-context";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 const STAGES = ["sourced", "screen", "interview", "offer", "accepted", "declined", "withdrawn"];
@@ -21,6 +23,7 @@ type Candidate = {
 };
 
 export default function AppCandidatesPage() {
+  const { permissions } = useWorkspace();
   const [rows, setRows] = useState<Candidate[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [name, setName] = useState("");
@@ -102,6 +105,7 @@ export default function AppCandidatesPage() {
   );
 
   return (
+    <ModuleGate module="tracker" permissions={permissions}>
     <div className="space-y-6">
       <div className="max-w-2xl">
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
@@ -221,5 +225,6 @@ export default function AppCandidatesPage() {
         </div>
       </Card>
     </div>
+    </ModuleGate>
   );
 }

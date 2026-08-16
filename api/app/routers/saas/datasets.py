@@ -12,6 +12,7 @@ from sqlalchemy import select
 from app.auth.deps import CurrentUser, ensure_user_org, get_current_user
 from app.db.models import Dataset
 from app.db.session import get_session
+from app.services.access import require_module, require_write
 
 router = APIRouter(prefix="/api/v1/datasets", tags=["saas-datasets"])
 
@@ -43,6 +44,7 @@ def _serialize(ds: Dataset) -> Dict[str, Any]:
 def list_datasets(user: CurrentUser = Depends(get_current_user)) -> Dict[str, Any]:
     with get_session() as session:
         ctx = ensure_user_org(session, user)
+        require_module(ctx.org, ctx.membership.role, "cleaner")
         rows = session.scalars(
             select(Dataset)
             .where(Dataset.org_id == ctx.org.id)
@@ -56,6 +58,8 @@ def list_datasets(user: CurrentUser = Depends(get_current_user)) -> Dict[str, An
 def create_dataset(payload: DatasetCreate, user: CurrentUser = Depends(get_current_user)) -> Dict[str, Any]:
     with get_session() as session:
         ctx = ensure_user_org(session, user)
+        require_module(ctx.org, ctx.membership.role, "cleaner")
+        require_write(ctx.membership.role)
         max_rows = ctx.org.max_upload_rows or 5000
         records = payload.records[:max_rows]
         ds = Dataset(

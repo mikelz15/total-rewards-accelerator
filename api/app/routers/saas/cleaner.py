@@ -11,6 +11,7 @@ from pydantic import BaseModel
 
 from app.auth.deps import CurrentUser, ensure_user_org, get_current_user
 from app.db.session import get_session
+from app.services.access import require_module, require_write
 from app.services.cleaner import clean_dataframe, parse_tabular_text
 
 router = APIRouter(prefix="/api/v1/cleaner", tags=["saas-cleaner"])
@@ -68,6 +69,8 @@ async def cleaner_upload(
 ) -> Dict[str, Any]:
     with get_session() as session:
         ctx = ensure_user_org(session, user)
+        require_module(ctx.org, ctx.membership.role, "cleaner")
+        require_write(ctx.membership.role)
         max_rows = ctx.org.max_upload_rows or 5000
     content = await file.read()
     text = _read_text_bytes(content)
@@ -84,6 +87,8 @@ def cleaner_paste(
 ) -> Dict[str, Any]:
     with get_session() as session:
         ctx = ensure_user_org(session, user)
+        require_module(ctx.org, ctx.membership.role, "cleaner")
+        require_write(ctx.membership.role)
         max_rows = ctx.org.max_upload_rows or 5000
     if payload.csv_text:
         df = _parse_to_df(payload.csv_text)

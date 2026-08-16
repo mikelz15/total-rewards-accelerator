@@ -99,14 +99,15 @@ def ensure_user_org(session: Session, user: CurrentUser) -> OrgContext:
         )
         return OrgContext(user=user, org=org, membership=membership, workspace=workspace)
 
-    # Bootstrap personal organization
+    # Bootstrap personal organization (trial = full modules, soft-paywall later via plan)
     label = (user.email or "My workspace").split("@")[0]
     org_name = f"{label}'s workspace"
     org = Organization(
         name=org_name,
         slug=_slugify(label),
-        plan="pilot",
+        plan="trial",
         max_upload_rows=5000,
+        suspended=False,
     )
     session.add(org)
     session.flush()

@@ -5,8 +5,11 @@ import { FormEvent, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { saasApi } from "@/lib/saas-api";
 import { Button, Card, Stat } from "@/components/ModuleShell";
+import { ModuleGate } from "@/components/ModuleGate";
+import { useWorkspace } from "@/lib/workspace-context";
 
 export default function AppCleanerPage() {
+  const { permissions } = useWorkspace();
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -55,6 +58,7 @@ export default function AppCleanerPage() {
   }
 
   return (
+    <ModuleGate module="cleaner" permissions={permissions}>
     <div className="space-y-6">
       <div className="max-w-2xl">
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
@@ -139,5 +143,6 @@ export default function AppCleanerPage() {
         </div>
       </div>
     </div>
+    </ModuleGate>
   );
 }

@@ -14,6 +14,8 @@ import {
 import { getAccessToken, saasApi } from "@/lib/saas-api";
 import { money } from "@/lib/format";
 import { Button, Card, Stat } from "@/components/ModuleShell";
+import { ModuleGate } from "@/components/ModuleGate";
+import { useWorkspace } from "@/lib/workspace-context";
 
 type FormState = {
   base_salary: number;
@@ -104,6 +106,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 }
 
 export default function AppCloserPage() {
+  const { permissions } = useWorkspace();
   const [form, setForm] = useState<FormState>(defaults);
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [projection, setProjection] = useState<Projection | null>(null);
@@ -202,6 +205,7 @@ export default function AppCloserPage() {
     projection?.totals?.grand_total;
 
   return (
+    <ModuleGate module="closer" permissions={permissions}>
     <div className="space-y-6">
       <div className="max-w-2xl">
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
@@ -470,5 +474,6 @@ export default function AppCloserPage() {
         </div>
       </div>
     </div>
+    </ModuleGate>
   );
 }

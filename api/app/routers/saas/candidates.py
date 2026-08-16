@@ -13,6 +13,7 @@ from sqlalchemy import select
 from app.auth.deps import CurrentUser, ensure_user_org, get_current_user
 from app.db.models import Candidate
 from app.db.session import get_session
+from app.services.access import require_module, require_write
 
 router = APIRouter(prefix="/api/v1/candidates", tags=["saas-candidates"])
 
@@ -75,6 +76,7 @@ def _pipeline_summary(rows: list[Candidate]) -> Dict[str, Any]:
 def list_candidates(user: CurrentUser = Depends(get_current_user)) -> Dict[str, Any]:
     with get_session() as session:
         ctx = ensure_user_org(session, user)
+        require_module(ctx.org, ctx.membership.role, "tracker")
         rows = list(
             session.scalars(
                 select(Candidate)
@@ -95,6 +97,8 @@ def create_candidate(payload: CandidateCreate, user: CurrentUser = Depends(get_c
         raise HTTPException(status_code=400, detail=f"Invalid stage; use one of {sorted(STAGES)}")
     with get_session() as session:
         ctx = ensure_user_org(session, user)
+        require_module(ctx.org, ctx.membership.role, "tracker")
+        require_write(ctx.membership.role)
         c = Candidate(
             org_id=ctx.org.id,
             workspace_id=ctx.workspace.id if ctx.workspace else None,
@@ -116,6 +120,8 @@ def update_candidate(
         raise HTTPException(status_code=400, detail=f"Invalid stage; use one of {sorted(STAGES)}")
     with get_session() as session:
         ctx = ensure_user_org(session, user)
+        require_module(ctx.org, ctx.membership.role, "tracker")
+        require_write(ctx.membership.role)
         c = session.get(Candidate, candidate_id)
         if not c or c.org_id != ctx.org.id:
             raise HTTPException(status_code=404, detail="Candidate not found")
@@ -130,6 +136,8 @@ def update_candidate(
 def delete_candidate(candidate_id: UUID, user: CurrentUser = Depends(get_current_user)) -> Dict[str, Any]:
     with get_session() as session:
         ctx = ensure_user_org(session, user)
+        require_module(ctx.org, ctx.membership.role, "tracker")
+        require_write(ctx.membership.role)
         c = session.get(Candidate, candidate_id)
         if not c or c.org_id != ctx.org.id:
             raise HTTPException(status_code=404, detail="Candidate not found")
