@@ -18,8 +18,19 @@ Mikéz Comp Engineering Toolkit — a thin full-stack MVP of the portfolio progr
 ## Stack
 
 - **Web:** Next.js 14 (App Router) + TypeScript + Tailwind + Recharts  
+- **Mobile:** Expo (React Native) + Expo Router — see `mobile/`  
 - **API:** FastAPI + pandas + ReportLab  
 - **Path:** `~/Desktop/Total_Rewards_Accelerator`
+
+### Mobile
+
+```bash
+cd ~/Desktop/Total_Rewards_Accelerator/mobile
+npm install
+npx expo start
+```
+
+Tabs: Home · Cleaner · Equity · Tracker · Closer. Details in `mobile/README.md`.
 
 ## Prerequisites
 
