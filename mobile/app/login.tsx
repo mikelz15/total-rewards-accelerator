@@ -55,7 +55,8 @@ export default function LoginScreen() {
       >
         <Eyebrow>SaaS workspace</Eyebrow>
         <Title>Sign in to your org</Title>
-        <Body style={{ marginTop: 8 }}>
+        <View style={{ height: 8 }} />
+        <Body>
           Same Supabase account as the web app. Public demo tabs still work without login.
         </Body>
 

@@ -30,11 +30,13 @@ export function ModuleLock({
       <View style={styles.wrap}>
         <Card>
           <Title>Workspace required</Title>
-          <Body style={{ marginTop: 8 }}>
+          <View style={{ height: 8 }} />
+          <Body>
             Sign in to use org data and entitlements, or switch Home to Demo mode for sample data.
           </Body>
+          <View style={{ height: 12 }} />
           <Link href="/login" asChild>
-            <Button title="Sign in" style={{ marginTop: 12 }} />
+            <Button title="Sign in" />
           </Link>
         </Card>
       </View>
@@ -51,7 +53,8 @@ export function ModuleLock({
           {permissions?.suspended ? "Suspended" : planHas ? "Role restricted" : "Upgrade"}
         </Text>
         <Title>{LABELS[module]} locked</Title>
-        <Body style={{ marginTop: 8 }}>
+        <View style={{ height: 8 }} />
+        <Body>
           {permissions?.suspended
             ? "This organization is suspended."
             : planHas
