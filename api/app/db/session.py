@@ -25,12 +25,21 @@ def saas_config_status() -> dict:
     has_db = bool(os.environ.get("DATABASE_URL", "").strip())
     has_url = bool(os.environ.get("SUPABASE_URL", "").strip())
     has_anon = bool(anon)
+    # Key names only (helps catch typos / wrong service) — never values
+    related_keys = sorted(
+        k
+        for k in os.environ
+        if k.upper().startswith(
+            ("DATABASE", "SUPABASE", "CORS", "DEMO", "RENDER_", "PYTHON")
+        )
+    )
     return {
         "has_database_url": has_db,
         "has_supabase_url": has_url,
         "has_supabase_anon_key": has_anon,
         "has_jwt_secret": has_real_secret,
         "ready": has_db and (has_real_secret or (has_url and has_anon)),
+        "related_env_keys": related_keys,
     }
 
 
