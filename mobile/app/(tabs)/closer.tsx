@@ -14,6 +14,7 @@ import {
   Subtitle,
   Title,
 } from "@/components/ui";
+import { ModuleLock } from "@/components/ModuleLock";
 import { SimpleBarChart } from "@/components/SimpleBarChart";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
@@ -98,6 +99,7 @@ export default function CloserScreen() {
   ];
 
   return (
+    <ModuleLock module="closer">
     <Screen style={{ padding: 0 }}>
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <Eyebrow>Module 04</Eyebrow>
@@ -212,6 +214,7 @@ function Field({
         autoCapitalize="none"
       />
     </View>
+    </ModuleLock>
   );
 }
 

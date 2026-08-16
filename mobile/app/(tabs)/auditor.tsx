@@ -14,6 +14,7 @@ import {
   Subtitle,
   Title,
 } from "@/components/ui";
+import { ModuleLock } from "@/components/ModuleLock";
 import { SimpleBarChart } from "@/components/SimpleBarChart";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
@@ -72,6 +73,7 @@ export default function AuditorScreen() {
   }, [audit]);
 
   return (
+    <ModuleLock module="equity">
     <Screen style={{ padding: 0 }}>
       <ScrollView contentContainerStyle={styles.scroll}>
         <Eyebrow>Module 02</Eyebrow>
@@ -216,6 +218,7 @@ export default function AuditorScreen() {
         )}
       </ScrollView>
     </Screen>
+    </ModuleLock>
   );
 }
 

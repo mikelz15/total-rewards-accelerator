@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import * as DocumentPicker from "expo-document-picker";
 import { readAsStringAsync } from "expo-file-system/legacy";
 import { api, type CleanResult } from "@/lib/api";
+import { saasApi } from "@/lib/saas-api";
 import { money } from "@/lib/format";
 import { saveCleanResult } from "@/lib/session";
 import {
@@ -17,12 +18,15 @@ import {
   Subtitle,
   Title,
 } from "@/components/ui";
+import { ModuleLock } from "@/components/ModuleLock";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
+import { useAuth } from "@/lib/auth-context";
 
 export default function CleanerScreen() {
   const router = useRouter();
   const c = Colors[useColorScheme() ?? "light"];
+  const { mode, accessToken } = useAuth();
   const [result, setResult] = useState<CleanResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,15 +70,32 @@ export default function CleanerScreen() {
       setLoading(true);
       setUploadName(asset.name);
 
-      // Prefer multipart upload (matches web); fall back to reading text + paste
+      // Workspace: SaaS upload + save dataset. Demo: public API with caps.
       try {
-        const data = await api.cleanerUpload({
-          uri: asset.uri,
-          name: asset.name || "upload.csv",
-          mimeType: asset.mimeType,
-        });
-        await applyResult(data);
+        if (mode === "workspace" && accessToken) {
+          const cleaned = await saasApi.cleanerUpload(accessToken, {
+            uri: asset.uri,
+            name: asset.name || "upload.csv",
+            mimeType: asset.mimeType,
+          });
+          await saasApi.createDataset(accessToken, {
+            name: (asset.name || "upload").replace(/\.[^.]+$/, ""),
+            source_filename: asset.name || "upload.csv",
+            records: cleaned.records || [],
+            stats: cleaned.stats || {},
+            issues: (cleaned.issues as unknown[]) || [],
+          });
+          await applyResult(cleaned as CleanResult);
+        } else {
+          const data = await api.cleanerUpload({
+            uri: asset.uri,
+            name: asset.name || "upload.csv",
+            mimeType: asset.mimeType,
+          });
+          await applyResult(data);
+        }
       } catch {
+        if (mode === "workspace") throw new Error("Workspace upload failed");
         const text = await readAsStringAsync(asset.uri);
         if (!text.trim()) throw new Error("File is empty");
         const data = await api.cleanerPaste(text);
@@ -85,9 +106,10 @@ export default function CleanerScreen() {
     } finally {
       setLoading(false);
     }
-  }, [applyResult]);
+  }, [applyResult, mode, accessToken]);
 
   return (
+    <ModuleLock module="cleaner">
     <Screen style={{ padding: 0 }}>
       <ScrollView
         contentContainerStyle={styles.scroll}
@@ -95,7 +117,7 @@ export default function CleanerScreen() {
           <RefreshControl refreshing={loading} onRefresh={loadSample} tintColor={c.tint} />
         }
       >
-        <Eyebrow>Module 01</Eyebrow>
+        <Eyebrow>Module 01 · {mode === "workspace" ? "Workspace" : "Demo"}</Eyebrow>
         <Title>Market Data Cleaner</Title>
         <Subtitle>
           Load the messy HRIS sample or pick a CSV/TSV from your device. Shared Placement Engine
@@ -103,8 +125,9 @@ export default function CleanerScreen() {
         </Subtitle>
 
         <Banner tone="warn">
-          Public demo: prefer sample data. Custom files are capped (≤10 rows) and scanned for
-          sensitive headers on the API.
+          {mode === "workspace"
+            ? "Workspace: uploads use org row limits and save a durable dataset for Equity."
+            : "Public demo: prefer sample data. Custom files are capped (≤10 rows) and scanned for sensitive headers."}
         </Banner>
 
         <Button
@@ -170,6 +193,7 @@ export default function CleanerScreen() {
         )}
       </ScrollView>
     </Screen>
+    </ModuleLock>
   );
 }
 

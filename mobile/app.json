@@ -2,7 +2,7 @@
   "expo": {
     "name": "Total Rewards Accelerator",
     "slug": "total-rewards-accelerator",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "tra",
@@ -12,7 +12,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.mikez.totalrewardsaccelerator",
-      "buildNumber": "1",
+      "buildNumber": "2",
       "infoPlist": {
         "UIBackgroundModes": [
           "remote-notification"
@@ -25,7 +25,7 @@
       }
     },
     "android": {
-      "versionCode": 1,
+      "versionCode": 4,
       "adaptiveIcon": {
         "backgroundColor": "#0f766e",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -68,14 +68,18 @@
         {
           "iCloudContainerEnvironment": "Production"
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
     },
     "extra": {
       "apiUrl": "https://tra-api-starter.onrender.com",
+      "webAppUrl": "https://totalrewardsaccelerator.com/app",
       "privacyPolicyUrl": "https://totalrewardsaccelerator.com/privacy",
+      "supabaseUrl": "https://iqcnuocamgtiniqjlnkh.supabase.co",
+      "supabaseAnonKey": "",
       "router": {},
       "eas": {
         "projectId": "3bd2110d-f225-4850-be64-d688d36caf0e"

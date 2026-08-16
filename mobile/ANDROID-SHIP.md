@@ -1,11 +1,15 @@
 # Android + Play Store shipping (iOS on hold)
 
-## Production AAB (ready)
+## SaaS readiness (code)
+
+See **`MOBILE-SAAS-READINESS.md`**. Next store build should be **1.1.0 / versionCode 4** with Supabase anon key in EAS env for workspace sign-in. Existing store AAB can remain demo-only until then.
+
+## Production AAB (last built)
 
 | Field | Value |
 |--------|--------|
-| **Version** | 1.0.0 |
-| **versionCode** | **3** (use this one) |
+| **Version** | 1.0.0 (next: 1.1.0) |
+| **versionCode** | **3** last shipped candidate · next ship **4** |
 | **Build page** | https://expo.dev/accounts/mikelz15/projects/total-rewards-accelerator/builds/88346866-0055-4561-85d8-690df90e02ba |
 | **Download AAB** | https://expo.dev/artifacts/eas/cs3wg4AHyRnmeuIKC43iv2hprhU7A9ZWRt1ruGywAlg.aab |
 | **Package** | `com.mikez.totalrewardsaccelerator` |

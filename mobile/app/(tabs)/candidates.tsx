@@ -14,6 +14,7 @@ import {
   Subtitle,
   Title,
 } from "@/components/ui";
+import { ModuleLock } from "@/components/ModuleLock";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 
@@ -43,6 +44,7 @@ export default function CandidatesScreen() {
   );
 
   return (
+    <ModuleLock module="tracker">
     <Screen style={{ padding: 0 }}>
       <ScrollView
         contentContainerStyle={styles.scroll}
@@ -101,6 +103,7 @@ export default function CandidatesScreen() {
         )}
       </ScrollView>
     </Screen>
+    </ModuleLock>
   );
 }
 
