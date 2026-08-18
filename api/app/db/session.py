@@ -14,37 +14,62 @@ from sqlalchemy.orm import Session, sessionmaker
 _engine: Optional[Engine] = None
 _SessionLocal: Optional[sessionmaker] = None
 _composite_applied = False
+_composite_meta: dict = {
+    "tra_saas_json_present": False,
+    "tra_saas_json_parse_ok": False,
+    "tra_saas_json_keys": [],
+    "tra_stripe_json_present": False,
+    "tra_stripe_json_parse_ok": False,
+    "tra_stripe_json_keys": [],
+}
 
 
-def apply_composite_saas_env() -> None:
-    """
-    Optional single-var bootstrap for hosts that only apply some dashboard secrets.
-
-    Set TRA_SAAS_JSON to a JSON object, e.g.:
-      {"DATABASE_URL":"...","SUPABASE_URL":"...","SUPABASE_ANON_KEY":"..."}
-
-    Existing process env wins (setdefault).
-    """
-    global _composite_applied
-    if _composite_applied:
-        return
-    _composite_applied = True
-    raw = os.environ.get("TRA_SAAS_JSON", "").strip()
+def _merge_json_env(var_name: str, *, override: bool = False) -> tuple[bool, bool, list]:
+    """Load JSON object from env var into os.environ. Returns (present, parse_ok, keys)."""
+    raw = os.environ.get(var_name, "").strip()
     if not raw:
-        return
+        return False, False, []
     try:
         data = json.loads(raw)
     except json.JSONDecodeError:
-        return
+        return True, False, []
     if not isinstance(data, dict):
-        return
+        return True, False, []
+    keys: list = []
     for key, value in data.items():
         if not key or value is None:
             continue
         k = str(key).strip()
         v = str(value).strip()
-        if k and v:
-            os.environ.setdefault(k, v)
+        if not k or not v:
+            continue
+        keys.append(k)
+        if override or k not in os.environ or not str(os.environ.get(k, "")).strip():
+            os.environ[k] = v
+    return True, True, sorted(keys)
+
+
+def apply_composite_saas_env() -> None:
+    """
+    Optional JSON bootstrap for hosts that drop individual dashboard secrets.
+
+    TRA_SAAS_JSON — DB + Supabase (+ optional Stripe)
+    TRA_STRIPE_JSON — Stripe-only (recommended if TRA_SAAS_JSON is already large)
+    """
+    global _composite_applied, _composite_meta
+    if _composite_applied:
+        return
+    _composite_applied = True
+    p1, ok1, k1 = _merge_json_env("TRA_SAAS_JSON", override=False)
+    p2, ok2, k2 = _merge_json_env("TRA_STRIPE_JSON", override=True)
+    _composite_meta = {
+        "tra_saas_json_present": p1,
+        "tra_saas_json_parse_ok": ok1,
+        "tra_saas_json_keys": k1,
+        "tra_stripe_json_present": p2,
+        "tra_stripe_json_parse_ok": ok2,
+        "tra_stripe_json_keys": k2,
+    }
 
 
 def saas_config_status() -> dict:
@@ -64,7 +89,7 @@ def saas_config_status() -> dict:
         k
         for k in os.environ
         if k.upper().startswith(
-            ("DATABASE", "SUPABASE", "CORS", "DEMO", "TRA_SAAS", "RENDER_", "PYTHON")
+            ("DATABASE", "SUPABASE", "CORS", "DEMO", "TRA_SAAS", "STRIPE", "PUBLIC_WEB", "SYSTEM_ADMIN", "RENDER_", "PYTHON")
         )
     )
     return {
@@ -73,6 +98,8 @@ def saas_config_status() -> dict:
         "has_supabase_anon_key": has_anon,
         "has_jwt_secret": has_real_secret,
         "has_tra_saas_json": bool(os.environ.get("TRA_SAAS_JSON", "").strip()),
+        "has_tra_stripe_json": bool(os.environ.get("TRA_STRIPE_JSON", "").strip()),
+        "composite": dict(_composite_meta),
         "ready": has_db and (has_real_secret or (has_url and has_anon)),
         "related_env_keys": related_keys,
     }
