@@ -1,37 +1,39 @@
 import Link from "next/link";
 
+/** Fixed commercial prices — match Stripe test/live Price objects */
 const saasModules = [
   {
     name: "Cleaner",
-    price: "$99–$149",
+    price: "$129",
     unit: "/ month",
     blurb: "HRIS import, column mapping, quality score, Placement Engine on cleaned rows.",
   },
   {
     name: "Equity + Merit",
-    price: "$199–$299",
+    price: "$249",
     unit: "/ month",
     blurb: "Dual-lens equity, flight risk, merit pool remediation toward mid or expected placement.",
   },
   {
     name: "Candidate Tracker",
-    price: "$99–$149",
+    price: "$129",
     unit: "/ month",
     blurb: "Pipeline stages, offer packages, notes — handoff into Closer.",
   },
   {
     name: "Closer",
-    price: "$149–$249",
+    price: "$199",
     unit: "/ month",
     blurb: "Four-year total wealth projection and one-page offer PDF.",
   },
 ];
 
 const oneTime = [
-  { name: "Cleaner", price: "$129–$179" },
-  { name: "Equity + Merit", price: "$299–$399" },
-  { name: "Candidate Tracker", price: "$129–$179" },
-  { name: "Closer", price: "$199–$299" },
+  { name: "Cleaner", price: "$1,290", note: "Annual prepaid (~10× monthly)" },
+  { name: "Equity + Merit", price: "$2,490", note: "Annual prepaid (~10× monthly)" },
+  { name: "Candidate Tracker", price: "$1,290", note: "Annual prepaid (~10× monthly)" },
+  { name: "Closer", price: "$1,990", note: "Annual prepaid (~10× monthly)" },
+  { name: "Full suite", price: "$4,990", note: "Annual prepaid (~10× monthly)" },
 ];
 
 export default function PricingPage() {
@@ -45,9 +47,9 @@ export default function PricingPage() {
           Modules you can buy separately — or as a suite
         </h1>
         <p className="mt-4 text-lg text-slate-600">
-          Total Rewards Accelerator is modular by design. Start with Cleaner, add Equity + Merit when
-          you need defendable remediation, or close offers with Tracker + Closer. Design-partner
-          pilots available — ranges below are indicative SaaS and one-time licensing bands.
+          Fixed monthly subscription pricing. Start with Cleaner, add Equity + Merit when you need
+          defendable remediation, or close offers with Tracker + Closer. Design-partner pilots are
+          still available via SOW.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
@@ -57,17 +59,17 @@ export default function PricingPage() {
             Create workspace
           </Link>
           <Link
-            href="/login"
-            className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-          >
-            Sign in to app
-          </Link>
-          <a
-            href="https://totalrewardsaccelerator.com"
+            href="/app/billing"
             className="rounded-xl border border-teal-200 bg-teal-50 px-5 py-3 text-sm font-medium text-teal-900 hover:bg-teal-100"
           >
+            Subscribe in app
+          </Link>
+          <Link
+            href="/cleaner"
+            className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          >
             Try public demo
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -75,13 +77,13 @@ export default function PricingPage() {
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="text-xl font-semibold text-slate-900">SaaS subscription</h2>
-            <p className="mt-1 text-sm text-slate-500">Monthly per module · hosted access</p>
+            <p className="mt-1 text-sm text-slate-500">Monthly per module · hosted access · USD</p>
           </div>
           <div className="rounded-2xl border-2 border-teal-600 bg-teal-50 px-5 py-3 text-right">
             <div className="text-xs font-semibold uppercase tracking-wide text-teal-800">
               Full suite bundle
             </div>
-            <div className="text-2xl font-semibold tabular-nums text-slate-900">$399–$599</div>
+            <div className="text-2xl font-semibold tabular-nums text-slate-900">$499</div>
             <div className="text-xs text-slate-600">/ month · all four modules</div>
           </div>
         </div>
@@ -106,16 +108,17 @@ export default function PricingPage() {
       </section>
 
       <section className="mt-14">
-        <h2 className="text-xl font-semibold text-slate-900">One-time licensing</h2>
+        <h2 className="text-xl font-semibold text-slate-900">One-time / annual licensing</h2>
         <p className="mt-1 text-sm text-slate-500">
-          Per-module license bands for design partners and internal deployments (terms via SOW).
+          Prepaid annual licenses for design partners and internal deployments (terms via SOW).
         </p>
         <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
           <table className="min-w-full text-left text-sm">
             <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
               <tr>
                 <th className="px-5 py-3 font-medium">Module</th>
-                <th className="px-5 py-3 font-medium">One-time license</th>
+                <th className="px-5 py-3 font-medium">Annual license</th>
+                <th className="px-5 py-3 font-medium">Notes</th>
               </tr>
             </thead>
             <tbody>
@@ -123,6 +126,7 @@ export default function PricingPage() {
                 <tr key={row.name} className="border-t border-slate-100">
                   <td className="px-5 py-3 font-medium text-slate-900">{row.name}</td>
                   <td className="px-5 py-3 tabular-nums text-slate-700">{row.price}</td>
+                  <td className="px-5 py-3 text-slate-500">{row.note}</td>
                 </tr>
               ))}
             </tbody>
@@ -143,9 +147,8 @@ export default function PricingPage() {
         <div className="rounded-2xl border border-slate-200 bg-slate-900 p-5 text-white shadow-sm">
           <h3 className="font-semibold">Design partner pilot</h3>
           <p className="mt-2 text-sm text-slate-300">
-            Prefer a fixed-scope pilot with advisory sessions? Pilot pricing and SOW live in the
-            go-to-market pack — or DM <strong className="text-teal-300">PILOT</strong> after you
-            try the sample demo.
+            Prefer a fixed-scope pilot with advisory sessions? Ask for a pilot SOW — or start a
+            workspace and we can grant pilot access from the platform admin console.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <Link
@@ -155,18 +158,18 @@ export default function PricingPage() {
               Try the demo
             </Link>
             <Link
-              href="/"
+              href="/signup"
               className="rounded-xl border border-slate-600 px-4 py-2.5 text-sm font-medium text-slate-200 hover:bg-slate-800"
             >
-              Back to home
+              Create workspace
             </Link>
           </div>
         </div>
       </section>
 
       <p className="mt-10 text-xs text-slate-500">
-        Prices shown as ranges for planning; final commercial terms are set in a pilot SOW or
-        subscription agreement. Public demo is sample data only.
+        Prices in USD. Subscriptions billed monthly via Stripe. Public demo is sample data only.
+        Taxes may apply.
       </p>
     </div>
   );

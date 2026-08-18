@@ -125,35 +125,41 @@ def permission_payload(
 
 
 def catalog() -> List[Dict[str, Any]]:
+    """Fixed prices — must stay aligned with Stripe Price objects + /pricing page."""
     return [
         {
             "id": "cleaner",
             "name": "Cleaner",
-            "price_label": "$99–$149/mo",
+            "price_label": "$129/mo",
+            "price_usd": 129,
             "stripe_price_env": "STRIPE_PRICE_CLEANER",
         },
         {
             "id": "equity",
             "name": "Equity + Merit",
-            "price_label": "$199–$299/mo",
+            "price_label": "$249/mo",
+            "price_usd": 249,
             "stripe_price_env": "STRIPE_PRICE_EQUITY",
         },
         {
             "id": "tracker",
             "name": "Candidate Tracker",
-            "price_label": "$99–$149/mo",
+            "price_label": "$129/mo",
+            "price_usd": 129,
             "stripe_price_env": "STRIPE_PRICE_TRACKER",
         },
         {
             "id": "closer",
             "name": "Closer",
-            "price_label": "$149–$249/mo",
+            "price_label": "$199/mo",
+            "price_usd": 199,
             "stripe_price_env": "STRIPE_PRICE_CLOSER",
         },
         {
             "id": "suite",
             "name": "Full suite",
-            "price_label": "$399–$599/mo",
+            "price_label": "$499/mo",
+            "price_usd": 499,
             "stripe_price_env": "STRIPE_PRICE_SUITE",
             "modules": sorted(ALL_MODULES),
         },
