@@ -22,7 +22,7 @@ export function BrandLogo({ variant = "nav", href = "/", priority = false }: Pro
   const img = (
     <Image
       src="/brand/tra-logo.png"
-      alt="Total Rewards Accelerator — Making compensation easy"
+      alt="Total Rewards Accelerator — Making compensation easy for all"
       width={sizes.width}
       height={sizes.height}
       className={`${sizes.className} object-contain object-left`}

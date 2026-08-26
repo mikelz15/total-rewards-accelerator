@@ -88,7 +88,7 @@ export default function HomePage() {
             Stop crunching rows. Start designing strategy.
           </h1>
           <p className="mt-2 text-sm font-medium tracking-wide text-teal-800">
-            Making compensation easy
+            Making compensation easy for all
           </p>
           <p className="mt-4 max-w-xl text-lg text-slate-600">
             A three-click modular system — Cleaner, Equity + Merit, Candidate Tracker, and Closer —
