@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { BrandLogo } from "@/components/BrandLogo";
 
@@ -62,6 +63,22 @@ const edges = [
 export default function HomePage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
+      <Link
+        href="/signup"
+        className="group mb-10 block overflow-hidden rounded-3xl border border-teal-200/80 bg-slate-900 shadow-sm ring-1 ring-teal-900/10 transition hover:ring-teal-500/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+        aria-label="Start free trial — first 30 days free, then cancel anytime"
+      >
+        <Image
+          src="/promo/launch-30-days-free-16x9.png"
+          alt="Launch promo: first 30 days free on Total Rewards Accelerator, then cancel anytime. Start free trial at totalrewardsaccelerator.com"
+          width={1920}
+          height={1080}
+          priority
+          className="h-auto w-full object-cover transition duration-300 group-hover:opacity-95"
+          sizes="(max-width: 1152px) 100vw, 1152px"
+        />
+      </Link>
+
       <section className="grid gap-10 lg:grid-cols-[1.25fr_0.85fr] lg:items-center">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
