@@ -46,6 +46,12 @@ export default function PricingPage() {
         <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-900">
           Modules you can buy separately — or as a suite
         </h1>
+        <div className="mt-4 rounded-2xl border border-teal-200 bg-teal-50 px-4 py-3">
+          <p className="text-sm font-semibold text-teal-950">Launch promo — first 30 days free</p>
+          <p className="mt-1 text-sm text-teal-900/80">
+            Card required at checkout. You won’t be charged until day 31. Cancel anytime from Billing.
+          </p>
+        </div>
         <p className="mt-4 text-lg text-slate-600">
           Fixed monthly subscription pricing. Start with Cleaner, add Equity + Merit when you need
           defendable remediation, or close offers with Tracker + Closer. Design-partner pilots are
@@ -56,13 +62,13 @@ export default function PricingPage() {
             href="/signup"
             className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-medium text-white hover:bg-slate-800"
           >
-            Create workspace
+            Start free trial
           </Link>
           <Link
             href="/app/billing"
             className="rounded-xl border border-teal-200 bg-teal-50 px-5 py-3 text-sm font-medium text-teal-900 hover:bg-teal-100"
           >
-            Subscribe in app
+            Choose a plan
           </Link>
           <Link
             href="/cleaner"
@@ -85,6 +91,7 @@ export default function PricingPage() {
             </div>
             <div className="text-2xl font-semibold tabular-nums text-slate-900">$499</div>
             <div className="text-xs text-slate-600">/ month · all four modules</div>
+            <div className="mt-1 text-xs font-medium text-teal-800">30 days free to start</div>
           </div>
         </div>
 
@@ -101,6 +108,7 @@ export default function PricingPage() {
                 </span>
                 <span className="text-sm text-slate-500">{m.unit}</span>
               </div>
+              <p className="mt-1 text-xs font-medium text-teal-800">30 days free, then billed monthly</p>
               <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">{m.blurb}</p>
             </div>
           ))}

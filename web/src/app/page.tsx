@@ -80,16 +80,16 @@ export default function HomePage() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
-              href="/cleaner"
+              href="/signup"
               className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-medium text-white hover:bg-slate-800"
             >
-              Try public demo
+              Start free trial
             </Link>
             <Link
-              href="/signup"
+              href="/cleaner"
               className="rounded-xl border border-teal-200 bg-teal-50 px-5 py-3 text-sm font-medium text-teal-900 hover:bg-teal-100"
             >
-              Create workspace
+              Try public demo
             </Link>
             <Link
               href="/pricing"
@@ -98,6 +98,9 @@ export default function HomePage() {
               View pricing
             </Link>
           </div>
+          <p className="mt-3 text-sm font-medium text-teal-800">
+            Launch promo: first 30 days free on any plan · card required · cancel anytime
+          </p>
           <p className="mt-4 text-xs text-slate-500">
             Demo tip: <strong>Reset demo</strong> in the nav reloads the messy HRIS sample. Prefer
             sample data — uploads are capped and scanned on the public demo.

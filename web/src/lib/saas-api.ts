@@ -212,8 +212,16 @@ export const saasApi = {
         price_label: string;
         checkout_ready: boolean;
         modules?: string[];
+        trial_days?: number;
       }[];
       stripe_enabled: boolean;
+      trial_days?: number;
+      promo?: {
+        enabled: boolean;
+        trial_days: number;
+        label: string;
+        detail: string;
+      } | null;
       note?: string;
     }>("/api/v1/billing/catalog", token),
 

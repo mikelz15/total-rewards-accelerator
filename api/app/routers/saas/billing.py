@@ -61,8 +61,19 @@ def _plan_for_product(product: str) -> str:
     }.get(product, "trial")
 
 
+def _trial_days() -> int:
+    """Launch promo: first N days free (card required). Set STRIPE_TRIAL_DAYS=0 to disable."""
+    raw = os.environ.get("STRIPE_TRIAL_DAYS", "30").strip()
+    try:
+        days = int(raw)
+    except ValueError:
+        days = 30
+    return max(0, min(days, 90))
+
+
 @router.get("/catalog")
 def billing_catalog() -> Dict[str, Any]:
+    trial_days = _trial_days()
     items = []
     for c in catalog():
         pid = _price_id(c["id"]) if c["id"] != "suite" or True else None
@@ -71,11 +82,25 @@ def billing_catalog() -> Dict[str, Any]:
                 **{k: v for k, v in c.items() if k != "stripe_price_env"},
                 "stripe_configured": bool(_price_id(c["id"])),
                 "checkout_ready": bool(_stripe() and _price_id(c["id"])),
+                "trial_days": trial_days,
             }
         )
+    promo = None
+    if trial_days > 0:
+        promo = {
+            "enabled": True,
+            "trial_days": trial_days,
+            "label": f"First {trial_days} days free",
+            "detail": (
+                f"Card required. You won’t be charged until the {trial_days}-day trial ends. "
+                "Cancel anytime from Billing → Manage payment method."
+            ),
+        }
     return {
         "products": items,
         "stripe_enabled": bool(_stripe()),
+        "trial_days": trial_days,
+        "promo": promo,
         "note": (
             "When Stripe is not configured, org owners can still use trial/pilot plans; "
             "platform admin can grant paid plans manually."
@@ -140,6 +165,16 @@ def create_checkout(body: CheckoutBody, user: CurrentUser = Depends(get_current_
         site = os.environ.get("PUBLIC_WEB_URL", "https://totalrewardsaccelerator.com").rstrip("/")
         success = body.success_url or f"{site}/app/billing?checkout=success"
         cancel = body.cancel_url or f"{site}/app/billing?checkout=cancel"
+        trial_days = _trial_days()
+        sub_data: Dict[str, Any] = {
+            "metadata": {
+                "org_id": str(ctx.org.id),
+                "product": body.product,
+                "plan": _plan_for_product(body.product),
+            }
+        }
+        if trial_days > 0:
+            sub_data["trial_period_days"] = trial_days
         session_obj = stripe.checkout.Session.create(
             mode="subscription",
             customer=customer_id,
@@ -150,16 +185,16 @@ def create_checkout(body: CheckoutBody, user: CurrentUser = Depends(get_current_
                 "org_id": str(ctx.org.id),
                 "product": body.product,
                 "plan": _plan_for_product(body.product),
+                "trial_days": str(trial_days),
             },
-            subscription_data={
-                "metadata": {
-                    "org_id": str(ctx.org.id),
-                    "product": body.product,
-                    "plan": _plan_for_product(body.product),
-                }
-            },
+            subscription_data=sub_data,
+            allow_promotion_codes=True,
         )
-        return {"url": session_obj["url"], "session_id": session_obj["id"]}
+        return {
+            "url": session_obj["url"],
+            "session_id": session_obj["id"],
+            "trial_days": trial_days,
+        }
 
 
 @router.post("/portal")
@@ -216,7 +251,13 @@ async def stripe_webhook(request: Request) -> Dict[str, Any]:
                     if not sub:
                         sub = Subscription(org_id=org.id)
                         session.add(sub)
-                    sub.status = "active"
+                    # Launch promo / Stripe trial → unlock modules while status is trialing
+                    trial_meta = (data.get("metadata") or {}).get("trial_days")
+                    try:
+                        trial_n = int(trial_meta) if trial_meta is not None else _trial_days()
+                    except ValueError:
+                        trial_n = _trial_days()
+                    sub.status = "trialing" if trial_n > 0 else "active"
                     sub.stripe_customer_id = data.get("customer") or sub.stripe_customer_id
                     sub.stripe_subscription_id = data.get("subscription") or sub.stripe_subscription_id
                     if product == "suite":

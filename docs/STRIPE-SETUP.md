@@ -79,13 +79,25 @@ curl -s https://tra-api-starter.onrender.com/health | python3 -m json.tool
 # stripe.prices.*: true
 ```
 
-Then: sign in as **org owner** → `/app/billing` → Subscribe (test card `4242 4242 4242 4242`).
+Then: sign in as **org owner** → `/app/billing` → **Start free trial** (test card `4242 4242 4242 4242` in Test mode).
+
+### Launch promo — first 30 days free
+Checkout passes `trial_period_days` from env (default **30**):
+
+```text
+STRIPE_TRIAL_DAYS=30
+```
+
+- Card is collected at Checkout; **$0** until the trial ends, then the plan price bills monthly.  
+- Set `STRIPE_TRIAL_DAYS=0` to turn the promo off.  
+- Catalog/billing UI show “First N days free” when enabled.
 
 ### 6. Go live
 1. Stripe toggle **Live mode**  
 2. Re-run script with `sk_live_…`  
 3. New live webhook + live price IDs on Render  
 4. Activate payments / business details in Stripe  
+
 
 ---
 
