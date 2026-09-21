@@ -12,6 +12,7 @@
 | [07-icp-and-prospect-list.md](./07-icp-and-prospect-list.md) | **ICP, how to build list, starter segments** |
 | [08-denver-metro-prospect-queue.md](./08-denver-metro-prospect-queue.md) | **Denver/Front Range local 30+ research queue** |
 | [09-brand-assets.md](./09-brand-assets.md) | **Logo paths, LinkedIn banner, brand colors** |
+| [10-governance-chip-post.md](./10-governance-chip-post.md) | **Governance chip hybrid post + COS/CT escalation line** |
 | [linkedin-banner-tra.png](./linkedin-banner-tra.png) | LinkedIn banner **1584×396** |
 | [TRA-Design-Partner-Pilot-SOW.docx](./TRA-Design-Partner-Pilot-SOW.docx) | 2-page SOW (Word, logo header) |
 | [TRA-Design-Partner-Pilot-SOW.pdf](./TRA-Design-Partner-Pilot-SOW.pdf) | 2-page SOW (PDF — re-export from DOCX if outdated) |
@@ -19,10 +20,12 @@
 ## This week
 1. Open live demo → full click path (https://totalrewardsaccelerator.com — no password)  
 2. Record Loom with `04-loom-script.md`  
-3. LinkedIn post + first comment from `05-post-hosting-copy.md`  
+3. LinkedIn post + first comment from `05-post-hosting-copy.md` **or** the governance-chip hybrid in `10-governance-chip-post.md` (COS Monday 08:00 Denver)  
 4. Start Week 1 of `06-90-day-revenue-plan.md` (Calendly + 15 warm DMs)  
 5. Build prospect sheet from `07-icp-and-prospect-list.md`  
 6. On PILOT: send SOW PDF  
 
 ## Product highlight (v0.3)
 Shared **Placement Engine**: years of experience + education → expected rate, used by Cleaner, Auditor, Merit, Flight Risk, and Closer — while classic mid-compa stays.
+
+Quiet **governance overlay** (not a module): COS gates cards weekly; chips land on Cleaner / Auditor / Closer only. Near-term: CT HB 5003 on 2026-10-01. See `docs/COS-GOVERNANCE-HANDOFF.md` and `api/app/data/governance_rules.json`.
