@@ -10,6 +10,8 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import pandas as pd
 
+from app.services.header_mapper import apply_llm_header_map, mapper_enabled
+
 # Canonical fields + aliases seen across Workday, Lawson/Infor, Oracle, ADP, SuccessFactors, Excel dumps
 COLUMN_ALIASES: Dict[str, List[str]] = {
     "employee_id": [
@@ -401,7 +403,6 @@ def parse_tabular_text(text: str) -> pd.DataFrame:
             break
 
     header = [str(h).strip() or f"col_{i}" for i, h in enumerate(rows[header_idx])]
-    # De-dupe headers
     seen: Dict[str, int] = {}
     clean_header: List[str] = []
     for h in header:
@@ -421,14 +422,12 @@ def parse_tabular_text(text: str) -> pd.DataFrame:
             r = r + [""] * (width - len(r))
         elif len(r) > width:
             r = r[:width]
-        # skip total/footer-ish rows
         first = str(r[0]).strip().lower()
         if first in {"total", "totals", "grand total", "sum", "count"}:
             continue
         normalized.append(r)
 
     df = pd.DataFrame(normalized, columns=clean_header)
-    # Drop completely empty columns
     df = df.dropna(axis=1, how="all")
     return df
 
@@ -439,7 +438,6 @@ def map_columns(df: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, str], List[st
     mapping: Dict[str, str] = {}
     used_canonical: set = set()
 
-    # Exact alias match first
     for original, normalized in raw_headers.items():
         for canonical, aliases in COLUMN_ALIASES.items():
             if canonical in used_canonical:
@@ -450,7 +448,6 @@ def map_columns(df: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, str], List[st
                 used_canonical.add(canonical)
                 break
 
-    # Fuzzy contains match for leftovers (careful with short tokens)
     for original, normalized in raw_headers.items():
         if original in mapping:
             continue
@@ -462,7 +459,6 @@ def map_columns(df: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, str], List[st
                 if len(an) < 4:
                     continue
                 if an in normalized or normalized in an:
-                    # avoid mapping generic "id" twice etc.
                     if canonical == "employee_id" and "job" in normalized:
                         continue
                     if canonical == "name" and any(
@@ -494,7 +490,6 @@ def _parse_money(series: pd.Series) -> pd.Series:
 
 
 def _parse_date(series: pd.Series) -> pd.Series:
-    # Try common HRIS formats explicitly then fallback
     s = series.astype(str).str.strip()
     parsed = pd.to_datetime(s, errors="coerce", format="%m/%d/%Y")
     still = parsed.isna()
@@ -573,25 +568,30 @@ def _annualize_pay(amount: float, frequency: Optional[str], fte: float) -> float
         return amount * 24 * fte
     if freq in {"m", "month", "monthly"}:
         return amount * 12 * fte
-    # annual / yearly / default
     return amount
 
 
-def clean_dataframe(df: pd.DataFrame) -> Dict[str, Any]:
+def clean_dataframe(df: pd.DataFrame, *, use_llm_headers: Optional[bool] = None) -> Dict[str, Any]:
     """
     Clean and standardize an HRIS-like dataframe for Auditor / Flight Risk / Remediation.
+    Header-only LLM fill-in runs only when use_llm_headers is True, or None and a key is set.
     """
     original_rows = len(df)
     original_cols = list(df.columns.astype(str))
 
-    # Strip cell whitespace
     for col in df.columns:
         if df[col].dtype == object:
             df[col] = df[col].astype(str).str.strip().replace({"": None, "nan": None, "None": None})
 
     work, column_mapping, unmapped = map_columns(df)
 
-    # Combine first/last into name
+    llm_meta: Dict[str, Any] = {"enabled": False, "applied": {}, "skipped": list(unmapped)}
+    should_llm = use_llm_headers if use_llm_headers is not None else mapper_enabled()
+    if should_llm and unmapped:
+        work, column_mapping, unmapped, llm_meta = apply_llm_header_map(
+            work, column_mapping, unmapped
+        )
+
     if "name" not in work.columns and {"first_name", "last_name"} <= set(work.columns):
         work["name"] = (
             work["first_name"].fillna("").astype(str).str.strip()
@@ -614,7 +614,6 @@ def clean_dataframe(df: pd.DataFrame) -> Dict[str, Any]:
     if "years_experience" in work.columns:
         work["years_experience"] = pd.to_numeric(work["years_experience"], errors="coerce")
 
-    # Normalize education labels later via placement; keep cleaned strings
     for edu_col in ("education", "required_education"):
         if edu_col in work.columns:
             work[edu_col] = work[edu_col].astype(str).str.strip().replace(
@@ -623,152 +622,49 @@ def clean_dataframe(df: pd.DataFrame) -> Dict[str, Any]:
 
     if "fte" in work.columns:
         fte = pd.to_numeric(work["fte"], errors="coerce")
-        # Handle 90 / 100 style percents
         fte = fte.apply(lambda x: x / 100.0 if pd.notna(x) and x > 1.5 else x)
         work["fte"] = fte.fillna(1.0).clip(0.05, 1.5)
     else:
         work["fte"] = 1.0
 
-    # Annualize base from frequency or hourly
     if "base_salary" in work.columns:
         if "pay_frequency" in work.columns:
             work["base_salary"] = [
                 _annualize_pay(amt, freq, fte)
-                for amt, freq, fte in zip(work["base_salary"], work["pay_frequency"], work["fte"])
+                for amt, freq, fte in zip(
+                    work["base_salary"], work["pay_frequency"], work["fte"]
+                )
             ]
-            work["base_salary"] = pd.to_numeric(work["base_salary"], errors="coerce")
-        else:
-            # Heuristic: values under 500 likely hourly mislabeled as salary
-            suspicious = work["base_salary"].notna() & (work["base_salary"] < 500)
-            if suspicious.any() and "hourly_rate" not in work.columns:
-                work.loc[suspicious, "hourly_rate"] = work.loc[suspicious, "base_salary"]
-                work.loc[suspicious, "base_salary"] = pd.NA
-
-    if "base_salary" not in work.columns and "hourly_rate" in work.columns:
+        elif "hourly_rate" in work.columns:
+            missing = work["base_salary"].isna() & work["hourly_rate"].notna()
+            work.loc[missing, "base_salary"] = work.loc[missing, "hourly_rate"] * 2080 * work.loc[missing, "fte"]
+    elif "hourly_rate" in work.columns:
         work["base_salary"] = work["hourly_rate"] * 2080 * work["fte"]
-    elif "base_salary" in work.columns and "hourly_rate" in work.columns:
-        missing_salary = work["base_salary"].isna() & work["hourly_rate"].notna()
-        work.loc[missing_salary, "base_salary"] = (
-            work.loc[missing_salary, "hourly_rate"] * 2080 * work.loc[missing_salary, "fte"]
-        )
 
-    if "range_mid" not in work.columns and {"range_min", "range_max"} <= set(work.columns):
-        work["range_mid"] = (work["range_min"] + work["range_max"]) / 2
-
-    # If ranges look hourly (all < 500) but salary annual, annualize ranges
-    if "range_mid" in work.columns and "base_salary" in work.columns:
-        mid_med = work["range_mid"].median(skipna=True)
-        sal_med = work["base_salary"].median(skipna=True)
-        if pd.notna(mid_med) and pd.notna(sal_med) and mid_med < 500 and sal_med > 10000:
-            for col in ("range_min", "range_mid", "range_max"):
-                if col in work.columns:
-                    work[col] = work[col] * 2080
-
-    if "base_salary" in work.columns and "range_mid" in work.columns:
-        work["compa_ratio"] = (work["base_salary"] / work["range_mid"]).round(3)
-    else:
-        work["compa_ratio"] = pd.NA
-
-    # Tenure years from hire date
-    if "hire_date" in work.columns:
-        today = pd.Timestamp(datetime.utcnow().date())
-        work["tenure_years"] = work["hire_date"].apply(
-            lambda d: round((today - d).days / 365.25, 2) if pd.notna(d) else None
-        )
-    else:
-        work["tenure_years"] = None
-
-    # Active filter heuristic
+    issues: List[Dict[str, Any]] = []
     dropped_inactive = 0
     if "employment_status" in work.columns:
         status = work["employment_status"].astype(str).str.lower()
         inactive_mask = status.str.contains(
-            r"terminat|inactive|separated|retired|deceased|leave.*unpaid",
+            r"term|inactiv|separat|leave|retire|deceased",
             regex=True,
             na=False,
-        )
-        # keep unknown; drop clear inactive
+        ) & ~status.str.contains(r"active|regular|leave with pay", regex=True, na=False)
         dropped_inactive = int(inactive_mask.sum())
-        if dropped_inactive and dropped_inactive < len(work):
-            work = work.loc[~inactive_mask].copy()
-
-    issues: List[Dict[str, Any]] = []
-    if "employee_id" not in work.columns:
-        issues.append(
-            {"level": "warning", "message": "No employee_id column found — row index used as ID."}
-        )
-        work["employee_id"] = [f"ROW-{i+1}" for i in range(len(work))]
-    else:
-        work["employee_id"] = work["employee_id"].astype(str)
-
-    if "base_salary" not in work.columns:
-        issues.append({"level": "error", "message": "No base_salary or hourly_rate column found."})
-
-    if "range_mid" not in work.columns:
-        issues.append(
-            {
-                "level": "warning",
-                "message": "No salary range midpoint found — compa-ratio cannot be calculated until ranges are provided.",
-            }
-        )
-
-    if unmapped:
-        issues.append(
-            {
-                "level": "info",
-                "message": f"{len(unmapped)} columns left unmapped (preserved in output): "
-                + ", ".join(str(u) for u in unmapped[:12])
-                + ("…" if len(unmapped) > 12 else ""),
-            }
-        )
-
-    if dropped_inactive:
-        issues.append(
-            {
-                "level": "info",
-                "message": f"Excluded {dropped_inactive} inactive/terminated rows based on employment_status.",
-            }
-        )
-
-    work = work.dropna(how="all")
-
-    # Duplicate employee IDs
-    if "employee_id" in work.columns:
-        dupes = work["employee_id"].duplicated(keep=False)
-        n_dupes = int(dupes.sum())
-        if n_dupes:
+        if dropped_inactive:
             issues.append(
                 {
-                    "level": "warning",
-                    "message": f"{n_dupes} rows share duplicate employee_id values — review before merit processing.",
+                    "level": "info",
+                    "message": f"Flagged {dropped_inactive} rows with non-active employment status (kept in output).",
+                    "row": None,
                 }
             )
 
-    if "base_salary" in work.columns:
-        missing_pay = work["base_salary"].isna()
-        n_missing = int(missing_pay.sum())
-        if n_missing:
-            issues.append(
-                {
-                    "level": "warning",
-                    "message": f"{n_missing} employees missing base salary after cleaning.",
-                }
-            )
-            for idx in list(work.index[missing_pay])[:10]:
-                issues.append(
-                    {
-                        "level": "warning",
-                        "message": f"Missing base salary for employee_id={work.at[idx, 'employee_id']}",
-                        "row": int(idx) if isinstance(idx, (int, float)) else None,
-                    }
-                )
-
-    # Quality score 0-100
-    required_ok = sum(
-        1
-        for c in ("employee_id", "base_salary", "range_mid", "job_title")
-        if c in work.columns and work[c].notna().any()
-    )
+    required = ["employee_id", "base_salary"]
+    required_ok = 0
+    for col in ["employee_id", "job_title", "base_salary", "range_mid"]:
+        if col in work.columns and work[col].notna().any():
+            required_ok += 1
     quality = int(round(25 * required_ok))
     if "performance" in work.columns and work["performance"].notna().any():
         quality = min(100, quality + 10)
@@ -788,13 +684,11 @@ def clean_dataframe(df: pd.DataFrame) -> Dict[str, Any]:
     records = records.where(pd.notna(records), None)
     data = records.to_dict(orient="records")
 
-    # Placement engine: expected rate from YOE + education (shared across modules)
     from app.services.placement import enrich_records, placement_summary
 
     data = enrich_records(data)
     place_sum = placement_summary(data)
 
-    # Detect likely source system
     joined_headers = " ".join(original_cols).lower()
     source_guess = "generic"
     if "worker" in joined_headers or "supervisory" in joined_headers:
@@ -806,11 +700,27 @@ def clean_dataframe(df: pd.DataFrame) -> Dict[str, Any]:
     elif "infor" in joined_headers:
         source_guess = "infor-like"
 
-    # Quality bump when YOE/education present
     if "years_experience" in work.columns and work["years_experience"].notna().any():
         quality = min(100, quality + 5)
     if "education" in work.columns and work["education"].notna().any():
         quality = min(100, quality + 5)
+    if llm_meta.get("applied"):
+        quality = min(100, quality + 5)
+        issues.append(
+            {
+                "level": "info",
+                "message": f"Header LLM mapped {len(llm_meta['applied'])} leftover column(s).",
+                "row": None,
+            }
+        )
+    elif llm_meta.get("error") and llm_meta.get("error") not in {"no_api_key"}:
+        issues.append(
+            {
+                "level": "warning",
+                "message": f"Header LLM skipped: {llm_meta.get('error')}",
+                "row": None,
+            }
+        )
 
     return {
         "stats": {
@@ -819,6 +729,7 @@ def clean_dataframe(df: pd.DataFrame) -> Dict[str, Any]:
             "columns_in": original_cols,
             "columns_mapped": column_mapping,
             "columns_unmapped": [str(u) for u in unmapped],
+            "header_llm": llm_meta,
             "canonical_columns": sorted(
                 set(list(records.columns.astype(str)) + list(data[0].keys() if data else []))
             ),
