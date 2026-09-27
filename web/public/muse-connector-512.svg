@@ -1,6 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="TRA">
-  <rect width="512" height="512" rx="96" fill="#0b0b0c"/>
-  <rect x="56" y="56" width="400" height="400" rx="64" fill="#f1eee8"/>
-  <text x="256" y="292" text-anchor="middle" font-family="Georgia, Times, serif" font-size="168" font-weight="600" fill="#0b0b0c">T</text>
-  <rect x="148" y="348" width="216" height="10" rx="5" fill="#8c8982"/>
+  <rect width="512" height="512" rx="108" fill="#0A4F52"/>
+  <text x="29.0" y="294.0" font-family="Arial Black, Arial, sans-serif" font-size="128" font-weight="900" fill="#FFFFFF">TRA</text>
+  <circle cx="413.0" cy="263.0" r="70" fill="#5C4008"/>
+  <circle cx="413.0" cy="260.0" r="70" fill="#8A620E"/>
+  <circle cx="413.0" cy="260.0" r="63" fill="#D4A017"/>
+  <circle cx="413.0" cy="260.0" r="54" fill="#E2B02A"/>
 </svg>
