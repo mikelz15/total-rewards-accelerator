@@ -14,7 +14,7 @@ export default function PrivacyPage() {
       <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-900">
         Privacy Policy
       </h1>
-      <p className="mt-2 text-sm text-slate-500">Last updated: August 16, 2026</p>
+      <p className="mt-2 text-sm text-slate-500">Last updated: September 26, 2026</p>
 
       <div className="mt-8 space-y-6 text-sm leading-relaxed text-slate-700">
         <section>
@@ -52,6 +52,10 @@ export default function PrivacyPage() {
               <strong>Files and HRIS-style records</strong> you choose to upload or paste into the
               product (customer / pilot deployments only; public demo is sample-first).
             </li>
+            <li>
+              <strong>Connector credentials</strong> such as workspace API keys when you connect an
+              agent (including Meta Muse).
+            </li>
           </ul>
         </section>
 
@@ -60,16 +64,29 @@ export default function PrivacyPage() {
           <p className="mt-2">
             To operate the Cleaner, Equity + Merit, Candidate Tracker, and Closer modules; improve
             reliability and security; respond to support and pilot requests; and send optional
-            product reminders if you enable notifications.
+            product reminders if you enable notifications. We do not sell personal information. We
+            do not use customer compensation files to train public models.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-semibold text-slate-900">Muse and other agents</h2>
+          <p className="mt-2">
+            If you connect TRA to Muse or another agent, that agent sends only the prompts and files
+            you authorize. TRA returns mappings, placement tables, audit notes, pool math, and PDF
+            links. TRA does not post salary ranges, email candidates, or write to your HRIS through
+            the v1 connector. You can revoke a workspace API key at any time. We do not use Muse
+            conversation content for advertising.
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-slate-900">Sharing</h2>
           <p className="mt-2">
-            We use infrastructure providers (e.g. hosting and app distribution platforms) to run the
-            service. We do not sell personal information. Data may be disclosed if required by law
-            or to protect rights and safety.
+            We use infrastructure providers (e.g. hosting, payments, and app distribution platforms)
+            to run the service. We do not sell personal information. Data may be disclosed if
+            required by law or to protect rights and safety. When Muse is connected, TRA shares with
+            Meta only the minimum a connected request needs to complete the tool call you started.
           </p>
         </section>
 
@@ -86,14 +103,15 @@ export default function PrivacyPage() {
           <h2 className="text-lg font-semibold text-slate-900">Your choices</h2>
           <p className="mt-2">
             You may decline optional notifications, avoid uploading personal data to the public
-            demo, and request deletion of pilot data by contacting us.
+            demo, disconnect an agent by deleting its API key, and request deletion of pilot data by
+            contacting us.
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-slate-900">Children</h2>
           <p className="mt-2">
-            TRA is a business productivity product and is not directed to children under 13.
+            TRA is a business productivity product and is not directed to children under 18.
           </p>
         </section>
 
@@ -114,6 +132,10 @@ export default function PrivacyPage() {
       </div>
 
       <p className="mt-10 text-sm">
+        <Link href="/terms" className="font-medium text-teal-700 hover:underline">
+          Terms of Service
+        </Link>
+        <span className="mx-2 text-slate-300">·</span>
         <Link href="/" className="font-medium text-teal-700 hover:underline">
           ← Back to home
         </Link>
