@@ -20,6 +20,14 @@ const modules = [
     accent: "border-t-teal-600",
   },
   {
+    href: "/cycle",
+    step: "02b",
+    title: "Cycle Lock",
+    blurb:
+      "Range-first merit. 3.2% envelope, $0 above midpoint, confirm-chip for scarce exceptions.",
+    accent: "border-t-slate-900",
+  },
+  {
     href: "/candidates",
     step: "03",
     title: "Candidate Tracker",

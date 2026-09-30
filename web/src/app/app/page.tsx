@@ -22,6 +22,13 @@ const modules = [
     accent: "border-t-teal-600",
   },
   {
+    href: "/app/cycle",
+    step: "02b",
+    title: "Cycle Lock",
+    body: "Range-first 3.2% envelope. Confirm-chip exceptions. $0 above midpoint.",
+    accent: "border-t-slate-900",
+  },
+  {
     href: "/app/candidates",
     step: "03",
     title: "Candidates",

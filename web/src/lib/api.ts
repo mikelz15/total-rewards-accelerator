@@ -187,6 +187,57 @@ export type RemediationResult = {
   unfunded: Record<string, unknown>[];
 };
 
+export type CycleLockPerson = {
+  id: string;
+  name: string;
+  title: string;
+  base: number;
+  range_min: number;
+  range_mid: number;
+  range_max: number;
+  penetration: number | null;
+  band: string;
+  last_increase: string;
+  lti: number;
+  proposed_cash: number;
+  proposed_pct: number;
+  new_base: number;
+  new_penetration: number | null;
+  wealth: {
+    four_year_total: number;
+    year_1_cash: number;
+    years: { year: number; base: number; bonus: number; vesting: number; year_total: number; cumulative: number }[];
+  };
+};
+
+export type CycleLockResult = {
+  philosophy: { name: string; rule: string; split: Record<string, number>; envelope_pct: number };
+  team: { name: string; headcount: number; salary_base: number };
+  envelope: number;
+  summary: {
+    envelope: number;
+    allocated: number;
+    remaining: number;
+    under_range_repaired: number;
+    above_midpoint_merit: number;
+    exceptions_pending: number;
+    exceptions_applied: number;
+    exception_dollars: number;
+    paycheck_half_point: number;
+  };
+  people: CycleLockPerson[];
+  chips: {
+    id: string;
+    name: string;
+    amount: number;
+    reason: string;
+    confirmed: boolean;
+    material: boolean;
+    applied: boolean;
+  }[];
+  demo?: boolean;
+};
+
 export type WealthProjection = {
   meta: {
     company_name: string;
@@ -292,6 +343,16 @@ export const api = {
     target_mode?: "mid" | "expected_placement" | "max_of_both";
   }) =>
     request<RemediationResult>("/api/remediation/run", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  cycleLockSample: () => request<CycleLockResult>("/api/cycle-lock/sample"),
+  cycleLockRun: (body: {
+    records?: Record<string, unknown>[];
+    envelope_pct?: number;
+    confirm_exceptions?: Record<string, boolean>;
+  }) =>
+    request<CycleLockResult>("/api/cycle-lock/run", {
       method: "POST",
       body: JSON.stringify(body),
     }),

@@ -15,6 +15,7 @@ const moduleLinks: {
   { href: "/app", label: "Dashboard" },
   { href: "/app/cleaner", label: "Cleaner", module: "cleaner" },
   { href: "/app/equity", label: "Equity", module: "equity" },
+  { href: "/app/cycle", label: "Cycle Lock", module: "equity" },
   { href: "/app/candidates", label: "Candidates", module: "tracker" },
   { href: "/app/closer", label: "Closer", module: "closer" },
   { href: "/app/datasets", label: "Datasets", module: "cleaner" },
