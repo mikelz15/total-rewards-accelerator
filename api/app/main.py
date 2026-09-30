@@ -59,6 +59,7 @@ from app.services.demo_guard import (
 from app.services.flight_risk import assess_flight_risk
 from app.services.placement import enrich_records, place_person, placement_summary
 from app.services.remediation import remediate
+from app.services.cycle_lock import lock_cycle
 
 # Public demo: Candidate Tracker + Closer stay on synthetic sample data only
 DEMO_SAMPLE_ONLY_PIPELINE = True
@@ -161,6 +162,12 @@ class RemediationRequest(BaseModel):
     underpaid_only: bool = True
     max_increase_pct: Optional[float] = Field(None, ge=0, le=50)
     target_mode: str = "mid"  # mid | expected_placement | max_of_both
+
+
+class CycleLockRequest(BaseModel):
+    records: Optional[List[Dict[str, Any]]] = None
+    envelope_pct: float = Field(0.032, ge=0, le=0.2)
+    confirm_exceptions: Optional[Dict[str, bool]] = None
 
 
 class CloserRequest(BaseModel):
@@ -464,6 +471,20 @@ def remediation_run(payload: RemediationRequest) -> Dict[str, Any]:
         max_increase_pct=payload.max_increase_pct,
         target_mode=payload.target_mode,
     )
+
+
+@app.post("/api/cycle-lock/run")
+def cycle_lock_run(payload: CycleLockRequest) -> Dict[str, Any]:
+    return lock_cycle(
+        payload.records,
+        envelope_pct=payload.envelope_pct,
+        confirm_exceptions=payload.confirm_exceptions,
+    )
+
+
+@app.get("/api/cycle-lock/sample")
+def cycle_lock_sample() -> Dict[str, Any]:
+    return lock_cycle()
 
 
 @app.post("/api/closer/project")

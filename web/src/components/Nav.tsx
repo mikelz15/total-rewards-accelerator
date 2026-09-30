@@ -11,6 +11,7 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/cleaner", label: "Cleaner" },
   { href: "/auditor", label: "Equity + Merit" },
+  { href: "/cycle", label: "Cycle Lock" },
   { href: "/candidates", label: "Candidate Tracker" },
   { href: "/closer", label: "Closer" },
   { href: "/pricing", label: "Pricing" },
