@@ -21,15 +21,15 @@ const modules = [
   },
   {
     href: "/cycle",
-    step: "02b",
+    step: "03",
     title: "Cycle Lock",
     blurb:
-      "Range-first merit. 3.2% envelope, $0 above midpoint, confirm-chip for scarce exceptions.",
+      "Included with Equity + Merit. Range-first merit: 3.2% envelope, $0 above midpoint, confirm-chip for scarce exceptions.",
     accent: "border-t-slate-900",
   },
   {
     href: "/candidates",
-    step: "03",
+    step: "04",
     title: "Candidate Tracker",
     blurb:
       "Recruiting pipeline: stages, offer packages, notes — hand off to Closer for total-wealth statements.",
@@ -37,7 +37,7 @@ const modules = [
   },
   {
     href: "/closer",
-    step: "04",
+    step: "05",
     title: "Candidate Closer",
     blurb:
       "Base / bonus / LTI → four-year total wealth projection and a one-page PDF most tools never produce.",
@@ -49,7 +49,7 @@ const workflow = [
   { n: "01", label: "Clean", detail: "HRIS in" },
   { n: "02", label: "Place", detail: "YOE + edu" },
   { n: "03", label: "Audit", detail: "Equity risk" },
-  { n: "04", label: "Fund", detail: "Merit pool" },
+  { n: "04", label: "Lock", detail: "Range-first pool" },
   { n: "05", label: "Close", detail: "4-yr wealth" },
 ];
 
@@ -99,9 +99,9 @@ export default function HomePage() {
             Making compensation easy for all
           </p>
           <p className="mt-4 max-w-xl text-lg text-slate-600">
-            A three-click modular system — Cleaner, Equity + Merit, Candidate Tracker, and Closer —
-            powered by one shared Placement Engine that turns years of experience and education into
-            personalized, defendable pay targets.
+            A three-click system — Cleaner, Equity + Merit with Cycle Lock, Candidate Tracker, and
+            Closer — powered by one shared Placement Engine that turns years of experience and
+            education into personalized, defendable pay targets.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
@@ -138,7 +138,7 @@ export default function HomePage() {
           </div>
           <p className="text-sm font-medium text-slate-900">End-to-end workflow</p>
           <p className="mt-1 text-xs text-slate-500">
-            One placement model. Four modules. Three clicks.
+            One placement model. Cycle Lock is the merit step, not a separate product.
           </p>
           <div className="mt-5 flex flex-wrap items-stretch gap-2">
             {workflow.map((step, i) => (
@@ -186,8 +186,12 @@ export default function HomePage() {
 
       <section className="mt-14">
         <h2 className="text-sm font-semibold uppercase tracking-[0.14em] text-slate-500">
-          Four modules
+          Modules
         </h2>
+        <p className="mt-2 max-w-2xl text-sm text-slate-500">
+          Five working surfaces. Four invoices. Cycle Lock ships with Equity + Merit and the full
+          suite.
+        </p>
         <div className="mt-4 grid gap-5 sm:grid-cols-2">
           {modules.map((m) => (
             <Link

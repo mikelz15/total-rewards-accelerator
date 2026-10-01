@@ -12,7 +12,8 @@ const saasModules = [
     name: "Equity + Merit",
     price: "$249",
     unit: "/ month",
-    blurb: "Dual-lens equity, flight risk, merit pool remediation toward mid or expected placement.",
+    blurb:
+      "Dual-lens equity, flight risk, merit pool remediation, and Cycle Lock. Not a separate charge.",
   },
   {
     name: "Candidate Tracker",
@@ -30,10 +31,18 @@ const saasModules = [
 
 const oneTime = [
   { name: "Cleaner", price: "$1,290", note: "Annual prepaid (~10× monthly)" },
-  { name: "Equity + Merit", price: "$2,490", note: "Annual prepaid (~10× monthly)" },
+  {
+    name: "Equity + Merit",
+    price: "$2,490",
+    note: "Annual prepaid (~10× monthly). Includes Cycle Lock.",
+  },
   { name: "Candidate Tracker", price: "$1,290", note: "Annual prepaid (~10× monthly)" },
   { name: "Closer", price: "$1,990", note: "Annual prepaid (~10× monthly)" },
-  { name: "Full suite", price: "$4,990", note: "Annual prepaid (~10× monthly)" },
+  {
+    name: "Full suite",
+    price: "$4,990",
+    note: "Annual prepaid (~10× monthly). Includes Cycle Lock.",
+  },
 ];
 
 export default function PricingPage() {
@@ -54,8 +63,11 @@ export default function PricingPage() {
         </div>
         <p className="mt-4 text-lg text-slate-600">
           Fixed monthly subscription pricing. Start with Cleaner, add Equity + Merit when you need
-          defendable remediation, or close offers with Tracker + Closer. Design-partner pilots are
-          still available via SOW.
+          defendable remediation and Cycle Lock, or close offers with Tracker + Closer.
+          Design-partner pilots are still available via SOW.
+        </p>
+        <p className="mt-3 text-sm text-slate-600">
+          Cycle Lock is included with Equity + Merit and the full suite. It is not a fifth invoice.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
@@ -90,7 +102,7 @@ export default function PricingPage() {
               Full suite bundle
             </div>
             <div className="text-2xl font-semibold tabular-nums text-slate-900">$499</div>
-            <div className="text-xs text-slate-600">/ month · all four modules</div>
+            <div className="text-xs text-slate-600">/ month · all modules, including Cycle Lock</div>
             <div className="mt-1 text-xs font-medium text-teal-800">30 days free to start</div>
           </div>
         </div>
@@ -148,6 +160,7 @@ export default function PricingPage() {
           <ul className="mt-3 space-y-2 text-sm text-slate-600">
             <li>· Shared Placement Engine (YOE + education)</li>
             <li>· Dual-lens equity + merit remediation</li>
+            <li>· Cycle Lock on Equity + Merit and the suite</li>
             <li>· Four-year total wealth closeouts</li>
             <li>· Three-click Comp Engineering workflow</li>
           </ul>
