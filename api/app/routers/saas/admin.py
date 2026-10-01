@@ -12,7 +12,7 @@ from sqlalchemy import func, select
 
 from app.auth.deps import CurrentUser, get_current_user
 from app.db.models import Dataset, Membership, Organization
-from app.db.session import get_session
+from app.db.session import bind_rls, get_session
 from app.services.access import perms_for
 from app.services.entitlements import MODULES, normalize_plan
 
@@ -56,6 +56,7 @@ def admin_me(user: CurrentUser = Depends(get_current_user)) -> Dict[str, Any]:
 def list_orgs(user: CurrentUser = Depends(get_current_user)) -> Dict[str, Any]:
     require_system_admin(user)
     with get_session() as session:
+        bind_rls(session, user_id=str(user.user_id), platform_admin=True)
         orgs = list(session.scalars(select(Organization).order_by(Organization.created_at.desc())).all())
         rows = []
         for o in orgs:
@@ -91,6 +92,7 @@ def patch_org(
 ) -> Dict[str, Any]:
     require_system_admin(user)
     with get_session() as session:
+        bind_rls(session, user_id=str(user.user_id), platform_admin=True)
         org = session.get(Organization, org_id)
         if not org:
             raise HTTPException(status_code=404, detail="Org not found")

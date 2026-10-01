@@ -11,7 +11,7 @@ from sqlalchemy import select
 
 from app.auth.deps import CurrentUser, ensure_user_org, get_current_user
 from app.db.models import Subscription
-from app.db.session import get_session
+from app.db.session import bind_rls, get_session
 from app.services.access import perms_for, require_billing_admin
 from app.services.entitlements import catalog
 
@@ -233,6 +233,8 @@ async def stripe_webhook(request: Request) -> Dict[str, Any]:
     data = event["data"]["object"]
 
     with get_session() as session:
+        # Signature already verified. Platform scope so the webhook can update any org.
+        bind_rls(session, platform_admin=True)
         if etype == "checkout.session.completed":
             org_id = (data.get("metadata") or {}).get("org_id")
             plan = (data.get("metadata") or {}).get("plan") or "suite"

@@ -84,6 +84,11 @@ def _slugify(name: str) -> str:
 
 def ensure_user_org(session: Session, user: CurrentUser) -> OrgContext:
     """Return primary org for user; bootstrap personal org on first visit."""
+    from sqlalchemy import text
+
+    from app.db.session import bind_rls
+
+    bind_rls(session, user_id=str(user.user_id))
     membership = session.scalar(
         select(Membership)
         .where(Membership.user_id == user.user_id)
@@ -91,6 +96,7 @@ def ensure_user_org(session: Session, user: CurrentUser) -> OrgContext:
         .limit(1)
     )
     if membership:
+        bind_rls(session, user_id=str(user.user_id), org_id=str(membership.org_id))
         org = session.get(Organization, membership.org_id)
         if not org:
             raise HTTPException(status_code=500, detail="Membership org missing")
@@ -102,20 +108,36 @@ def ensure_user_org(session: Session, user: CurrentUser) -> OrgContext:
     # Bootstrap personal organization (trial = full modules, soft-paywall later via plan)
     label = (user.email or "My workspace").split("@")[0]
     org_name = f"{label}'s workspace"
-    org = Organization(
-        name=org_name,
-        slug=_slugify(label),
-        plan="trial",
-        max_upload_rows=5000,
-        suspended=False,
-    )
-    session.add(org)
-    session.flush()
-    membership = Membership(org_id=org.id, user_id=user.user_id, role="owner")
-    session.add(membership)
-    workspace = Workspace(org_id=org.id, name="Default")
-    session.add(workspace)
-    session.flush()
+    slug = _slugify(label)
+    has_bootstrap = session.execute(
+        text("SELECT to_regprocedure('tra_bootstrap_org(text,text,uuid)') IS NOT NULL")
+    ).scalar()
+    if not has_bootstrap:
+        org = Organization(
+            name=org_name,
+            slug=slug,
+            plan="trial",
+            max_upload_rows=5000,
+            suspended=False,
+        )
+        session.add(org)
+        session.flush()
+        membership = Membership(org_id=org.id, user_id=user.user_id, role="owner")
+        session.add(membership)
+        workspace = Workspace(org_id=org.id, name="Default")
+        session.add(workspace)
+        session.flush()
+        return OrgContext(user=user, org=org, membership=membership, workspace=workspace)
+    row = session.execute(
+        text("SELECT org_id, membership_id, workspace_id FROM tra_bootstrap_org(:name, :slug, :uid)"),
+        {"name": org_name, "slug": slug, "uid": user.user_id},
+    ).one()
+    bind_rls(session, user_id=str(user.user_id), org_id=str(row.org_id))
+    org = session.get(Organization, row.org_id)
+    membership = session.get(Membership, row.membership_id)
+    workspace = session.get(Workspace, row.workspace_id)
+    if not org or not membership:
+        raise HTTPException(status_code=500, detail="Could not bootstrap workspace")
     return OrgContext(user=user, org=org, membership=membership, workspace=workspace)
 
 

@@ -76,3 +76,15 @@ Without Stripe, **trial/pilot** plans still unlock all modules; system admin can
 - **Admin (you):** `/app/admin`  
 
 Nav shows 🔒 on locked modules.
+
+## Row-level security
+
+Migration `api/app/db/migrations/003_rls.sql` enables and forces RLS on every client table.
+
+Tenant API sessions call `bind_rls` and `SET LOCAL ROLE tra_app`. That role cannot bypass RLS. A row is visible only when `org_id` matches the signed-in org, or the caller is that row's user (membership lookup).
+
+- System admin routes set `platform_admin` only after the email allow-list check.
+- The Stripe webhook sets `platform_admin` only after the Stripe signature checks out.
+- Until `003_rls.sql` is applied in Supabase, `bind_rls` does nothing and behavior stays as it is today.
+
+Apply the file in the Supabase SQL editor. Do not skip it once this API revision is deployed if you want the lock to be real.

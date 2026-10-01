@@ -127,6 +127,40 @@ def get_engine() -> Engine:
 
 
 @contextmanager
+def bind_rls(
+    session: Session,
+    *,
+    user_id: Optional[str] = None,
+    org_id: Optional[str] = None,
+    platform_admin: bool = False,
+    invite_token: str = "",
+) -> None:
+    """Apply tenant RLS for this transaction.
+
+    No-op until migration 003 has created role tra_app. After that, the
+    transaction runs as tra_app, which cannot bypass row-level security.
+    The Stripe webhook passes platform_admin=True after signature verification.
+    """
+    from sqlalchemy import text
+
+    ready = session.execute(
+        text("SELECT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'tra_app')")
+    ).scalar()
+    if not ready:
+        return
+    session.execute(text("SELECT set_config('app.user_id', :v, true)"), {"v": user_id or ""})
+    session.execute(text("SELECT set_config('app.org_id', :v, true)"), {"v": org_id or ""})
+    session.execute(
+        text("SELECT set_config('app.platform_admin', :v, true)"),
+        {"v": "on" if platform_admin else "off"},
+    )
+    session.execute(
+        text("SELECT set_config('app.invite_token', :v, true)"),
+        {"v": invite_token or ""},
+    )
+    session.execute(text("SET LOCAL ROLE tra_app"))
+
+
 def get_session() -> Generator[Session, None, None]:
     get_engine()
     assert _SessionLocal is not None

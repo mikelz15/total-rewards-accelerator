@@ -32,6 +32,7 @@ Walk this list in order. Skip a row only if you write why in the commit message.
 6. **Nav** — `web/src/components/Nav.tsx` and `web/src/components/AppNav.tsx`.
 7. **Workspace home** — `web/src/app/app/page.tsx` numbering and suggested path.
 8. **Entitlements copy** — `docs/ADMIN-AND-LICENSING.md`. Code gates stay in the API; do not add a Stripe SKU for an included surface.
+8b. **RLS** — if you add a table with client data, add `org_id`, enable and force RLS in a new migration, and grant `tra_app`. Do not query it before `bind_rls`.
 9. **Stripe descriptions** — `scripts/setup-stripe-products.py`. Existing live Prices are not recreated by a copy edit. Update Dashboard descriptions only if the live product text is customer-visible and wrong.
 10. **Mobile** — `mobile/app/(tabs)/index.tsx` and the module eyebrows. Do not link a route that does not exist. If mobile has no Cycle Lock screen, say it is included with Equity.
 11. **GTM** — `go-to-market/11-cycle-lock.md` or the note for the feature you just shipped. Do not rewrite old Loom scripts unless they are about to be recorded again.

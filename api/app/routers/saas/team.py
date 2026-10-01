@@ -12,7 +12,7 @@ from sqlalchemy import select
 
 from app.auth.deps import CurrentUser, ensure_user_org, get_current_user
 from app.db.models import Invite, Membership
-from app.db.session import get_session
+from app.db.session import bind_rls, get_session
 from app.services.access import require_team_admin
 from app.services.entitlements import ROLE_MODULES, normalize_role
 
@@ -116,6 +116,7 @@ def accept_invite(body: AcceptBody, user: CurrentUser = Depends(get_current_user
     if not token:
         raise HTTPException(status_code=400, detail="token required")
     with get_session() as session:
+        bind_rls(session, user_id=str(user.user_id), invite_token=token)
         inv = session.scalar(select(Invite).where(Invite.token == token, Invite.accepted_at.is_(None)))
         if not inv:
             raise HTTPException(status_code=404, detail="Invite not found or already used")
