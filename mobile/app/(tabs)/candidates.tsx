@@ -52,7 +52,7 @@ export default function CandidatesScreen() {
           <RefreshControl refreshing={loading} onRefresh={refresh} tintColor={c.tint} />
         }
       >
-        <Eyebrow>Module 03</Eyebrow>
+        <Eyebrow>Module 04</Eyebrow>
         <Title>Candidate Tracker</Title>
         <Subtitle>Sample recruiting pipeline — open an offer in Closer.</Subtitle>
 

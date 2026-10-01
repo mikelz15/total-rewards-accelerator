@@ -43,7 +43,7 @@ export default function CandidatesPage() {
 
   return (
     <ModuleShell
-      eyebrow="Module 03"
+      eyebrow="Module 04"
       title="Candidate Tracker"
       description="Recruiting pipeline tracker — separate from Candidate Closer (wealth PDF). Track stages, offer packages, and jump into Closer to generate a total-wealth statement."
     >

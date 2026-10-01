@@ -52,8 +52,8 @@ Without Stripe, **trial/pilot** plans still unlock all modules; system admin can
 
 | Plan | Modules |
 |------|---------|
-| `trial` / `pilot` / `starter` / `suite` | All four |
-| `cleaner` / `equity` / `tracker` / `closer` | That module only |
+| `trial` / `pilot` / `starter` / `suite` | All modules, including Cycle Lock (gated with equity) |
+| `cleaner` / `equity` / `tracker` / `closer` | That module only. `equity` includes Cycle Lock. |
 | `ta_pack` | Tracker + Closer |
 | `none` | None |
 

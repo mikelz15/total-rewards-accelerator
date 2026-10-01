@@ -102,7 +102,7 @@ export default function CloserScreen() {
     <ModuleLock module="closer">
     <Screen style={{ padding: 0 }}>
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        <Eyebrow>Module 04</Eyebrow>
+        <Eyebrow>Module 05</Eyebrow>
         <Title>Candidate Closer</Title>
         <Subtitle>Four-year total wealth — sample persona for public demo.</Subtitle>
 

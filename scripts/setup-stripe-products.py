@@ -33,7 +33,7 @@ PRODUCTS = [
     {
         "key": "equity",
         "name": "TRA Equity + Merit",
-        "description": "Dual-lens equity, flight risk, merit pool remediation",
+        "description": "Dual-lens equity, flight risk, merit pool, and Cycle Lock",
         "unit_amount": 24900,  # $249
         "env": "STRIPE_PRICE_EQUITY",
     },
@@ -54,7 +54,7 @@ PRODUCTS = [
     {
         "key": "suite",
         "name": "TRA Full Suite",
-        "description": "All modules: Cleaner, Equity + Merit, Tracker, Closer",
+        "description": "Cleaner, Equity + Merit with Cycle Lock, Tracker, Closer",
         "unit_amount": 49900,  # $499
         "env": "STRIPE_PRICE_SUITE",
     },

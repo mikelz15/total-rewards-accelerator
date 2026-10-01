@@ -120,7 +120,7 @@ export default function CloserPage() {
 
   return (
     <ModuleShell
-      eyebrow="Module 04"
+      eyebrow="Module 05"
       title="Candidate Closer"
       description="Translate base, bonus, and LTI into a multi-year total wealth trajectory. Generate a one-page PDF that turns offer letters into closing tools — the four-year view most market tools skip."
     >

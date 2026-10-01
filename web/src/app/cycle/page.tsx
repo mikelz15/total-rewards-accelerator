@@ -30,7 +30,7 @@ export default function CycleLockDemoPage() {
 
   return (
     <ModuleShell
-      eyebrow="Demo · Cycle Lock"
+      eyebrow="Module 03 · Cycle Lock"
       title="Monday 8:00 — range spends the pool"
       description="Same 3.2% envelope. Ratings do not allocate it. Under-range repair first, deceleration to midpoint, $0 above mid, one exception on a confirm-chip."
     >

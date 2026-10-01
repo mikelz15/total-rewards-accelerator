@@ -35,7 +35,7 @@ export default function AppCyclePage() {
       <div className="space-y-6">
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
-            Workspace · Cycle Lock
+            Module 03 · Cycle Lock
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
             Range-first merit lock
