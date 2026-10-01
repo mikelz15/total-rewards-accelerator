@@ -23,21 +23,21 @@ const modules = [
   },
   {
     href: "/app/cycle",
-    step: "02b",
+    step: "03",
     title: "Cycle Lock",
-    body: "Range-first 3.2% envelope. Confirm-chip exceptions. $0 above midpoint.",
+    body: "Included with Equity + Merit. Range-first 3.2% envelope. Confirm-chip exceptions. $0 above midpoint.",
     accent: "border-t-slate-900",
   },
   {
     href: "/app/candidates",
-    step: "03",
+    step: "04",
     title: "Candidates",
     body: "Persistent recruiting pipeline — hand off packages into Closer.",
     accent: "border-t-violet-500",
   },
   {
     href: "/app/closer",
-    step: "04",
+    step: "05",
     title: "Closer",
     body: "Four-year total wealth projection and one-page offer PDF.",
     accent: "border-t-rose-500",
@@ -92,8 +92,8 @@ export default function AppDashboardPage() {
           {me ? `Welcome back${me.user.email ? `, ${me.user.email.split("@")[0]}` : ""}` : "Your workspace"}
         </h1>
         <p className="mt-2 text-slate-600">
-          Authenticated Total Rewards Accelerator — durable datasets, equity runs, and offer tools
-          for your organization. Public sample demo stays at{" "}
+          Authenticated Total Rewards Accelerator — durable datasets, equity runs, Cycle Lock, and
+          offer tools for your organization. Public sample demo stays at{" "}
           <Link href="/" className="font-medium text-teal-800 hover:underline">
             the marketing site
           </Link>
@@ -122,7 +122,7 @@ export default function AppDashboardPage() {
         <h2 className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500">
           End-to-end modules
         </h2>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {modules.map((m) => (
             <Link
               key={m.href}
@@ -150,7 +150,7 @@ export default function AppDashboardPage() {
             <p className="mt-4 text-sm text-slate-500">
               No datasets yet.{" "}
               <Link href="/app/cleaner" className="font-medium text-teal-800 hover:underline">
-                Clean &amp; save one
+                Clean & save one
               </Link>
               .
             </p>
@@ -190,7 +190,7 @@ export default function AppDashboardPage() {
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold text-white">
                 2
               </span>
-              Run equity + flight risk, then allocate a merit pool.
+              Run equity, then lock the merit pool on range — not ratings.
             </li>
             <li className="flex gap-3">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold text-white">
