@@ -7,11 +7,17 @@ Mikéz Comp Engineering Toolkit — a thin full-stack MVP of the portfolio progr
 
 ## Modules
 
-| # | Module | What it does |
-|---|--------|----------------|
-| 01 | **Market Data Cleaner** | Upload/paste messy HRIS CSV → map columns, fix money/dates → analysis-ready records |
-| 02 | **Pay Equity Auditor** | Compa-ratio scatter, under/overpaid flags, top 5 raise targets + gap to parity |
-| 03 | **Candidate Closer** | Base / bonus / LTI → 4-year total wealth projection + one-page PDF |
+Canonical list. If this table changes, follow [docs/SYSTEM-CHANGE-PROTOCOL.md](docs/SYSTEM-CHANGE-PROTOCOL.md) before the commit is done.
+
+| # | Module | Route | Commercial |
+|---|--------|-------|------------|
+| 01 | **Market Data Cleaner** | `/cleaner` | Own price |
+| 02 | **Equity + Merit** | `/auditor` | Own price. Includes Cycle Lock |
+| 03 | **Cycle Lock** | `/cycle` | Not a separate invoice |
+| 04 | **Candidate Tracker** | `/candidates` | Own price |
+| 05 | **Candidate Closer** | `/closer` | Own price |
+
+Full suite is $499/mo or $4,990/year and includes Cycle Lock.
 
 **Three-Click Philosophy:** no action, analysis, or remediation should take more than three clicks.
 
