@@ -48,7 +48,7 @@ export function CycleLockBoard({
         </p>
         <p className="mt-1 text-sm text-slate-600">{data.philosophy.rule}</p>
         <p className="mt-2 text-xs text-slate-500">
-          A 0.5% rating notch on this team's average pay is about {money(data.summary.paycheck_half_point)} per paycheck.
+          A 0.5% rating notch on average pay for this team is about {money(data.summary.paycheck_half_point)} per paycheck.
         </p>
         <div className="mt-4 overflow-x-auto">
           <table className="min-w-full text-left text-sm">
