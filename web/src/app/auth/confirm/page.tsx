@@ -34,8 +34,9 @@ export default function AuthConfirmPage() {
             refresh_token,
           });
           if (sessionError) throw sessionError;
-          setStatus("Email confirmed. Redirecting…");
-          router.replace("/app");
+          const dest = params.get("type") === "recovery" ? "/auth/reset-password" : "/app";
+          setStatus(dest === "/app" ? "Email confirmed. Redirecting…" : "Opening the password form…");
+          router.replace(dest);
           router.refresh();
           return;
         }

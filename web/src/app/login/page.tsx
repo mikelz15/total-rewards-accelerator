@@ -53,7 +53,7 @@ function LoginForm() {
       const supabase = createClient();
       const redirectTo =
         typeof window !== "undefined"
-          ? `${window.location.origin}/auth/callback?next=/auth/reset-password`
+          ? `${window.location.origin}/auth/reset-password`
           : undefined;
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo,

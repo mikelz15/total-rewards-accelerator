@@ -21,16 +21,45 @@ export default function ResetPasswordPage() {
       return;
     }
     const supabase = createClient();
-    // Recovery links establish a session via /auth/callback before landing here
-    void supabase.auth.getSession().then(({ data }) => {
+    void (async () => {
+      const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+      const accessToken = hashParams.get("access_token");
+      const refreshToken = hashParams.get("refresh_token");
+      if (accessToken && refreshToken) {
+        const { error: sessionError } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        });
+        if (sessionError) {
+          setError(sessionError.message);
+          return;
+        }
+        window.history.replaceState(null, "", window.location.pathname);
+        setReady(true);
+        return;
+      }
+
+      const code = new URLSearchParams(window.location.search).get("code");
+      if (code) {
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+        if (exchangeError) {
+          setError(exchangeError.message);
+          return;
+        }
+        window.history.replaceState(null, "", window.location.pathname);
+        setReady(true);
+        return;
+      }
+
+      const { data } = await supabase.auth.getSession();
       if (!data.session) {
         setError(
           "This reset link is missing a session. Request a new forgot-password email from the login page."
         );
-      } else {
-        setReady(true);
+        return;
       }
-    });
+      setReady(true);
+    })();
   }, []);
 
   async function onSubmit(e: FormEvent) {
