@@ -1,6 +1,4 @@
-import Image from "next/image";
 import Link from "next/link";
-import { BrandLogo } from "@/components/BrandLogo";
 
 const modules = [
   {
@@ -9,7 +7,6 @@ const modules = [
     title: "Market Data Cleaner",
     blurb:
       "Messy HRIS → analysis-ready records. Maps columns, money, dates — then runs the shared Placement Engine.",
-    accent: "border-t-blue-500",
   },
   {
     href: "/auditor",
@@ -17,7 +14,6 @@ const modules = [
     title: "Equity + Merit",
     blurb:
       "Dual-lens equity (market mid + expected placement), flight risk, and merit pool remediation you can defend.",
-    accent: "border-t-teal-600",
   },
   {
     href: "/cycle",
@@ -25,7 +21,13 @@ const modules = [
     title: "Cycle Lock",
     blurb:
       "Included with Equity + Merit. Range-first merit: 3.2% envelope, $0 above midpoint, confirm-chip for scarce exceptions.",
-    accent: "border-t-slate-900",
+  },
+  {
+    href: "/philosophy",
+    step: "—",
+    title: "Philosophy Check",
+    blurb:
+      "Included with Equity. Does the pay file match the stated philosophy? Midpoint, performance, and leftover department effects.",
   },
   {
     href: "/candidates",
@@ -33,7 +35,6 @@ const modules = [
     title: "Candidate Tracker",
     blurb:
       "Recruiting pipeline: stages, offer packages, notes — hand off to Closer for total-wealth statements.",
-    accent: "border-t-violet-500",
   },
   {
     href: "/closer",
@@ -41,7 +42,6 @@ const modules = [
     title: "Candidate Closer",
     blurb:
       "Base / bonus / LTI → four-year total wealth projection and a one-page PDF most tools never produce.",
-    accent: "border-t-rose-500",
   },
 ];
 
@@ -70,158 +70,90 @@ const edges = [
 
 export default function HomePage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12">
-      <Link
-        href="/signup"
-        className="group mb-10 block overflow-hidden rounded-3xl border border-teal-200/80 bg-slate-900 shadow-sm ring-1 ring-teal-900/10 transition hover:ring-teal-500/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
-        aria-label="Start free trial — first 30 days free, then cancel anytime"
-      >
-        <Image
-          src="/promo/launch-30-days-free-16x9.png"
-          alt="Launch promo: first 30 days free on Total Rewards Accelerator, then cancel anytime. Start free trial at totalrewardsaccelerator.com"
-          width={1920}
-          height={1080}
-          priority
-          className="h-auto w-full object-cover transition duration-300 group-hover:opacity-95"
-          sizes="(max-width: 1152px) 100vw, 1152px"
-        />
-      </Link>
-
-      <section className="grid gap-10 lg:grid-cols-[1.25fr_0.85fr] lg:items-center">
+    <div className="mx-auto max-w-5xl px-4 py-16 sm:py-20">
+      <section className="grid gap-12 lg:grid-cols-[1.3fr_0.7fr] lg:items-start">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
-            Comp Engineering Toolkit · Mikéz
-          </p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl text-balance">
+          <p className="text-sm text-slate-500">Comp engineering toolkit</p>
+          <h1 className="mt-3 max-w-xl text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl text-balance">
             Stop crunching rows. Start designing strategy.
           </h1>
-          <p className="mt-2 text-sm font-medium tracking-wide text-teal-800">
-            Making compensation easy for all
+          <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate-600">
+            Clean a file, place people, fund a cycle, and close an offer. One placement model
+            underneath, built to take three clicks.
           </p>
-          <p className="mt-4 max-w-xl text-lg text-slate-600">
-            A three-click system — Cleaner, Equity + Merit with Cycle Lock, Candidate Tracker, and
-            Closer — powered by one shared Placement Engine that turns years of experience and
-            education into personalized, defendable pay targets.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
               href="/signup"
-              className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-medium text-white hover:bg-slate-800"
+              className="rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800"
             >
               Start free trial
             </Link>
             <Link
               href="/cleaner"
-              className="rounded-xl border border-teal-200 bg-teal-50 px-5 py-3 text-sm font-medium text-teal-900 hover:bg-teal-100"
+              className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50"
             >
-              Try public demo
+              Try the demo
             </Link>
-            <Link
-              href="/pricing"
-              className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-            >
-              View pricing
+            <Link href="/pricing" className="px-2 text-sm text-slate-600 hover:text-slate-900">
+              Pricing
             </Link>
           </div>
-          <p className="mt-3 text-sm font-medium text-teal-800">
-            Launch promo: first 30 days free on any plan · card required · cancel anytime
-          </p>
-          <p className="mt-4 text-xs text-slate-500">
-            Demo tip: <strong>Reset demo</strong> in the nav reloads the messy HRIS sample. Prefer
-            sample data — uploads are capped and scanned on the public demo.
+          <p className="mt-4 text-sm text-slate-500">
+            First 30 days free. Card required. Cancel anytime.
           </p>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
-          <div className="mb-5 flex justify-center border-b border-slate-100 pb-5">
-            <BrandLogo variant="hero" href={null} priority />
-          </div>
-          <p className="text-sm font-medium text-slate-900">End-to-end workflow</p>
-          <p className="mt-1 text-xs text-slate-500">
-            One placement model. Cycle Lock is the merit step, not a separate product.
-          </p>
-          <div className="mt-5 flex flex-wrap items-stretch gap-2">
-            {workflow.map((step, i) => (
-              <div key={step.n} className="flex items-center gap-2">
-                <div className="min-w-[4.5rem] rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3 text-center">
-                  <div className="text-[10px] font-semibold tracking-widest text-teal-700">
-                    {step.n}
-                  </div>
-                  <div className="mt-1 text-sm font-semibold text-slate-900">{step.label}</div>
-                  <div className="text-[11px] text-slate-500">{step.detail}</div>
-                </div>
-                {i < workflow.length - 1 && (
-                  <span className="hidden text-slate-300 sm:inline" aria-hidden>
-                    →
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-          <div className="mt-5 rounded-xl bg-slate-900 px-4 py-3 text-xs leading-relaxed text-slate-200">
-            <span className="font-semibold text-teal-300">Placement Engine</span> sits under every
-            module: expected position-in-range from YOE + education — market mid and experience lens
-            side by side.
-          </div>
-          <p className="mt-4 text-xs text-slate-500">Built by Mikéz · Design-partner ready</p>
-        </div>
-      </section>
-
-      <section className="mt-14">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.14em] text-slate-500">
-          Why this is different
-        </h2>
-        <div className="mt-4 grid gap-4 sm:grid-cols-3">
-          {edges.map((e) => (
-            <div
-              key={e.title}
-              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
-            >
-              <h3 className="text-base font-semibold text-slate-900">{e.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">{e.body}</p>
-            </div>
+        <ol className="border-t border-slate-200 lg:border-l lg:border-t-0 lg:pl-8">
+          {workflow.map((step) => (
+            <li key={step.n} className="flex gap-4 border-b border-slate-200 py-3 last:border-b-0">
+              <span className="w-6 text-sm tabular-nums text-slate-400">{step.n}</span>
+              <span>
+                <span className="block text-sm font-medium text-slate-900">{step.label}</span>
+                <span className="text-sm text-slate-500">{step.detail}</span>
+              </span>
+            </li>
           ))}
-        </div>
+        </ol>
       </section>
 
-      <section className="mt-14">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.14em] text-slate-500">
-          Modules
-        </h2>
+      <section className="mt-20 grid gap-8 sm:grid-cols-3">
+        {edges.map((edge) => (
+          <div key={edge.title}>
+            <h2 className="text-sm font-medium text-slate-900">{edge.title}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-slate-600">{edge.body}</p>
+          </div>
+        ))}
+      </section>
+
+      <section className="mt-20">
+        <h2 className="text-sm font-medium text-slate-900">Tools</h2>
         <p className="mt-2 max-w-2xl text-sm text-slate-500">
-          Five working surfaces. Four invoices. Cycle Lock ships with Equity + Merit and the full
-          suite.
+          Cycle Lock and Philosophy Check ship with Equity. Four invoices.
         </p>
-        <div className="mt-4 grid gap-5 sm:grid-cols-2">
-          {modules.map((m) => (
+        <div className="mt-4 divide-y divide-slate-200 border-y border-slate-200">
+          {modules.map((module) => (
             <Link
-              key={m.href}
-              href={m.href}
-              className={`group rounded-2xl border border-slate-200 border-t-4 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${m.accent}`}
+              key={module.href}
+              href={module.href}
+              className="group grid gap-1 py-4 sm:grid-cols-[7rem_1fr] sm:items-baseline sm:gap-6"
             >
-              <div className="text-xs font-semibold tracking-widest text-slate-400">{m.step}</div>
-              <h2 className="mt-2 text-lg font-semibold text-slate-900 group-hover:text-teal-800">
-                {m.title}
-              </h2>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">{m.blurb}</p>
-              <span className="mt-4 inline-block text-sm font-medium text-teal-700">
-                Open module →
+              <span className="text-sm tabular-nums text-slate-400">{module.step}</span>
+              <span>
+                <span className="text-base font-medium text-slate-900 group-hover:underline">
+                  {module.title}
+                </span>
+                <span className="mt-1 block text-sm leading-relaxed text-slate-600">{module.blurb}</span>
               </span>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="mt-14 rounded-2xl border border-amber-200 bg-amber-50/80 px-5 py-4 text-sm text-amber-950">
-        <p className="font-semibold">Public demo guardrails</p>
-        <p className="mt-1 text-amber-900/90">
-          Custom Cleaner uploads are capped at <strong>10 rows</strong>, scanned for sensitive
-          headers (SSN, DOB, address, etc.), and rate-limited to{" "}
-          <strong>5 uploads per IP per week</strong>. Candidate Tracker and Closer run on{" "}
-          <strong>synthetic sample data only</strong>. Do not upload real employee or candidate
-          files.
-        </p>
-      </section>
+      <p className="mt-12 max-w-2xl text-sm leading-relaxed text-slate-500">
+        The public demo prefers the sample file. A custom upload is capped at 10 rows, scanned for
+        sensitive headers, and limited to five a week from one address. Tracker and Closer stay on
+        synthetic data. Do not upload a real employee or candidate file.
+      </p>
     </div>
   );
 }

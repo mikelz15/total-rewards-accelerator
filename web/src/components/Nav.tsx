@@ -8,11 +8,11 @@ import { resetDemoSession, saveCleanResult } from "@/lib/session";
 import { BrandLogo } from "@/components/BrandLogo";
 
 const links = [
-  { href: "/", label: "Home" },
   { href: "/cleaner", label: "Cleaner" },
-  { href: "/auditor", label: "Equity + Merit" },
-  { href: "/cycle", label: "Cycle Lock" },
-  { href: "/candidates", label: "Candidate Tracker" },
+  { href: "/auditor", label: "Equity" },
+  { href: "/cycle", label: "Cycle" },
+  { href: "/philosophy", label: "Philosophy" },
+  { href: "/candidates", label: "Tracker" },
   { href: "/closer", label: "Closer" },
   { href: "/pricing", label: "Pricing" },
 ];
@@ -21,6 +21,7 @@ export function Nav() {
   const pathname = usePathname();
   const router = useRouter();
   const [resetting, setResetting] = useState(false);
+  const [open, setOpen] = useState(false);
 
   async function handleResetDemo() {
     if (resetting) return;
@@ -47,49 +48,76 @@ export function Nav() {
     return null;
   }
 
+  function itemClass(active: boolean) {
+    return active
+      ? "text-sm font-medium text-slate-900"
+      : "text-sm text-slate-600 hover:text-slate-900";
+  }
+
   return (
-    <header className="border-b border-slate-200 bg-white/90 backdrop-blur sticky top-0 z-50">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5">
-        <div className="flex min-w-0 items-center gap-3">
-          <BrandLogo variant="nav" priority />
-          <span className="hidden text-[11px] text-slate-500 sm:block sm:max-w-[9rem] leading-snug">
-            Mikéz Comp Engineering Toolkit
-          </span>
-        </div>
-        <nav className="flex flex-wrap items-center justify-end gap-1">
-          {links.map((link) => {
-            const active = pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`rounded-full px-3 py-1.5 text-sm transition ${
-                  active
-                    ? "bg-slate-900 text-white"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-4">
+        <BrandLogo variant="nav" priority />
+        <nav className="hidden items-center gap-5 lg:flex">
+          {links.map((link) => (
+            <Link key={link.href} href={link.href} className={itemClass(pathname === link.href)}>
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="hidden items-center gap-4 lg:flex">
           <button
             type="button"
             onClick={handleResetDemo}
             disabled={resetting}
-            className="ml-1 rounded-full border border-teal-200 bg-teal-50 px-3 py-1.5 text-sm font-medium text-teal-800 transition hover:bg-teal-100 disabled:opacity-50"
+            className="text-sm text-slate-500 hover:text-slate-900 disabled:opacity-50"
             title="Clear session data and reload the messy HRIS sample"
           >
-            {resetting ? "Resetting…" : "Reset demo"}
+            {resetting ? "Resetting…" : "Reset"}
           </button>
           <Link
             href="/app"
-            className="ml-1 rounded-full bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-800"
+            className="rounded-lg bg-slate-900 px-3.5 py-2 text-sm font-medium text-white hover:bg-slate-800"
           >
             Open app
           </Link>
-        </nav>
+        </div>
+        <button
+          type="button"
+          className="text-sm font-medium text-slate-800 lg:hidden"
+          aria-expanded={open}
+          onClick={() => setOpen((value) => !value)}
+        >
+          {open ? "Close" : "Menu"}
+        </button>
       </div>
+      {open && (
+        <div className="border-t border-slate-200 bg-white px-4 py-3 lg:hidden">
+          <div className="flex flex-col gap-3">
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={itemClass(pathname === link.href)}
+                onClick={() => setOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <button
+              type="button"
+              onClick={handleResetDemo}
+              disabled={resetting}
+              className="text-left text-sm text-slate-500"
+            >
+              {resetting ? "Resetting…" : "Reset demo"}
+            </button>
+            <Link href="/app" className="text-sm font-medium text-slate-900" onClick={() => setOpen(false)}>
+              Open app
+            </Link>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

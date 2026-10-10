@@ -103,6 +103,26 @@ export const saasApi = {
       token
     ),
 
+  philosophyRun: (
+    token: string,
+    body: {
+      dataset_id?: string;
+      records?: Record<string, unknown>[];
+      market_low?: number;
+      market_high?: number;
+      dept_log_cap?: number;
+      save?: boolean;
+    }
+  ) =>
+    saasRequest<import("@/lib/api").PhilosophyResult & { run_id?: string | null }>(
+      "/api/v1/philosophy/run",
+      token,
+      {
+        method: "POST",
+        body: JSON.stringify(body),
+      }
+    ),
+
   auditorRun: (
     token: string,
     body: {

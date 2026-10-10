@@ -15,8 +15,9 @@ const moduleLinks: {
   { href: "/app", label: "Dashboard" },
   { href: "/app/cleaner", label: "Cleaner", module: "cleaner" },
   { href: "/app/equity", label: "Equity", module: "equity" },
-  { href: "/app/cycle", label: "Cycle Lock", module: "equity" },
-  { href: "/app/candidates", label: "Candidates", module: "tracker" },
+  { href: "/app/cycle", label: "Cycle", module: "equity" },
+  { href: "/app/philosophy", label: "Philosophy", module: "equity" },
+  { href: "/app/candidates", label: "Tracker", module: "tracker" },
   { href: "/app/closer", label: "Closer", module: "closer" },
   { href: "/app/datasets", label: "Datasets", module: "cleaner" },
 ];
@@ -58,10 +59,7 @@ export function AppNav({
         <div className="flex min-w-0 items-center gap-3">
           <BrandLogo variant="nav" href="/app" priority />
           <div className="hidden min-w-0 sm:block">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-teal-700">
-              Workspace
-            </p>
-            <p className="truncate text-sm text-slate-700">{orgName || "Loading…"}</p>
+            <p className="truncate text-sm text-slate-600">{orgName || "Workspace"}</p>
           </div>
         </div>
         <nav className="flex max-w-full flex-wrap items-center justify-end gap-1">

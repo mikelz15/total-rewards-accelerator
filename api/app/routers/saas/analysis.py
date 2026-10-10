@@ -16,6 +16,7 @@ from app.services.access import require_module, require_write
 from app.services.auditor import audit_equity
 from app.services.closer import build_wealth_pdf, project_total_wealth
 from app.services.flight_risk import assess_flight_risk
+from app.services.philosophy_check import check_philosophy
 from app.services.remediation import remediate
 
 router = APIRouter(prefix="/api/v1", tags=["saas-analysis"])
@@ -39,6 +40,15 @@ class RemediationBody(BaseModel):
     underpaid_only: bool = True
     max_increase_pct: Optional[float] = Field(None, ge=0, le=50)
     target_mode: str = "mid"
+    save: bool = True
+
+
+class PhilosophyBody(BaseModel):
+    records: Optional[List[Dict[str, Any]]] = None
+    dataset_id: Optional[UUID] = None
+    market_low: float = Field(0.97, gt=0, lt=3)
+    market_high: float = Field(1.03, gt=0, lt=3)
+    dept_log_cap: float = Field(0.08, gt=0, le=1)
     save: bool = True
 
 
@@ -210,6 +220,58 @@ def saas_remediation_run(
                     "summary": result.get("summary"),
                     "allocations": result.get("allocations"),
                     "unfunded": result.get("unfunded"),
+                },
+            )
+        result["run_id"] = run_id
+        return result
+
+
+@router.post("/philosophy/run")
+def saas_philosophy_run(
+    payload: PhilosophyBody,
+    user: CurrentUser = Depends(get_current_user),
+) -> Dict[str, Any]:
+    """Org file, no demo row cap. Same three claims as the public sample board."""
+    with get_session() as session:
+        ctx = ensure_user_org(session, user)
+        require_module(ctx.org, ctx.membership.role, "equity")
+        require_write(ctx.membership.role)
+        records, dataset_id = _load_records(
+            session, ctx.org.id, payload.records, payload.dataset_id
+        )
+        try:
+            result = check_philosophy(
+                records,
+                demo=False,
+                market_low=payload.market_low,
+                market_high=payload.market_high,
+                dept_log_cap=payload.dept_log_cap,
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        result["source"] = "dataset" if dataset_id else "records"
+        result["saas"] = {"org_id": str(ctx.org.id), "sample_only": False}
+        run_id = None
+        if payload.save:
+            run_id = _save_run(
+                session,
+                org_id=ctx.org.id,
+                user_id=user.user_id,
+                kind="philosophy",
+                dataset_id=dataset_id,
+                params={
+                    "market_low": payload.market_low,
+                    "market_high": payload.market_high,
+                    "dept_log_cap": payload.dept_log_cap,
+                },
+                result={
+                    "philosophy": result.get("philosophy"),
+                    "claims": result.get("claims"),
+                    "scores": result.get("scores"),
+                    "drivers": result.get("drivers"),
+                    "usable": result.get("usable"),
+                    "headcount": result.get("headcount"),
+                    "caveat": result.get("caveat"),
                 },
             )
         result["run_id"] = run_id

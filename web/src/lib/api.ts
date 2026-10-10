@@ -210,6 +210,55 @@ export type CycleLockPerson = {
   };
 };
 
+export type PhilosophyClaim = {
+  id: string;
+  statement: string;
+  test: string;
+  status: "aligned" | "not_aligned" | "untested";
+  detail: string;
+};
+
+export type PhilosophyPerson = {
+  id: string;
+  name: string;
+  title: string;
+  department: string;
+  base: number;
+  mid: number;
+  ratio: number;
+  rating: number | null;
+  tenure_years: number | null;
+  outside: boolean;
+};
+
+export type PhilosophyResult = {
+  demo: boolean;
+  as_of: string;
+  caveat: string;
+  philosophy: { name: string };
+  headcount: number;
+  usable: number;
+  claims: PhilosophyClaim[];
+  scores: {
+    median_ratio: number;
+    target_low: number;
+    target_high: number;
+    rating_coef: number | null;
+    rating_pay_pct: number | null;
+    residual_variance: number | null;
+    r_squared: number | null;
+    outside_band: number;
+    outside_band_pct: number;
+    band_low: number;
+    band_high: number;
+    department_max_abs: number | null;
+    department_cap: number;
+    reference_department: string | null;
+  };
+  drivers: { name: string; coef: number; se: number | null; kind: string }[];
+  people: PhilosophyPerson[];
+};
+
 export type CycleLockResult = {
   philosophy: { name: string; rule: string; split: Record<string, number>; envelope_pct: number };
   team: { name: string; headcount: number; salary_base: number };
@@ -347,6 +396,18 @@ export const api = {
       body: JSON.stringify(body),
     }),
   cycleLockSample: () => request<CycleLockResult>("/api/cycle-lock/sample"),
+  philosophySample: () => request<PhilosophyResult>("/api/philosophy/sample"),
+  philosophyRun: (body: {
+    records?: Record<string, unknown>[];
+    csv_text?: string;
+    market_low?: number;
+    market_high?: number;
+    dept_log_cap?: number;
+  }) =>
+    request<PhilosophyResult>("/api/philosophy/run", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
   cycleLockRun: (body: {
     records?: Record<string, unknown>[];
     envelope_pct?: number;

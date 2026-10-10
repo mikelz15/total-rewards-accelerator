@@ -60,6 +60,7 @@ from app.services.flight_risk import assess_flight_risk
 from app.services.placement import enrich_records, place_person, placement_summary
 from app.services.remediation import remediate
 from app.services.cycle_lock import lock_cycle
+from app.services.philosophy_check import check_philosophy
 
 # Public demo: Candidate Tracker + Closer stay on synthetic sample data only
 DEMO_SAMPLE_ONLY_PIPELINE = True
@@ -168,6 +169,14 @@ class CycleLockRequest(BaseModel):
     records: Optional[List[Dict[str, Any]]] = None
     envelope_pct: float = Field(0.032, ge=0, le=0.2)
     confirm_exceptions: Optional[Dict[str, bool]] = None
+
+
+class PhilosophyRequest(BaseModel):
+    records: Optional[List[Dict[str, Any]]] = None
+    csv_text: Optional[str] = None
+    market_low: float = Field(0.97, gt=0, lt=3)
+    market_high: float = Field(1.03, gt=0, lt=3)
+    dept_log_cap: float = Field(0.08, gt=0, le=1)
 
 
 class CloserRequest(BaseModel):
@@ -485,6 +494,56 @@ def cycle_lock_run(payload: CycleLockRequest) -> Dict[str, Any]:
 @app.get("/api/cycle-lock/sample")
 def cycle_lock_sample() -> Dict[str, Any]:
     return lock_cycle()
+
+
+def _philosophy_kwargs(payload: PhilosophyRequest) -> Dict[str, Any]:
+    return {
+        "market_low": payload.market_low,
+        "market_high": payload.market_high,
+        "dept_log_cap": payload.dept_log_cap,
+    }
+
+
+@app.post("/api/philosophy/run")
+def philosophy_run(request: Request, payload: PhilosophyRequest) -> Dict[str, Any]:
+    try:
+        knobs = _philosophy_kwargs(payload)
+        if payload.csv_text or payload.records:
+            if payload.csv_text:
+                frame = _parse_to_df(payload.csv_text)
+            else:
+                frame = pd.DataFrame(payload.records)
+                if frame.empty:
+                    raise HTTPException(status_code=400, detail="No data rows found")
+            ip = client_ip(
+                {k.lower(): v for k, v in request.headers.items()},
+                request.client.host if request.client else None,
+            )
+            try:
+                guard = enforce_demo_clean(
+                    list(frame.columns),
+                    len(frame),
+                    count_toward_rate_limit=True,
+                    ip=ip,
+                )
+            except ValueError as exc:
+                raise HTTPException(status_code=400, detail=str(exc)) from exc
+            frame = frame.head(DEMO_MAX_ROWS)
+            records = frame.where(pd.notna(frame), None).to_dict(orient="records")
+            result = check_philosophy(records, demo=True, **knobs)
+            result["source"] = "file"
+            result["demo_guard"] = guard
+            return result
+        result = check_philosophy(demo=True, **knobs)
+        result["source"] = "sample"
+        return result
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.get("/api/philosophy/sample")
+def philosophy_sample() -> Dict[str, Any]:
+    return check_philosophy()
 
 
 @app.post("/api/closer/project")

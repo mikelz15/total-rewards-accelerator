@@ -29,6 +29,13 @@ const modules = [
     accent: "border-t-slate-900",
   },
   {
+    href: "/app/philosophy",
+    step: "—",
+    title: "Philosophy Check",
+    body: "Included with Equity. Score a saved dataset against midpoint, performance, and department.",
+    accent: "border-t-amber-600",
+  },
+  {
     href: "/app/candidates",
     step: "04",
     title: "Candidates",
