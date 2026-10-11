@@ -110,6 +110,14 @@ def saas_enabled() -> bool:
     return bool(saas_config_status()["ready"])
 
 
+def connect_args_for(url: str) -> dict:
+    """psycopg prepared statements break on the Supabase transaction pooler."""
+    lowered = url.lower()
+    if "pooler.supabase.com" in lowered or ":6543" in lowered or "pgbouncer=true" in lowered:
+        return {"prepare_threshold": None}
+    return {}
+
+
 def get_engine() -> Engine:
     global _engine, _SessionLocal
     url = os.environ.get("DATABASE_URL", "").strip()
@@ -121,12 +129,17 @@ def get_engine() -> Engine:
     elif url.startswith("postgresql://") and "+psycopg" not in url and "+asyncpg" not in url:
         url = url.replace("postgresql://", "postgresql+psycopg://", 1)
     if _engine is None:
-        _engine = create_engine(url, pool_pre_ping=True, pool_size=3, max_overflow=5)
+        _engine = create_engine(
+            url,
+            pool_pre_ping=True,
+            pool_size=3,
+            max_overflow=5,
+            connect_args=connect_args_for(url),
+        )
         _SessionLocal = sessionmaker(bind=_engine, autoflush=False, autocommit=False)
     return _engine
 
 
-@contextmanager
 def bind_rls(
     session: Session,
     *,
@@ -137,8 +150,12 @@ def bind_rls(
 ) -> None:
     """Apply tenant RLS for this transaction.
 
+    Call it. Do not enter it. A contextmanager decorator here used to return
+    a generator and skip the body, so signed-in routes never set the tenant.
+
     No-op until migration 003 has created role tra_app. After that, the
-    transaction runs as tra_app, which cannot bypass row-level security.
+    transaction runs as tra_app when this connection is allowed to. If it is
+    not, the savepoint rolls back and the connecting role continues.
     The Stripe webhook passes platform_admin=True after signature verification.
     """
     from sqlalchemy import text
@@ -158,7 +175,13 @@ def bind_rls(
         text("SELECT set_config('app.invite_token', :v, true)"),
         {"v": invite_token or ""},
     )
-    session.execute(text("SET LOCAL ROLE tra_app"))
+    nested = session.begin_nested()
+    try:
+        session.execute(text("SET LOCAL ROLE tra_app"))
+    except Exception:
+        nested.rollback()
+        return
+    nested.commit()
 
 
 @contextmanager

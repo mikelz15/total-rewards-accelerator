@@ -94,7 +94,7 @@ app = FastAPI(
         "PHI header scan, and upload rate limits. SaaS routes under /api/v1 require "
         "Supabase Bearer tokens when DATABASE_URL + SUPABASE_JWT_SECRET are set."
     ),
-    version="0.6.0",
+    version="0.6.1",
 )
 
 # Multi-tenant SaaS (no-op impact on demo routes)
@@ -321,7 +321,7 @@ def health() -> Dict[str, Any]:
     return {
         "status": "ok",
         "service": "total-rewards-accelerator",
-        "version": "0.6.0",
+        "version": "0.6.1",
         "demo_password_required": bool(_DEMO_PASSWORD),
         "saas": {
             "enabled": saas_enabled(),
