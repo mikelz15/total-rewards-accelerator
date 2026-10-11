@@ -51,11 +51,11 @@ function LoginForm() {
     setInfo(null);
     try {
       const supabase = createClient();
-      // Route recovery through the callback so the #access_token hash is preserved
-      // (a direct redirect to the reset form drops the hash on some flows).
+      // The reset page reads the hash itself. A server hop was dropping it and
+      // leaving people on the public site.
       const redirectTo =
         typeof window !== "undefined"
-          ? `${window.location.origin}/auth/callback`
+          ? `${window.location.origin}/auth/reset-password`
           : undefined;
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo,
@@ -120,9 +120,11 @@ function LoginForm() {
 
         {search.get("error") === "confirm" && (
           <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
-            Email confirmation did not complete
-            {search.get("detail") ? `: ${search.get("detail")}` : "."} Try signing in
-            below, or use Forgot password.
+            {/expired|invalid|already/i.test(search.get("detail") || "")
+              ? "That link was already used or it expired. Use Forgot password to send a new one."
+              : `Email confirmation did not complete${
+                  search.get("detail") ? `: ${search.get("detail")}` : "."
+                } Try signing in below, or use Forgot password.`}
           </p>
         )}
 

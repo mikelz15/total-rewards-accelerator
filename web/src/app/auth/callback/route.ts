@@ -57,11 +57,14 @@ export async function GET(request: Request) {
   var next = new URLSearchParams(window.location.search).get("next") || "";
   if (next.charAt(0) !== "/" || next.indexOf("//") === 0 || next.indexOf("\\\\") !== -1) next = "";
   var type = hashParams.get("type") || "";
-  var dest = next || (type === "recovery" ? "/auth/reset-password" : "/auth/confirm");
+  var dest = type === "recovery" ? "/auth/reset-password" : (next || "/auth/confirm");
   if (hashParams.get("access_token") && hashParams.get("refresh_token")) {
     window.location.replace(dest + hash);
   } else {
-    window.location.replace("/login?error=confirm");
+    var detail = hashParams.get("error_description") || hashParams.get("error_code") || hashParams.get("error") || "";
+    var login = "/login?error=confirm";
+    if (detail) login += "&detail=" + encodeURIComponent(detail);
+    window.location.replace(login);
   }
 </script>
 </body>

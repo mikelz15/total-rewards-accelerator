@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { AuthReturn } from "@/components/AuthReturn";
 import { Nav } from "@/components/Nav";
 import "./globals.css";
 
@@ -40,6 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
+        <AuthReturn />
         <Nav />
         <main>{children}</main>
       </body>
