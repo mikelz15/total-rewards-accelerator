@@ -26,7 +26,7 @@ except Exception:
 import pandas as pd
 from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, Field
 
 from app.db.session import saas_config_status, saas_enabled
@@ -94,8 +94,23 @@ app = FastAPI(
         "PHI header scan, and upload rate limits. SaaS routes under /api/v1 require "
         "Supabase Bearer tokens when DATABASE_URL + SUPABASE_JWT_SECRET are set."
     ),
-    version="0.6.1",
+    version="0.6.2",
 )
+
+
+@app.exception_handler(Exception)
+async def unhandled_exception(_request: Request, exc: Exception):
+    """Class and SQLSTATE only. The message can contain the database URL."""
+    if isinstance(exc, HTTPException):
+        raise exc
+    orig = getattr(exc, "orig", None)
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": type(exc).__name__,
+            "pgcode": getattr(orig, "pgcode", None),
+        },
+    )
 
 # Multi-tenant SaaS (no-op impact on demo routes)
 app.include_router(saas_me.router)
@@ -321,7 +336,7 @@ def health() -> Dict[str, Any]:
     return {
         "status": "ok",
         "service": "total-rewards-accelerator",
-        "version": "0.6.1",
+        "version": "0.6.2",
         "demo_password_required": bool(_DEMO_PASSWORD),
         "saas": {
             "enabled": saas_enabled(),
