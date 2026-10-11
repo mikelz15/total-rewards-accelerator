@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from contextlib import contextmanager
 from typing import Generator, Optional
 
@@ -110,6 +111,32 @@ def saas_enabled() -> bool:
     return bool(saas_config_status()["ready"])
 
 
+def use_ipv4_pooler(url: str) -> str:
+    """Direct db.<ref>.supabase.co is IPv6-only. Render cannot open that route.
+
+    The shared pooler in us-east-2 has IPv4. This project's database answered
+    from 2600:1f16::/36, which is that region. The password stays in the URL.
+    """
+    match = re.match(
+        r"(?P<scheme>postgres(?:ql)?(?:\+\w+)?://)"
+        r"postgres"
+        r"(?P<secret>:[^@]+@)"
+        r"db\.(?P<ref>[a-z0-9]+)\.supabase\.co"
+        r"(?::\d+)?"
+        r"(?P<rest>/.*)?$",
+        url,
+    )
+    if not match:
+        return url
+    rest = match.group("rest") or "/postgres"
+    if "sslmode=" not in rest:
+        rest += ("&" if "?" in rest else "?") + "sslmode=require"
+    return (
+        f"{match.group('scheme')}postgres.{match.group('ref')}"
+        f"{match.group('secret')}aws-0-us-east-2.pooler.supabase.com:5432{rest}"
+    )
+
+
 def connect_args_for(url: str) -> dict:
     """psycopg prepared statements break on the Supabase transaction pooler."""
     lowered = url.lower()
@@ -120,7 +147,7 @@ def connect_args_for(url: str) -> dict:
 
 def get_engine() -> Engine:
     global _engine, _SessionLocal
-    url = os.environ.get("DATABASE_URL", "").strip()
+    url = use_ipv4_pooler(os.environ.get("DATABASE_URL", "").strip())
     if not url:
         raise RuntimeError("DATABASE_URL is not configured")
     # Supabase pooler sometimes needs this; sync driver for simplicity in Phase 1

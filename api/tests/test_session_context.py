@@ -3,7 +3,7 @@
 import inspect
 import unittest
 
-from app.db.session import bind_rls, connect_args_for, get_session
+from app.db.session import bind_rls, connect_args_for, get_session, use_ipv4_pooler
 
 
 class SessionContextTests(unittest.TestCase):
@@ -21,6 +21,15 @@ class SessionContextTests(unittest.TestCase):
         direct = "postgresql+psycopg://u@db.example.supabase.co:5432/postgres"
         self.assertEqual(connect_args_for(pooler), {"prepare_threshold": None})
         self.assertEqual(connect_args_for(direct), {})
+
+    def test_direct_supabase_host_moves_to_the_ipv4_pooler(self) -> None:
+        direct = "postgresql://postgres:secret@db.abc123.supabase.co:5432/postgres"
+        pooled = use_ipv4_pooler(direct)
+        self.assertIn("postgres.abc123:secret@", pooled)
+        self.assertIn("aws-0-us-east-2.pooler.supabase.com:5432", pooled)
+        self.assertNotIn("db.abc123.supabase.co", pooled)
+        already = "postgresql://postgres.abc123:secret@aws-0-us-east-2.pooler.supabase.com:5432/postgres"
+        self.assertEqual(use_ipv4_pooler(already), already)
 
     def test_bind_rls_runs_when_called(self) -> None:
         # A contextmanager wrapper would not run until entered. Callers do not enter it.
