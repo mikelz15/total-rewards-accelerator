@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import io
 import os
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -94,23 +95,32 @@ app = FastAPI(
         "PHI header scan, and upload rate limits. SaaS routes under /api/v1 require "
         "Supabase Bearer tokens when DATABASE_URL + SUPABASE_JWT_SECRET are set."
     ),
-    version="0.6.2",
+    version="0.6.3",
 )
+
+
+def _safe_failure(exc: Exception) -> dict:
+    """Type chain and a redacted note. Never return a URL, host, or password."""
+    chain = []
+    current: Optional[BaseException] = exc
+    seen = 0
+    while current is not None and seen < 4:
+        chain.append(type(current).__name__)
+        current = getattr(current, "orig", None) or current.__cause__
+        seen += 1
+    note = " ".join(str(exc).split())
+    note = re.sub(r"postgres(?:ql)?(?:\+\w+)?://\S+", "[url]", note, flags=re.I)
+    note = re.sub(r"\b[\w.-]+\.supabase\.(?:co|com)\b", "[host]", note, flags=re.I)
+    note = re.sub(r"\b\d{1,3}(?:\.\d{1,3}){3}\b", "[ip]", note)
+    note = re.sub(r"(?i)password=\S+", "password=[redacted]", note)
+    return {"error": chain[0], "chain": chain, "note": note[:240]}
 
 
 @app.exception_handler(Exception)
 async def unhandled_exception(_request: Request, exc: Exception):
-    """Class and SQLSTATE only. The message can contain the database URL."""
     if isinstance(exc, HTTPException):
         raise exc
-    orig = getattr(exc, "orig", None)
-    return JSONResponse(
-        status_code=500,
-        content={
-            "error": type(exc).__name__,
-            "pgcode": getattr(orig, "pgcode", None),
-        },
-    )
+    return JSONResponse(status_code=500, content=_safe_failure(exc))
 
 # Multi-tenant SaaS (no-op impact on demo routes)
 app.include_router(saas_me.router)
@@ -336,7 +346,7 @@ def health() -> Dict[str, Any]:
     return {
         "status": "ok",
         "service": "total-rewards-accelerator",
-        "version": "0.6.2",
+        "version": "0.6.3",
         "demo_password_required": bool(_DEMO_PASSWORD),
         "saas": {
             "enabled": saas_enabled(),
