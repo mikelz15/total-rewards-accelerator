@@ -51,9 +51,11 @@ function LoginForm() {
     setInfo(null);
     try {
       const supabase = createClient();
+      // Route recovery through the callback so the #access_token hash is preserved
+      // (a direct redirect to the reset form drops the hash on some flows).
       const redirectTo =
         typeof window !== "undefined"
-          ? `${window.location.origin}/auth/reset-password`
+          ? `${window.location.origin}/auth/callback`
           : undefined;
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo,
