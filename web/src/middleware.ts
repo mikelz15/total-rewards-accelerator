@@ -46,7 +46,8 @@ export async function middleware(request: NextRequest) {
     pathname === "/icon" ||
     pathname.startsWith("/api/demo-auth") ||
     pathname.startsWith("/privacy") ||
-    pathname.startsWith("/pricing")
+    pathname.startsWith("/pricing") ||
+    pathname.startsWith("/trial")
   ) {
     return response;
   }
@@ -72,3 +73,4 @@ export const config = {
     "/((?!_next/static|_next/image|favicon.ico|brand/|icon.png|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };
+
