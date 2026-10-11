@@ -161,6 +161,7 @@ def bind_rls(
     session.execute(text("SET LOCAL ROLE tra_app"))
 
 
+@contextmanager
 def get_session() -> Generator[Session, None, None]:
     get_engine()
     assert _SessionLocal is not None
