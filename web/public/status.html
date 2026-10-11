@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>TRA Site Status</title>
+<style>
+  :root { --bg:#0d1117; --card:#161b22; --border:#30363d; --green:#3fb950; --red:#f85149; --amber:#d29922; --text:#e6edf3; --muted:#8b949e; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; padding:16px; max-width:640px; margin:0 auto; -webkit-text-size-adjust:100%; }
+  header { display:flex; align-items:center; justify-content:space-between; margin:8px 0 16px; }
+  h1 { font-size:20px; font-weight:700; }
+  #clock { font-size:12px; color:var(--muted); }
+  #overall { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; text-align:center; margin-bottom:16px; }
+  #overall .dot { width:16px; height:16px; border-radius:50%; display:inline-block; margin-right:8px; vertical-align:baseline; }
+  #overall.up .dot { background:var(--green); box-shadow:0 0 12px var(--green); }
+  #overall.down .dot { background:var(--red); box-shadow:0 0 12px var(--red); }
+  #overall.checking .dot { background:var(--amber); box-shadow:0 0 12px var(--amber); animation:pulse 1s infinite; }
+  @keyframes pulse { 50% { opacity:.4; } }
+  #overall .label { font-size:18px; font-weight:700; }
+  #overall .sub { font-size:12px; color:var(--muted); margin-top:6px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:12px; }
+  .card h2 { font-size:14px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:10px; }
+  .ep { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-top:1px solid var(--border); }
+  .ep:first-of-type { border-top:none; }
+  .ep .name { font-size:15px; font-weight:600; }
+  .ep .url { font-size:11px; color:var(--muted); margin-top:2px; word-break:break-all; }
+  .ep .stat { text-align:right; font-size:13px; white-space:nowrap; margin-left:8px; }
+  .pill { display:inline-block; font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; }
+  .pill.up { background:rgba(63,185,80,.15); color:var(--green); }
+  .pill.down { background:rgba(248,81,73,.15); color:var(--red); }
+  .pill.check { background:rgba(210,153,34,.15); color:var(--amber); }
+  .ms { color:var(--muted); font-size:11px; margin-top:3px; }
+  .deep { font-size:11px; color:var(--muted); margin-top:8px; padding-top:8px; border-top:1px dashed var(--border); }
+  .issue { padding:10px 0; border-top:1px solid var(--border); font-size:14px; }
+  .issue:first-of-type { border-top:none; }
+  .issue .sev { font-size:10px; font-weight:700; text-transform:uppercase; padding:2px 8px; border-radius:6px; margin-right:8px; }
+  .sev.high { background:rgba(248,81,73,.15); color:var(--red); }
+  .sev.med { background:rgba(210,153,34,.15); color:var(--amber); }
+  .issue .desc { color:var(--muted); font-size:12px; margin-top:4px; }
+  button { width:100%; background:#1f6feb; color:#fff; border:none; border-radius:12px; padding:14px; font-size:16px; font-weight:600; margin:4px 0 16px; cursor:pointer; }
+  button:active { opacity:.8; }
+  footer { text-align:center; font-size:11px; color:var(--muted); padding:12px 0 24px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>TRA Site Status</h1>
+  <span id="clock"></span>
+</header>
+
+<div id="overall" class="checking">
+  <span class="dot"></span><span class="label" id="overallLabel">Checking…</span>
+  <div class="sub" id="overallSub">Pinging totalrewardsaccelerator.com</div>
+</div>
+
+<div class="card">
+  <h2>Live reachability</h2>
+  <div id="endpoints"></div>
+  <div class="deep" id="deepLine"></div>
+</div>
+
+<button id="recheck" onclick="runChecks()">↻ Check again</button>
+
+<div class="card">
+  <h2>Known issues</h2>
+  <div class="issue"><span class="sev high">High</span><strong>POST /v1/clean → HTTP 500</strong><div class="desc">CSV/JSON uploads fail. Blocks place, audit, fund, brief (all need clean's job_id). Found in E2E tests Oct 11.</div></div>
+  <div class="issue"><span class="sev med">Medium</span><strong>shiva@ login: "Email not confirmed"</strong><div class="desc">No MX records for the domain, so confirmation emails can't land. Blocked on email setup.</div></div>
+</div>
+
+<div class="card">
+  <h2>Visitors</h2>
+  <div style="font-size:14px;color:var(--muted)">Connecting analytics… visitor stats will appear here once wired up.</div>
+</div>
+
+<footer>Built for Michael · Live check runs in your browser on load<br><span id="builtAt"></span></footer>
+
+<script>
+const DEEP = {
+  at: "Oct 11, 2026 ~4:45pm MDT (Shiva's server check)",
+  rows: [
+    ["Homepage", 200], ["Trial page", 200], ["Pricing page", 200], ["API /v1/me", 401]
+  ]
+};
+const ENDPOINTS = [
+  { name:"Homepage", url:"https://totalrewardsaccelerator.com/" },
+  { name:"Trial page", url:"https://totalrewardsaccelerator.com/trial" },
+  { name:"Pricing page", url:"https://totalrewardsaccelerator.com/pricing" },
+  { name:"API", url:"https://tra-api-starter.onrender.com/v1/me" }
+};
+function tick(){ document.getElementById('clock').textContent = new Date().toLocaleString(); }
+setInterval(tick, 1000); tick();
+document.getElementById('builtAt').textContent = "Deep-check snapshot: " + DEEP.at;
+document.getElementById('deepLine').textContent =
+  "Shiva's deep check (" + DEEP.at + "): " + DEEP.rows.map(r=>r[0]+" "+r[1]).join(" · ");
+
+const box = document.getElementById('endpoints');
+box.innerHTML = ENDPOINTS.map((e,i)=>
+  `<div class="ep"><div><div class="name">${e.name}</div><div class="url">${e.url}</div></div>`+
+  `<div class="stat"><span class="pill check" id="pill${i}">…</span><div class="ms" id="ms${i}"></div></div></div>`
+).join('');
+
+async function ping(e){
+  const t0 = performance.now();
+  try {
+    await fetch(e.url, { mode:'no-cors', cache:'no-store', redirect:'follow' });
+    return { up:true, ms:Math.round(performance.now()-t0) };
+  } catch(err){ return { up:false, ms:null }; }
+}
+async function runChecks(){
+  const overall = document.getElementById('overall');
+  overall.className = 'checking';
+  document.getElementById('overallLabel').textContent = 'Checking…';
+  const results = await Promise.all(ENDPOINTS.map(ping));
+  let allUp = true;
+  results.forEach((r,i)=>{
+    const pill = document.getElementById('pill'+i), ms = document.getElementById('ms'+i);
+    if(r.up){ pill.className='pill up'; pill.textContent='REACHABLE'; ms.textContent=r.ms+' ms'; }
+    else { pill.className='pill down'; pill.textContent='DOWN'; ms.textContent='no response'; allUp=false; }
+  });
+  overall.className = allUp ? 'up' : 'down';
+  document.getElementById('overallLabel').textContent = allUp ? 'All systems reachable' : 'Issue detected';
+  document.getElementById('overallSub').textContent = 'Last check: ' + new Date().toLocaleTimeString();
+}
+runChecks();
+</script>
+</body>
+</html>
