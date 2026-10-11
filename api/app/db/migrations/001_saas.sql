@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS organizations (
   name TEXT NOT NULL,
   slug TEXT NOT NULL UNIQUE,
   plan TEXT NOT NULL DEFAULT 'pilot'
-    CHECK (plan IN ('demo', 'pilot', 'starter', 'suite')),
+    CHECK (plan IN ('demo', 'pilot', 'starter', 'suite', 'trial')),
   max_upload_rows INTEGER NOT NULL DEFAULT 5000,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

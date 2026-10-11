@@ -86,8 +86,9 @@ def ensure_user_org(session: Session, user: CurrentUser) -> OrgContext:
     """Return primary org for user; bootstrap personal org on first visit."""
     from sqlalchemy import text
 
-    from app.db.session import bind_rls
+    from app.db.session import allow_trial_plan, bind_rls
 
+    allow_trial_plan(session)
     bind_rls(session, user_id=str(user.user_id))
     membership = session.scalar(
         select(Membership)

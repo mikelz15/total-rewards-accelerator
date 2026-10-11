@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session, sessionmaker
 _engine: Optional[Engine] = None
 _SessionLocal: Optional[sessionmaker] = None
 _composite_applied = False
+_trial_plan_ready = False
 _composite_meta: dict = {
     "tra_saas_json_present": False,
     "tra_saas_json_parse_ok": False,
@@ -134,6 +135,31 @@ def use_ipv4_pooler(url: str) -> str:
     return (
         f"{match.group('scheme')}postgres.{match.group('ref')}"
         f"{match.group('secret')}aws-0-us-east-2.pooler.supabase.com:5432{rest}"
+    )
+
+
+def allow_trial_plan(session: Session) -> None:
+    """The live check allows demo, pilot, starter, and suite. First login writes trial."""
+    global _trial_plan_ready
+    if _trial_plan_ready:
+        return
+    from sqlalchemy import text
+
+    definition = session.execute(
+        text(
+            "SELECT pg_get_constraintdef(oid) FROM pg_constraint "
+            "WHERE conname = 'organizations_plan_check'"
+        )
+    ).scalar()
+    if definition and "trial" in definition:
+        _trial_plan_ready = True
+        return
+    session.execute(text("ALTER TABLE organizations DROP CONSTRAINT IF EXISTS organizations_plan_check"))
+    session.execute(
+        text(
+            "ALTER TABLE organizations ADD CONSTRAINT organizations_plan_check "
+            "CHECK (plan IN ('demo', 'pilot', 'starter', 'suite', 'trial'))"
+        )
     )
 
 
