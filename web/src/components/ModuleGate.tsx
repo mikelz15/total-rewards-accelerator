@@ -1,9 +1,11 @@
 "use client";
 
+
 import Link from "next/link";
 import type { ModuleId, Permissions } from "@/lib/permissions";
 import { MODULE_LABELS, canUseModule } from "@/lib/permissions";
 import { Card } from "@/components/ModuleShell";
+
 
 export function ModuleGate({
   module,
@@ -14,15 +16,34 @@ export function ModuleGate({
   permissions: Permissions | null;
   children: React.ReactNode;
 }) {
+  // Permissions are still loading — show a loading state, NOT the locked UI.
+  // Treating null as "not entitled" was a bug: it flashed "UPGRADE REQUIRED"
+  // on every module page while /api/v1/me was in flight.
+  if (permissions === null) {
+    return (
+      <Card>
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+          Loading
+        </p>
+        <h2 className="mt-2 text-xl font-semibold text-slate-900">
+          Loading {MODULE_LABELS[module]}…
+        </h2>
+        <p className="mt-2 text-sm text-slate-600">
+          Checking your plan and permissions.
+        </p>
+      </Card>
+    );
+  }
+
   if (canUseModule(permissions, module)) {
     return <>{children}</>;
   }
 
   const planHas =
-    permissions &&
     !permissions.suspended &&
     (permissions.plan_modules?.includes(module) ?? false);
   const label = MODULE_LABELS[module];
+
 
   return (
     <Card>
