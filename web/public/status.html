@@ -100,27 +100,46 @@ box.innerHTML = ENDPOINTS.map((e,i)=>
   `<div class="stat"><span class="pill check" id="pill${i}">…</span><div class="ms" id="ms${i}"></div></div></div>`
 ).join('');
 
-async function ping(e){
+async function ping(e, i){
   const t0 = performance.now();
+  const ctrl = new AbortController();
+  const timer = setTimeout(()=>ctrl.abort(), 10000);
   try {
-    await fetch(e.url, { mode:'no-cors', cache:'no-store', redirect:'follow' });
+    await fetch(e.url, { mode:'no-cors', cache:'no-store', redirect:'follow', signal:ctrl.signal });
+    clearTimeout(timer);
     return { up:true, ms:Math.round(performance.now()-t0) };
-  } catch(err){ return { up:false, ms:null }; }
+  } catch(err){
+    clearTimeout(timer);
+    return { up:false, ms:null };
+  }
+}
+function paint(i, r){
+  const pill = document.getElementById('pill'+i), ms = document.getElementById('ms'+i);
+  if(r.up){ pill.className='pill up'; pill.textContent='REACHABLE'; ms.textContent=r.ms+' ms'; }
+  else { pill.className='pill down'; pill.textContent='DOWN'; ms.textContent='no response / timed out'; }
+  return r.up;
 }
 async function runChecks(){
   const overall = document.getElementById('overall');
   overall.className = 'checking';
   document.getElementById('overallLabel').textContent = 'Checking…';
-  const results = await Promise.all(ENDPOINTS.map(ping));
-  let allUp = true;
-  results.forEach((r,i)=>{
-    const pill = document.getElementById('pill'+i), ms = document.getElementById('ms'+i);
-    if(r.up){ pill.className='pill up'; pill.textContent='REACHABLE'; ms.textContent=r.ms+' ms'; }
-    else { pill.className='pill down'; pill.textContent='DOWN'; ms.textContent='no response'; allUp=false; }
+  document.getElementById('overallSub').textContent = 'Pinging totalrewardsaccelerator.com';
+  ENDPOINTS.forEach((e,i)=>{
+    const pill = document.getElementById('pill'+i);
+    pill.className='pill check'; pill.textContent='…';
+    document.getElementById('ms'+i).textContent='';
   });
-  overall.className = allUp ? 'up' : 'down';
-  document.getElementById('overallLabel').textContent = allUp ? 'All systems reachable' : 'Issue detected';
-  document.getElementById('overallSub').textContent = 'Last check: ' + new Date().toLocaleTimeString();
+  let done = 0, allUp = true;
+  ENDPOINTS.forEach((e,i)=>{
+    ping(e,i).then(r=>{
+      if(!paint(i,r)) allUp = false;
+      if(++done === ENDPOINTS.length){
+        overall.className = allUp ? 'up' : 'down';
+        document.getElementById('overallLabel').textContent = allUp ? 'All systems reachable' : 'Issue detected';
+        document.getElementById('overallSub').textContent = 'Last check: ' + new Date().toLocaleTimeString();
+      }
+    });
+  });
 }
 runChecks();
 </script>
