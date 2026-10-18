@@ -14,7 +14,7 @@ export default function PrivacyPage() {
       <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-900">
         Privacy Policy
       </h1>
-      <p className="mt-2 text-sm text-slate-500">Last updated: September 26, 2026</p>
+      <p className="mt-2 text-sm text-slate-500">Last updated: October 18, 2026</p>
 
       <div className="mt-8 space-y-6 text-sm leading-relaxed text-slate-700">
         <section>
@@ -53,8 +53,8 @@ export default function PrivacyPage() {
               product (customer / pilot deployments only; public demo is sample-first).
             </li>
             <li>
-              <strong>Connector credentials</strong> such as workspace API keys when you connect an
-              agent (including Meta Muse).
+              <strong>A workspace API key</strong> when you connect the TRA product to an agent,
+              including Meta Muse. The sample desk does not use a key.
             </li>
           </ul>
         </section>
@@ -70,13 +70,26 @@ export default function PrivacyPage() {
         </section>
 
         <section>
+          <h2 className="text-lg font-semibold text-slate-900">Sample desk</h2>
+          <p className="mt-2">
+            The sample desk is a separate connector. It has no account and no API key. It answers
+            four sample tasks: package tracking, a spend search, a copy of a usual order, and a
+            paystub explanation. The text you send is used to answer that call and is not stored.
+            Nothing from that call is sold or shared. There is nothing to delete. The desk does not
+            charge, does not connect to a bank, and does not invent a carrier scan. Health records
+            and money movement are not tools on the sample desk.
+          </p>
+        </section>
+
+        <section>
           <h2 className="text-lg font-semibold text-slate-900">Muse and other agents</h2>
           <p className="mt-2">
-            If you connect TRA to Muse or another agent, that agent sends only the prompts and files
-            you authorize. TRA returns mappings, placement tables, audit notes, pool math, and PDF
-            links. TRA does not post salary ranges, email candidates, or write to your HRIS through
-            the v1 connector. You can revoke a workspace API key at any time. We do not use Muse
-            conversation content for advertising.
+            If you connect the TRA product to Muse or another agent, that agent sends only the
+            prompts and files you authorize, using a workspace API key. TRA returns mappings,
+            placement tables, audit notes, pool math, and PDF links. The file for that job is held
+            in memory only long enough to finish the job. TRA does not post salary ranges, email
+            candidates, or write to your HRIS. You can revoke the key at any time. We do not use
+            Muse conversation content for advertising.
           </p>
         </section>
 
@@ -85,8 +98,9 @@ export default function PrivacyPage() {
           <p className="mt-2">
             We use infrastructure providers (e.g. hosting, payments, and app distribution platforms)
             to run the service. We do not sell personal information. Data may be disclosed if
-            required by law or to protect rights and safety. When Muse is connected, TRA shares with
-            Meta only the minimum a connected request needs to complete the tool call you started.
+            required by law or to protect rights and safety. The sample desk returns its answer in
+            the call and does not share the text you typed. When the TRA product is connected, TRA
+            shares with Meta only the tool result for the call you started.
           </p>
         </section>
 
@@ -103,8 +117,9 @@ export default function PrivacyPage() {
           <h2 className="text-lg font-semibold text-slate-900">Your choices</h2>
           <p className="mt-2">
             You may decline optional notifications, avoid uploading personal data to the public
-            demo, disconnect an agent by deleting its API key, and request deletion of pilot data by
-            contacting us.
+            demo, and disconnect the TRA product by deleting its API key. The sample desk keeps no
+            account and no paste, so there is no sample-desk record to delete. You may request
+            deletion of pilot data by contacting us.
           </p>
         </section>
 
