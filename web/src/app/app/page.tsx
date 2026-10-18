@@ -127,10 +127,37 @@ export default function AppDashboardPage() {
 
       <div>
         <h2 className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500">
-          End-to-end modules
+          {me?.membership.role === "ta" ? "Recruiting" : "End-to-end modules"}
         </h2>
+        {me?.membership.role === "ta" && (
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <Link
+              href="/app/closer?door=tally"
+              className="rounded-2xl border border-slate-200 border-t-4 border-t-teal-700 bg-white p-5 shadow-sm"
+            >
+              <p className="text-[10px] font-semibold tracking-widest text-teal-700">Door 1</p>
+              <h3 className="mt-1 font-semibold text-slate-900">Resume tally</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Break the resume into jobs. Same benchmark is full credit, a near match is half.
+              </p>
+            </Link>
+            <Link
+              href="/app/closer"
+              className="rounded-2xl border border-slate-200 border-t-4 border-t-rose-500 bg-white p-5 shadow-sm"
+            >
+              <p className="text-[10px] font-semibold tracking-widest text-teal-700">Door 2</p>
+              <h3 className="mt-1 font-semibold text-slate-900">Four-year trajectory</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                The years are already known. Project the offer. No resume required.
+              </p>
+            </Link>
+          </div>
+        )}
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {modules.map((m) => (
+          {(me?.membership.role === "ta"
+            ? modules.filter((m) => m.href === "/app/candidates" || m.href === "/app/closer")
+            : modules
+          ).map((m) => (
             <Link
               key={m.href}
               href={m.href}

@@ -15,6 +15,7 @@ import { getAccessToken, saasApi } from "@/lib/saas-api";
 import { money } from "@/lib/format";
 import { Button, Card, Stat } from "@/components/ModuleShell";
 import { ModuleGate } from "@/components/ModuleGate";
+import { CreditLedger, ResumeCredit } from "@/components/ResumeCredit";
 import { useWorkspace } from "@/lib/workspace-context";
 
 type FormState = {
@@ -114,6 +115,20 @@ export default function AppCloserPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const years = params.get("years");
+    const education = params.get("education");
+    const role = params.get("role");
+    const name = params.get("name");
+    if (years || education || role || name) {
+      setForm((prev) => ({
+        ...prev,
+        years_experience: years ? Number(years) : prev.years_experience,
+        education: education || prev.education,
+        job_title: role || prev.job_title,
+        candidate_name: name || prev.candidate_name,
+      }));
+    }
     let cancelled = false;
     (async () => {
       try {
@@ -299,6 +314,24 @@ export default function AppCloserPage() {
               />
             </Field>
 
+            <ResumeCredit
+              jobTitle={form.job_title}
+              loadSample={async () => {
+                const token = await getAccessToken();
+                return saasApi.resumeCreditSample(token) as Promise<CreditLedger>;
+              }}
+              tallyText={async (text, target) => {
+                const token = await getAccessToken();
+                return saasApi.resumeCreditTally(token, {
+                  text,
+                  target_title: target,
+                }) as Promise<CreditLedger>;
+              }}
+              onConfirm={(years, education) => {
+                update("years_experience", years);
+                if (education) update("education", education);
+              }}
+            />
             <div className="border-t border-slate-100 pt-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-teal-800">
                 Placement (YOE + education)

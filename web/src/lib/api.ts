@@ -430,6 +430,13 @@ export const api = {
         body: JSON.stringify({ records }),
       }
     ),
+  resumeCreditSample: () =>
+    request<Record<string, unknown>>("/api/resume-credit/sample"),
+  resumeCreditTally: (body: { text?: string; target_title?: string; jobs?: unknown[] }) =>
+    request<Record<string, unknown>>("/api/resume-credit/tally", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
   closerProject: (payload: Record<string, unknown>) =>
     request<WealthProjection>("/api/closer/project", {
       method: "POST",

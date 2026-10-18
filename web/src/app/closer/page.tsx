@@ -14,6 +14,7 @@ import {
 import { api, WealthProjection } from "@/lib/api";
 import { money } from "@/lib/format";
 import { Button, Card, ModuleShell, Stat } from "@/components/ModuleShell";
+import { CreditLedger, ResumeCredit } from "@/components/ResumeCredit";
 
 type FormState = {
   base_salary: number;
@@ -67,7 +68,9 @@ export default function CloserPage() {
     const base = params.get("base");
     const bonus = params.get("bonus");
     const lti = params.get("lti");
-    if (name || role || base || bonus || lti) {
+    const years = params.get("years");
+    const education = params.get("education");
+    if (name || role || base || bonus || lti || years || education) {
       setForm((prev) => ({
         ...prev,
         candidate_name: name || prev.candidate_name,
@@ -75,6 +78,8 @@ export default function CloserPage() {
         base_salary: base ? Number(base) : prev.base_salary,
         target_bonus_pct: bonus ? Number(bonus) : prev.target_bonus_pct,
         lti_target_value: lti ? Number(lti) : prev.lti_target_value,
+        years_experience: years ? Number(years) : prev.years_experience,
+        education: education || prev.education,
       }));
     }
   }, []);
@@ -183,6 +188,17 @@ export default function CloserPage() {
               />
             </Field>
 
+            <ResumeCredit
+              jobTitle={form.job_title}
+              loadSample={() => api.resumeCreditSample() as Promise<CreditLedger>}
+              tallyText={(text, target) =>
+                api.resumeCreditTally({ text, target_title: target }) as Promise<CreditLedger>
+              }
+              onConfirm={(years, education) => {
+                update("years_experience", years);
+                if (education) update("education", education);
+              }}
+            />
             <div className="border-t border-slate-100 pt-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-teal-800">
                 Wage-calc placement (YOE + education)

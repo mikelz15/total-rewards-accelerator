@@ -192,6 +192,13 @@ export const saasApi = {
       body: JSON.stringify(body),
     }),
 
+  resumeCreditSample: (token: string) =>
+    saasRequest<Record<string, unknown>>("/api/v1/resume-credit/sample", token),
+  resumeCreditTally: (token: string, body: { text?: string; target_title?: string }) =>
+    saasRequest<Record<string, unknown>>("/api/v1/resume-credit/tally", token, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
   closerProject: (token: string, body: Record<string, unknown>) =>
     saasRequest<Record<string, unknown>>("/api/v1/closer/project", token, {
       method: "POST",

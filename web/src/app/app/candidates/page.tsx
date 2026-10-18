@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { getAccessToken, saasApi } from "@/lib/saas-api";
 import { money } from "@/lib/format";
 import { Button, Card, Stat } from "@/components/ModuleShell";
 import { ModuleGate } from "@/components/ModuleGate";
+import { CreditLedger, ResumeCredit } from "@/components/ResumeCredit";
 import { useWorkspace } from "@/lib/workspace-context";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
@@ -24,6 +26,7 @@ type Candidate = {
 
 export default function AppCandidatesPage() {
   const { permissions } = useWorkspace();
+  const router = useRouter();
   const [rows, setRows] = useState<Candidate[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [name, setName] = useState("");
@@ -119,6 +122,24 @@ export default function AppCandidatesPage() {
           wealth.
         </p>
       </div>
+
+      <ResumeCredit
+        jobTitle={role || "Role"}
+        loadSample={async () => {
+          const token = await getAccessToken();
+          return saasApi.resumeCreditSample(token) as Promise<CreditLedger>;
+        }}
+        tallyText={async (text, target) => {
+          const token = await getAccessToken();
+          return saasApi.resumeCreditTally(token, { text, target_title: target }) as Promise<CreditLedger>;
+        }}
+        onConfirm={(years, education) => {
+          const params = new URLSearchParams({ years: String(years) });
+          if (education) params.set("education", education);
+          if (role) params.set("role", role);
+          router.push(`/app/closer?${params.toString()}`);
+        }}
+      />
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Total" value={String(rows.length)} />
