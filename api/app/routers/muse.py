@@ -101,17 +101,27 @@ def me(authorization: Optional[str] = Header(default=None)) -> Dict[str, Any]:
     }
 
 
+def dataframe_for_clean(payload: CleanRequest) -> pd.DataFrame:
+    """Turn a connector body into a frame. A blank file is a 400, not a 500."""
+    text = (payload.csv_text or "").strip()
+    try:
+        if text:
+            df = parse_tabular_text(text)
+        elif payload.records:
+            df = pd.DataFrame(payload.records)
+        else:
+            raise HTTPException(status_code=400, detail="Provide csv_text or records")
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    if df.empty:
+        raise HTTPException(status_code=400, detail="CSV is empty")
+    return df
+
+
 @router.post("/clean")
 def clean(payload: CleanRequest, authorization: Optional[str] = Header(default=None)) -> Dict[str, Any]:
     require_key(authorization)
-    if payload.csv_text:
-        df = parse_tabular_text(payload.csv_text)
-    elif payload.records:
-        df = pd.DataFrame(payload.records)
-    else:
-        raise HTTPException(status_code=400, detail="Provide csv_text or records")
-    if df.empty:
-        raise HTTPException(status_code=400, detail="CSV is empty")
+    df = dataframe_for_clean(payload)
     hits = scan_headers_for_phi([str(c) for c in df.columns])
     if hits:
         raise HTTPException(
