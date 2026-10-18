@@ -48,6 +48,7 @@ export function AppNav({
   }
 
   const settings = [
+    { href: "/app/governance", label: "Rules" },
     { href: "/app/team", label: "Team" },
     { href: "/app/billing", label: "Billing" },
     ...(isSystemAdmin ? [{ href: "/app/admin", label: "Admin" }] : []),

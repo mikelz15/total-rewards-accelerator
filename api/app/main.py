@@ -36,6 +36,7 @@ from app.routers.saas import billing as saas_billing
 from app.routers.saas import candidates as saas_candidates
 from app.routers.saas import cleaner as saas_cleaner
 from app.routers.saas import datasets as saas_datasets
+from app.routers.saas import governance as saas_governance
 from app.routers.saas import me as saas_me
 from app.routers.saas import team as saas_team
 from app.routers import muse as muse_router
@@ -106,6 +107,7 @@ app.include_router(saas_analysis.router)
 app.include_router(saas_team.router)
 app.include_router(saas_billing.router)
 app.include_router(saas_admin.router)
+app.include_router(saas_governance.router)
 app.include_router(muse_router.router)
 
 app.add_middleware(

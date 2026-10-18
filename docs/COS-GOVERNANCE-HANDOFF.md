@@ -51,9 +51,9 @@ Do not chip `watch` items (example: Delaware 2027).
 
 ## This week’s seed
 File: `api/app/data/governance_rules.json`  
-Jurisdictions in pack: CO, CA, NY, WA, IL, VA, ME, CT (1 Oct 2026 — upcoming chip), DE (watch only), NJ QSBS, federal QSBS, FLSA.
+Jurisdictions in pack: CO, CA, NY, WA, IL, VA, ME, CT (in force 1 Oct 2026), DE (watch only), NJ QSBS, federal QSBS, FLSA.
 
-Near-term COS watch: **Connecticut HB 5003 on 2026-10-01.** That is the only seeded item inside the next 90 days that is not already in force.
+Connecticut HB 5003 is in force. Seed version 0.1.1, verified 2026-10-17. Delaware stays future. Do not chip it until 2027-06-28.
 
 ## Escalation line to principal
 Use this format, nothing longer:

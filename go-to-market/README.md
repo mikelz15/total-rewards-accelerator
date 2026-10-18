@@ -28,4 +28,4 @@
 ## Product highlight (v0.3)
 Shared **Placement Engine**: years of experience + education → expected rate, used by Cleaner, Auditor, Merit, Flight Risk, and Closer — while classic mid-compa stays.
 
-Quiet **governance overlay** (not a module): COS gates cards weekly; chips land on Cleaner / Auditor / Closer only. Near-term: CT HB 5003 on 2026-10-01. See `docs/COS-GOVERNANCE-HANDOFF.md` and `api/app/data/governance_rules.json`.
+Quiet **governance overlay** (not a module): COS gates cards weekly; chips land on Cleaner / Auditor / Closer only. CT HB 5003 is in force as of 2026-10-01. See `docs/COS-GOVERNANCE-HANDOFF.md` and `api/app/data/governance_rules.json`.

@@ -50,6 +50,36 @@ export type MeResponse = {
   workspace: { id: string; name: string } | null;
 };
 
+export type GovernanceCard = {
+  id: string;
+  jurisdiction_id: string;
+  place: string;
+  citation: string | null;
+  summary: string | null;
+  status: string;
+  effective_on: string;
+  sunset_on: string | null;
+  instrument: string | null;
+  employees: number | null;
+  source_url: string | null;
+  severity: string | null;
+  chip: boolean;
+};
+
+export type GovernanceLibrary = {
+  as_of: string;
+  version: string;
+  disclaimer: string | null;
+  places: { id: string; name: string }[];
+  includes_federal: boolean;
+  empty_reason: "no_file" | "no_places" | null;
+  dataset_id: string | null;
+  dataset_name: string | null;
+  past: GovernanceCard[];
+  current: GovernanceCard[];
+  future: GovernanceCard[];
+};
+
 export type DatasetSummary = {
   id: string;
   name: string;
@@ -64,6 +94,12 @@ export const saasApi = {
 
   listDatasets: (token: string) =>
     saasRequest<{ datasets: DatasetSummary[] }>("/api/v1/datasets", token),
+
+  governance: (token: string, asOf?: string) =>
+    saasRequest<GovernanceLibrary>(
+      `/api/v1/governance${asOf ? `?as_of=${encodeURIComponent(asOf)}` : ""}`,
+      token
+    ),
 
   createDataset: (
     token: string,
