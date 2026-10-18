@@ -17,15 +17,20 @@ export default function PlatformAdminPage() {
   const [modules, setModules] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
+  const [orgsLoaded, setOrgsLoaded] = useState(false);
 
   async function load() {
-    const token = await getAccessToken();
-    const me = await saasApi.adminMe(token);
-    setAllowed(me.is_system_admin);
-    if (!me.is_system_admin) return;
-    const data = await saasApi.adminOrgs(token);
-    setOrgs(data.orgs);
-    setModules(data.modules);
+    try {
+      const token = await getAccessToken();
+      const me = await saasApi.adminMe(token);
+      setAllowed(me.is_system_admin);
+      if (!me.is_system_admin) return;
+      const data = await saasApi.adminOrgs(token);
+      setOrgs(data.orgs);
+      setModules(data.modules);
+    } finally {
+      setOrgsLoaded(true);
+    }
   }
 
   useEffect(() => {
@@ -176,7 +181,7 @@ export default function PlatformAdminPage() {
               {orgs.length === 0 && (
                 <tr>
                   <td colSpan={5} className="px-4 py-8 text-center text-slate-500">
-                    {allowed === null ? "Loading…" : "No organizations yet."}
+                    {allowed === null || !orgsLoaded ? "Loading…" : "No organizations yet."}
                   </td>
                 </tr>
               )}
