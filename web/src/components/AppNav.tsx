@@ -47,10 +47,27 @@ export function AppNav({
     router.refresh();
   }
 
+  const role = permissions?.role;
+  const links =
+    role === "hrbp"
+      ? moduleLinks.filter((link) =>
+          ["/app", "/app/equity", "/app/closer"].includes(link.href)
+        )
+      : role === "executive"
+        ? moduleLinks.filter((link) =>
+            ["/app", "/app/equity", "/app/cycle", "/app/philosophy", "/app/closer"].includes(
+              link.href
+            )
+          )
+        : moduleLinks;
   const settings = [
-    { href: "/app/governance", label: "Rules" },
-    { href: "/app/team", label: "Team" },
-    { href: "/app/billing", label: "Billing" },
+    ...(role === "hrbp" ? [] : [{ href: "/app/governance", label: "Rules" }]),
+    ...(role === "hrbp" || role === "executive"
+      ? []
+      : [
+          { href: "/app/team", label: "Team" },
+          { href: "/app/billing", label: "Billing" },
+        ]),
     ...(isSystemAdmin ? [{ href: "/app/admin", label: "Admin" }] : []),
   ];
 
@@ -64,7 +81,7 @@ export function AppNav({
           </div>
         </div>
         <nav className="flex max-w-full flex-wrap items-center justify-end gap-1">
-          {moduleLinks.map((link) => {
+          {links.map((link) => {
             const locked =
               link.module && permissions
                 ? !canUseModule(permissions, link.module)

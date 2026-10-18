@@ -12,9 +12,9 @@ from sqlalchemy import func, select
 
 from app.auth.deps import CurrentUser, get_current_user
 from app.db.models import Dataset, Membership, Organization
-from app.db.session import bind_rls, get_session
+from app.db.session import allow_seat_roles, bind_rls, get_session
 from app.services.access import perms_for
-from app.services.entitlements import MODULES, normalize_plan
+from app.services.entitlements import MODULES, ROLE_MODULES, normalize_plan
 
 router = APIRouter(prefix="/api/v1/admin", tags=["platform-admin"])
 
@@ -119,3 +119,30 @@ def patch_org(
             "entitlements": org.entitlements_json,
             "effective_modules": perms_for(org, "owner")["plan_modules"],
         }
+
+
+class SeatBody(BaseModel):
+    role: str
+
+
+@router.patch("/seat")
+def sit_as(body: SeatBody, user: CurrentUser = Depends(get_current_user)) -> Dict[str, Any]:
+    """Switch the operator's own seat so a home can be filmed. Admin stays open."""
+    require_system_admin(user)
+    role = (body.role or "").strip().lower()
+    if role not in ROLE_MODULES:
+        raise HTTPException(status_code=400, detail="Unknown role")
+    with get_session() as session:
+        allow_seat_roles(session)
+        bind_rls(session, user_id=str(user.user_id), platform_admin=True)
+        membership = session.scalar(
+            select(Membership)
+            .where(Membership.user_id == user.user_id)
+            .order_by(Membership.created_at.asc())
+            .limit(1)
+        )
+        if not membership:
+            raise HTTPException(status_code=404, detail="No workspace seat to switch")
+        membership.role = role
+        session.flush()
+        return {"role": membership.role, "org_id": str(membership.org_id)}

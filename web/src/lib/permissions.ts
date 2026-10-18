@@ -30,5 +30,7 @@ export const ROLE_HELP: Record<string, string> = {
   admin: "Full modules + team (no billing)",
   member: "Comp access to all entitled modules",
   ta: "Tracker + Closer only",
+  hrbp: "Place one person, hand off the four-year page, one group line",
+  executive: "Read offers, the cycle, philosophy, and rules in force",
   viewer: "Read access (no uploads/edits)",
 };

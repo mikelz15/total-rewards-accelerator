@@ -316,6 +316,12 @@ export const saasApi = {
       modules: string[];
     }>("/api/v1/admin/orgs", token),
 
+  adminSitAs: (token: string, role: string) =>
+    saasRequest<{ role: string; org_id: string }>("/api/v1/admin/seat", token, {
+      method: "PATCH",
+      body: JSON.stringify({ role }),
+    }),
+
   adminPatchOrg: (
     token: string,
     orgId: string,

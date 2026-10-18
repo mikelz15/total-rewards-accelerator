@@ -12,7 +12,7 @@ from sqlalchemy import select
 from app.auth.deps import CurrentUser, ensure_user_org, get_current_user
 from app.db.models import Dataset
 from app.db.session import get_session
-from app.services.access import require_module, require_write
+from app.services.access import can_access_module, org_override, org_suspended, require_module, require_write
 
 router = APIRouter(prefix="/api/v1/datasets", tags=["saas-datasets"])
 
@@ -44,7 +44,24 @@ def _serialize(ds: Dataset) -> Dict[str, Any]:
 def list_datasets(user: CurrentUser = Depends(get_current_user)) -> Dict[str, Any]:
     with get_session() as session:
         ctx = ensure_user_org(session, user)
-        require_module(ctx.org, ctx.membership.role, "cleaner")
+        # Equity and the HRBP seat read the saved file. They do not upload one.
+        if not (
+            can_access_module(
+                "cleaner",
+                ctx.org.plan,
+                ctx.membership.role,
+                suspended=org_suspended(ctx.org),
+                entitlement_override=org_override(ctx.org),
+            )
+            or can_access_module(
+                "equity",
+                ctx.org.plan,
+                ctx.membership.role,
+                suspended=org_suspended(ctx.org),
+                entitlement_override=org_override(ctx.org),
+            )
+        ):
+            require_module(ctx.org, ctx.membership.role, "cleaner")
         rows = session.scalars(
             select(Dataset)
             .where(Dataset.org_id == ctx.org.id)

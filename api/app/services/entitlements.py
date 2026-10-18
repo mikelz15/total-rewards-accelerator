@@ -25,16 +25,20 @@ PLAN_MODULES: Dict[str, Set[str]] = {
     "suspended": set(),
 }
 
-# What each seat role may use (intersected with plan entitlements)
+# What each seat role may use (intersected with plan entitlements).
+# hrbp places one person and can read the group file. executive is a read of
+# every module. Neither seat manages the team or the bill.
 ROLE_MODULES: Dict[str, Set[str]] = {
     "owner": set(ALL_MODULES),
     "admin": set(ALL_MODULES),
     "member": set(ALL_MODULES),  # Comp analyst
     "ta": {"tracker", "closer"},
+    "hrbp": {"closer", "equity"},
+    "executive": set(ALL_MODULES),
     "viewer": set(ALL_MODULES),  # read paths; write checks use can_write
 }
 
-WRITE_ROLES = {"owner", "admin", "member", "ta"}
+WRITE_ROLES = {"owner", "admin", "member", "ta", "hrbp"}
 BILLING_ROLES = {"owner"}
 TEAM_ADMIN_ROLES = {"owner", "admin"}
 

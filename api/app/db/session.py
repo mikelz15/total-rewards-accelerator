@@ -16,6 +16,8 @@ _engine: Optional[Engine] = None
 _SessionLocal: Optional[sessionmaker] = None
 _composite_applied = False
 _trial_plan_ready = False
+_seat_roles_ready = False
+SEAT_ROLES = ("owner", "admin", "member", "ta", "hrbp", "executive", "viewer")
 _composite_meta: dict = {
     "tra_saas_json_present": False,
     "tra_saas_json_parse_ok": False,
@@ -161,6 +163,39 @@ def allow_trial_plan(session: Session) -> None:
             "CHECK (plan IN ('demo', 'pilot', 'starter', 'suite', 'trial'))"
         )
     )
+
+
+def allow_seat_roles(session: Session) -> None:
+    """001 only allowed owner, admin, member, and viewer. ta, hrbp, and executive are seats."""
+    global _seat_roles_ready
+    if _seat_roles_ready:
+        return
+    from sqlalchemy import text
+
+    rows = session.execute(
+        text(
+            "SELECT conname, pg_get_constraintdef(oid) FROM pg_constraint "
+            "WHERE conrelid = 'memberships'::regclass AND contype = 'c' "
+            "AND pg_get_constraintdef(oid) ILIKE '%role%'"
+        )
+    ).all()
+    if rows and all(
+        all(role in (definition or "") for role in ("ta", "hrbp", "executive"))
+        for _name, definition in rows
+    ):
+        _seat_roles_ready = True
+        return
+    for name, _definition in rows:
+        if name and str(name).replace("_", "").isalnum():
+            session.execute(text(f"ALTER TABLE memberships DROP CONSTRAINT {name}"))
+    allowed = ", ".join(f"'{role}'" for role in SEAT_ROLES)
+    session.execute(
+        text(
+            "ALTER TABLE memberships ADD CONSTRAINT memberships_role_check "
+            f"CHECK (role IN ({allowed}))"
+        )
+    )
+    _seat_roles_ready = True
 
 
 def connect_args_for(url: str) -> dict:

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { getAccessToken, saasApi } from "@/lib/saas-api";
 import { Button, Card } from "@/components/ModuleShell";
 
@@ -10,6 +11,7 @@ import { Button, Card } from "@/components/ModuleShell";
  * Controlled by SYSTEM_ADMIN_EMAILS on the API (default: mikez.lopez15@gmail.com).
  */
 export default function PlatformAdminPage() {
+  const router = useRouter();
   const [allowed, setAllowed] = useState<boolean | null>(null);
   const [orgs, setOrgs] = useState<
     Awaited<ReturnType<typeof saasApi.adminOrgs>>["orgs"]
@@ -36,6 +38,20 @@ export default function PlatformAdminPage() {
   useEffect(() => {
     load().catch((e) => setError(e instanceof Error ? e.message : "Load failed"));
   }, []);
+
+  async function sitAs(role: string) {
+    setError(null);
+    setInfo(null);
+    try {
+      const token = await getAccessToken();
+      const seat = await saasApi.adminSitAs(token, role);
+      setInfo(`You are sitting as ${seat.role}. Opening that home.`);
+      router.push("/app");
+      router.refresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not switch seats");
+    }
+  }
 
   async function setPlan(orgId: string, plan: string) {
     setError(null);
@@ -106,8 +122,25 @@ export default function PlatformAdminPage() {
           <li>Visibility into member &amp; dataset counts (support)</li>
         </ul>
         <p className="mt-3 text-sm text-slate-500">
-          Customers control invites and roles (owner/admin/member/ta/viewer) themselves.
+          Customers invite owner, admin, member, ta, hrbp, executive, and viewer from Team.
+          They cannot flip their own row, and the only owner cannot demote themselves there.
         </p>
+      </Card>
+
+      <Card>
+        <h2 className="text-sm font-semibold text-slate-900">Sit as a seat</h2>
+        <p className="mt-2 text-sm text-slate-600">
+          This changes your seat in this workspace so you can film the home. Admin stays on the
+          bar. Sit back as owner when the shot is done. It does not invite anyone and it does not
+          touch another workspace.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {["owner", "member", "ta", "hrbp", "executive", "viewer"].map((role) => (
+            <Button key={role} type="button" onClick={() => void sitAs(role)}>
+              {role}
+            </Button>
+          ))}
+        </div>
       </Card>
 
       <Card className="overflow-hidden p-0">

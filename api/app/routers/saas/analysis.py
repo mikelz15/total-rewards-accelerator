@@ -13,6 +13,7 @@ from app.auth.deps import CurrentUser, ensure_user_org, get_current_user
 from app.db.models import AnalysisRun, Dataset
 from app.db.session import get_session
 from app.services.access import require_module, require_write
+from app.services.entitlements import can_write
 from app.services.auditor import audit_equity
 from app.services.closer import build_wealth_pdf, project_total_wealth
 from app.services.flight_risk import assess_flight_risk
@@ -122,10 +123,10 @@ def saas_auditor_run(
     with get_session() as session:
         ctx = ensure_user_org(session, user)
         require_module(ctx.org, ctx.membership.role, "equity")
-        require_write(ctx.membership.role)
         records, dataset_id = _load_records(
             session, ctx.org.id, payload.records, payload.dataset_id
         )
+        save = bool(payload.save) and can_write(ctx.membership.role)
         audit = audit_equity(
             records,
             underpaid_threshold=payload.underpaid_threshold,
@@ -152,7 +153,7 @@ def saas_auditor_run(
         audit["top_flight_risks"] = risk["top_risks"][:5]
         audit["saas"] = {"org_id": str(ctx.org.id)}
         run_id = None
-        if payload.save:
+        if save:
             # Persist summary-sized result (full employees can be large)
             slim = {
                 "summary": audit.get("summary"),
@@ -188,10 +189,10 @@ def saas_remediation_run(
     with get_session() as session:
         ctx = ensure_user_org(session, user)
         require_module(ctx.org, ctx.membership.role, "equity")
-        require_write(ctx.membership.role)
         records, dataset_id = _load_records(
             session, ctx.org.id, payload.records, payload.dataset_id
         )
+        save = bool(payload.save) and can_write(ctx.membership.role)
         result = remediate(
             records,
             merit_pool=payload.merit_pool,
@@ -202,7 +203,7 @@ def saas_remediation_run(
         )
         result["saas"] = {"org_id": str(ctx.org.id)}
         run_id = None
-        if payload.save:
+        if save:
             run_id = _save_run(
                 session,
                 org_id=ctx.org.id,
@@ -235,10 +236,10 @@ def saas_philosophy_run(
     with get_session() as session:
         ctx = ensure_user_org(session, user)
         require_module(ctx.org, ctx.membership.role, "equity")
-        require_write(ctx.membership.role)
         records, dataset_id = _load_records(
             session, ctx.org.id, payload.records, payload.dataset_id
         )
+        save = bool(payload.save) and can_write(ctx.membership.role)
         try:
             result = check_philosophy(
                 records,
@@ -252,7 +253,7 @@ def saas_philosophy_run(
         result["source"] = "dataset" if dataset_id else "records"
         result["saas"] = {"org_id": str(ctx.org.id), "sample_only": False}
         run_id = None
-        if payload.save:
+        if save:
             run_id = _save_run(
                 session,
                 org_id=ctx.org.id,
@@ -286,10 +287,9 @@ def saas_closer_project(
     with get_session() as session:
         ctx = ensure_user_org(session, user)
         require_module(ctx.org, ctx.membership.role, "closer")
-        require_write(ctx.membership.role)
         projection = project_total_wealth(**payload.model_dump(exclude={"save"}))
         projection["saas"] = {"org_id": str(ctx.org.id), "sample_only": False}
-        if payload.save:
+        if payload.save and can_write(ctx.membership.role):
             run_id = _save_run(
                 session,
                 org_id=ctx.org.id,

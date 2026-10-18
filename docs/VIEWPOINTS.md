@@ -6,8 +6,8 @@ Same engines. The home is the job the person is doing.
 |---|---|---|
 | Rewards | Cleaner, Equity, Cycle, Philosophy. Today's `member` home. | Yes |
 | Recruiter | Two doors: resume tally, or the four-year page. Then the pipeline. `ta` already has Tracker + Closer only. | Tally is on Closer. `ta` home opens on those doors. |
-| HRBP | Place this one person. Hand the manager the four-year page. One line if the offer sits under the group. | Not built. No `hrbp` role until this has been used. |
-| Executive | A read: offers against expected placement, cycle envelope, philosophy score, governance in force. | Not built. No `executive` role. Drill-through opens the screens we have. |
+| HRBP | Place this one person. Hand the manager the four-year page. One line if the offer sits under the group. | `hrbp` home. Closer and Equity. Can write the offer. Cannot upload a file, manage the team, or open billing. |
+| Executive | A read: offers against expected placement, cycle envelope, philosophy score, governance in force. | `executive` home. Read of Equity, Cycle, Philosophy, Closer, and Rules. A run is not stored. The PDF stays with a seat that can write. |
 
 ## Credit, and the benchmark files
 

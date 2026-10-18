@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
-import { saasApi, type DatasetSummary, type MeResponse } from "@/lib/saas-api";
+import { saasApi, type DatasetSummary, type GovernanceLibrary, type MeResponse } from "@/lib/saas-api";
 import { Card, Stat } from "@/components/ModuleShell";
+import { ExecutiveHome, HrbpHome } from "@/components/ViewpointHome";
 
 const modules = [
   {
@@ -55,6 +56,8 @@ export default function AppDashboardPage() {
   const [me, setMe] = useState<MeResponse | null>(null);
   const [datasets, setDatasets] = useState<DatasetSummary[]>([]);
   const [candidateCount, setCandidateCount] = useState(0);
+  const [offerCount, setOfferCount] = useState<number | null>(null);
+  const [governance, setGovernance] = useState<GovernanceLibrary | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -69,15 +72,20 @@ export default function AppDashboardPage() {
         const { data } = await supabase.auth.getSession();
         const token = data.session?.access_token;
         if (!token) return;
-        const [profile, ds, cand] = await Promise.all([
+        const [profile, ds, cand, rules] = await Promise.all([
           saasApi.me(token),
           saasApi.listDatasets(token).catch(() => ({ datasets: [] as DatasetSummary[] })),
-          saasApi.listCandidates(token).catch(() => ({ candidates: [] as unknown[] })),
+          saasApi.listCandidates(token).catch(() => ({ candidates: [] as unknown[], summary: {} })),
+          saasApi.governance(token).catch(() => null),
         ]);
         if (!cancelled) {
           setMe(profile);
           setDatasets(ds.datasets);
           setCandidateCount(cand.candidates?.length ?? 0);
+          const byStage = (cand.summary as { by_stage?: Record<string, number> } | undefined)?.by_stage;
+          const offers = (byStage?.offer ?? 0) + (byStage?.accepted ?? 0);
+          setOfferCount(byStage ? offers : null);
+          setGovernance(rules);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -88,6 +96,15 @@ export default function AppDashboardPage() {
       cancelled = true;
     };
   }, []);
+
+  if (me?.membership.role === "hrbp") {
+    return <HrbpHome datasets={datasets} />;
+  }
+  if (me?.membership.role === "executive") {
+    return (
+      <ExecutiveHome datasets={datasets} offerCount={offerCount} governance={governance} />
+    );
+  }
 
   return (
     <div className="space-y-8">
