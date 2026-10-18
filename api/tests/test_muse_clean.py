@@ -5,6 +5,7 @@ import unittest
 from fastapi import HTTPException
 
 from app.routers.muse import CleanRequest, dataframe_for_clean
+from app.services.cleaner import clean_dataframe
 
 
 class MuseCleanTests(unittest.TestCase):
@@ -19,6 +20,14 @@ class MuseCleanTests(unittest.TestCase):
             dataframe_for_clean(CleanRequest())
         self.assertEqual(caught.exception.status_code, 400)
         self.assertIn("csv_text", caught.exception.detail)
+
+    def test_one_salary_row_cleans(self) -> None:
+        text = "EE#,Employee Name,Annual Salary\n1,Alex Rivera,120000\n"
+        frame = dataframe_for_clean(CleanRequest(csv_text=text))
+        result = clean_dataframe(frame, use_llm_headers=False)
+        self.assertEqual(result["stats"]["rows_out"], 1)
+        summary = result["stats"].get("placement") or {}
+        self.assertIn("with_expected", summary)
 
     def test_sample_shape_parses(self) -> None:
         text = "EE#,Employee Name,Annual Salary\n1,Alex Rivera,120000\n"

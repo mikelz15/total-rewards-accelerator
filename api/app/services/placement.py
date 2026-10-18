@@ -383,10 +383,18 @@ def placement_summary(records: List[Dict[str, Any]]) -> Dict[str, Any]:
             "avg_actual_compa": None,
         }
     df = pd.DataFrame(records)
-    flags = df.get("placement_flag", pd.Series(dtype=str))
-    gap = pd.to_numeric(df.get("placement_gap"), errors="coerce")
-    exp_c = pd.to_numeric(df.get("expected_compa"), errors="coerce")
-    act_c = pd.to_numeric(df.get("compa_ratio"), errors="coerce")
+
+    def _numeric(name: str) -> pd.Series:
+        # A missing column must stay a Series. to_numeric(None) is a scalar and
+        # crashes a one-row file that never computed compa-ratio.
+        if name not in df.columns:
+            return pd.Series([pd.NA] * len(df), index=df.index, dtype="Float64")
+        return pd.to_numeric(df[name], errors="coerce")
+
+    flags = df["placement_flag"] if "placement_flag" in df.columns else pd.Series([None] * len(df), index=df.index)
+    gap = _numeric("placement_gap")
+    exp_c = _numeric("expected_compa")
+    act_c = _numeric("compa_ratio")
     below = (flags == "below_expected").sum() if len(flags) else 0
     return {
         "with_expected": int(exp_c.notna().sum()),
