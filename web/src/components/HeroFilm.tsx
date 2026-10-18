@@ -6,6 +6,7 @@ const FILMS = [
   {
     id: "cleaner",
     src: "/films/tra-cleaner.mp4",
+    poster: "/films/tra-cleaner.jpg",
     label: "Cleaner",
     length: "0:48",
     caption: "The sample extract, cleaned.",
@@ -13,6 +14,7 @@ const FILMS = [
   {
     id: "equity",
     src: "/films/tra-equity.mp4",
+    poster: "/films/tra-equity.jpg",
     label: "Equity + Merit",
     length: "0:44",
     caption: "Midpoint, expected placement, then the pool.",
@@ -20,6 +22,7 @@ const FILMS = [
   {
     id: "closer",
     src: "/films/tra-closer.mp4",
+    poster: "/films/tra-closer.jpg",
     label: "Closer",
     length: "0:34",
     caption: "Base, bonus, and LTI as a four-year total.",
@@ -44,7 +47,6 @@ export function HeroFilm() {
   async function play() {
     const video = videoRef.current;
     if (!video) return;
-    setPlaying(true);
     try {
       await video.play();
     } catch {
@@ -61,29 +63,35 @@ export function HeroFilm() {
           className="aspect-video w-full bg-[#12151c]"
           src={film.src}
           controls={playing}
-          preload="metadata"
+          preload="none"
           playsInline
-          onPlay={() => setPlaying(true)}
+          onPlaying={() => setPlaying(true)}
           onEnded={() => setPlaying(false)}
         />
         {!playing && (
           <button
             type="button"
             onClick={() => void play()}
-            className="absolute inset-0 flex items-center justify-center bg-slate-950/35"
+            className="absolute inset-0"
             aria-label={`Play ${film.label}, ${film.length}`}
           >
-            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-ember text-white shadow-[0_0_0_12px_rgba(196,92,38,0.18)]">
+            <img
+              src={film.poster}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover object-top"
+            />
+            <span className="absolute inset-0 bg-slate-950/20" />
+            <span className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-ember text-white shadow-[0_0_0_12px_rgba(196,92,38,0.22)]">
               <svg viewBox="0 0 24 24" className="ml-1 h-7 w-7 fill-current" aria-hidden>
                 <path d="M8 5v14l11-7z" />
               </svg>
             </span>
+            <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-black/75 to-transparent px-4 py-3 text-left text-xs text-white/95">
+              <span>{film.caption}</span>
+              <span className="rounded bg-black/70 px-1.5 py-0.5 tabular-nums">{film.length}</span>
+            </span>
           </button>
         )}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-black/70 to-transparent px-4 py-3 text-xs text-white/90">
-          <span>{film.caption}</span>
-          <span className="rounded bg-black/70 px-1.5 py-0.5 tabular-nums">{film.length}</span>
-        </div>
       </div>
       <div className="mt-3 flex min-w-0 flex-wrap justify-center gap-2">
         {FILMS.map((item, index) => (
