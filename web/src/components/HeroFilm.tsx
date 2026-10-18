@@ -27,6 +27,14 @@ const FILMS = [
     length: "0:34",
     caption: "Base, bonus, and LTI as a four-year total.",
   },
+  {
+    id: "tally",
+    src: "/films/tra-tally.mp4",
+    poster: "/films/tra-tally.jpg",
+    label: "Tally",
+    length: "0:57",
+    caption: "Six credit years from nine on the calendar.",
+  },
 ] as const;
 
 export function HeroFilm() {
