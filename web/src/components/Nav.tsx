@@ -75,11 +75,14 @@ export function Nav() {
           >
             {resetting ? "Resetting…" : "Reset"}
           </button>
-          <Link
-            href="/app"
-            className="rounded-lg bg-slate-900 px-3.5 py-2 text-sm font-medium text-white hover:bg-slate-800"
-          >
+          <Link href="/app" className="text-sm text-slate-600 hover:text-slate-900">
             Open app
+          </Link>
+          <Link
+            href="/signup"
+            className="rounded-lg bg-ember px-3.5 py-2 text-sm font-medium text-white hover:bg-ember-deep"
+          >
+            Start free trial
           </Link>
         </div>
         <button
@@ -112,8 +115,11 @@ export function Nav() {
             >
               {resetting ? "Resetting…" : "Reset demo"}
             </button>
-            <Link href="/app" className="text-sm font-medium text-slate-900" onClick={() => setOpen(false)}>
+            <Link href="/app" className="text-sm text-slate-600" onClick={() => setOpen(false)}>
               Open app
+            </Link>
+            <Link href="/signup" className="text-sm font-medium text-ember" onClick={() => setOpen(false)}>
+              Start free trial
             </Link>
           </div>
         </div>

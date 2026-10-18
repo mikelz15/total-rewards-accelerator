@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HeroFilm } from "@/components/HeroFilm";
 
 const modules = [
   {
@@ -68,53 +69,116 @@ const edges = [
   },
 ];
 
+const before = [
+  ["Worker ID", "W-1001", "W-1002"],
+  ["Legal Name", "Jane Doe", "Marcus Chen"],
+  ["Total Base Pay Annualized", "$92,000", "88,500"],
+  ["Pay Range Midpoint", "$110,000", "110000"],
+];
+
+const after = [
+  ["name", "Jane Doe", "Marcus Chen"],
+  ["base salary", "$92,000", "$88,500"],
+  ["range midpoint", "$110,000", "$110,000"],
+  ["years", "6", "4"],
+  ["education", "Bachelors", "Bachelors"],
+];
+
 export default function HomePage() {
   return (
-    <div className="mx-auto max-w-5xl px-4 py-16 sm:py-20">
-      <section className="grid gap-12 lg:grid-cols-[1.3fr_0.7fr] lg:items-start">
-        <div>
-          <p className="text-sm text-slate-500">Comp engineering toolkit</p>
-          <h1 className="mt-3 max-w-xl text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl text-balance">
-            Stop crunching rows. Start designing strategy.
-          </h1>
-          <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate-600">
-            Clean a file, place people, fund a cycle, and close an offer. One placement model
-            underneath, built to take three clicks.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link
-              href="/signup"
-              className="rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800"
-            >
-              Start free trial
-            </Link>
-            <Link
-              href="/cleaner"
-              className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50"
-            >
-              Try the demo
-            </Link>
-            <Link href="/pricing" className="px-2 text-sm text-slate-600 hover:text-slate-900">
-              Pricing
-            </Link>
-          </div>
-          <p className="mt-4 text-sm text-slate-500">
-            First 30 days free. Card required. Cancel anytime.
-          </p>
+    <div className="mx-auto max-w-5xl overflow-x-hidden px-4 py-14 sm:py-16">
+      <section className="text-center">
+        <h1 className="mx-auto max-w-3xl text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+          Stop crunching rows.
+          <span className="mt-1 block text-ember">Start designing strategy.</span>
+        </h1>
+        <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-slate-600">
+          Watch a messy HRIS extract become a cleaned file, in under a minute.
+        </p>
+        <HeroFilm />
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <Link
+            href="/signup"
+            className="rounded-lg bg-ember px-5 py-2.5 text-sm font-medium text-white hover:bg-ember-deep"
+          >
+            Start free trial
+          </Link>
+          <Link
+            href="/cleaner"
+            className="rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50"
+          >
+            Try the demo
+          </Link>
         </div>
-
-        <ol className="border-t border-slate-200 lg:border-l lg:border-t-0 lg:pl-8">
-          {workflow.map((step) => (
-            <li key={step.n} className="flex gap-4 border-b border-slate-200 py-3 last:border-b-0">
-              <span className="w-6 text-sm tabular-nums text-slate-400">{step.n}</span>
-              <span>
-                <span className="block text-sm font-medium text-slate-900">{step.label}</span>
-                <span className="text-sm text-slate-500">{step.detail}</span>
-              </span>
-            </li>
-          ))}
-        </ol>
+        <p className="mt-4 text-sm text-slate-500">
+          First 30 days free. Card required. Cancel anytime. The films use the sample file.
+        </p>
       </section>
+
+      <section className="mt-16">
+        <h2 className="text-center text-sm font-medium text-slate-900">The same two people</h2>
+        <p className="mx-auto mt-2 max-w-xl text-center text-sm text-slate-500">
+          The extract on the left is the sample. The columns on the right are what Cleaner keeps.
+        </p>
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
+          <div className="min-w-0 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+            <p className="border-b border-slate-200 bg-slate-50 px-4 py-2 text-xs font-medium uppercase tracking-wide text-slate-500">
+              Extract
+            </p>
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="text-xs text-slate-400">
+                  <th className="px-4 py-2 font-medium">Column</th>
+                  <th className="px-4 py-2 font-medium">Jane Doe</th>
+                  <th className="px-4 py-2 font-medium">Marcus Chen</th>
+                </tr>
+              </thead>
+              <tbody>
+                {before.map((row) => (
+                  <tr key={row[0]} className="border-t border-slate-100">
+                    <td className="px-4 py-2 font-mono text-xs text-slate-500">{row[0]}</td>
+                    <td className="px-4 py-2 text-slate-800">{row[1]}</td>
+                    <td className="px-4 py-2 text-slate-800">{row[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="min-w-0 overflow-x-auto rounded-2xl border border-teal-200 bg-white">
+            <p className="border-b border-teal-100 bg-teal-50 px-4 py-2 text-xs font-medium uppercase tracking-wide text-teal-800">
+              Cleaned
+            </p>
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="text-xs text-teal-700/70">
+                  <th className="px-4 py-2 font-medium">Column</th>
+                  <th className="px-4 py-2 font-medium">Jane Doe</th>
+                  <th className="px-4 py-2 font-medium">Marcus Chen</th>
+                </tr>
+              </thead>
+              <tbody>
+                {after.map((row) => (
+                  <tr key={row[0]} className="border-t border-teal-50">
+                    <td className="px-4 py-2 font-mono text-xs text-teal-800">{row[0]}</td>
+                    <td className="px-4 py-2 text-slate-900">{row[1]}</td>
+                    <td className="px-4 py-2 text-slate-900">{row[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <ol className="mx-auto mt-14 flex max-w-3xl flex-wrap justify-center gap-x-6 gap-y-2">
+        {workflow.map((step) => (
+          <li key={step.n} className="flex items-baseline gap-2 text-sm">
+            <span className="tabular-nums text-slate-400">{step.n}</span>
+            <span className="font-medium text-slate-900">{step.label}</span>
+            <span className="text-slate-500">{step.detail}</span>
+          </li>
+        ))}
+      </ol>
 
       <section className="mt-20 grid gap-8 sm:grid-cols-3">
         {edges.map((edge) => (

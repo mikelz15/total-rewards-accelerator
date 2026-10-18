@@ -11,6 +11,10 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        ember: {
+          DEFAULT: "var(--brand-ember)",
+          deep: "var(--brand-ember-deep)",
+        },
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],

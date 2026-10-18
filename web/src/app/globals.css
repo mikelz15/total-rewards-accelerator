@@ -10,6 +10,9 @@
   --brand-teal-deep: #0a4f52;
   --brand-gold: #d4a017;
   --brand-gold-bright: #f0b429;
+  /* Public-page accent. The star in the mark. The workspace stays teal. */
+  --brand-ember: #c45c26;
+  --brand-ember-deep: #a34b1e;
 }
 
 body {
