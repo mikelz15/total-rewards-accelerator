@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Iterable, List, Optional, Set
 
-MODULES = ("cleaner", "equity", "tracker", "closer")
+MODULES = ("cleaner", "equity", "tracker", "closer", "job_match")
 
 ALL_MODULES: Set[str] = set(MODULES)
 
@@ -19,6 +19,7 @@ PLAN_MODULES: Dict[str, Set[str]] = {
     "equity": {"equity"},
     "tracker": {"tracker"},
     "closer": {"closer"},
+    "job_match": {"job_match"},
     "cleaner_equity": {"cleaner", "equity"},
     "ta_pack": {"tracker", "closer"},
     "none": set(),
@@ -26,6 +27,7 @@ PLAN_MODULES: Dict[str, Set[str]] = {
 }
 
 # What each seat role may use (intersected with plan entitlements).
+# job_match is a Compensation / Total Rewards professional module (Rewards home).
 # hrbp places one person and can read the group file. executive is a read of
 # every module. Neither seat manages the team or the bill.
 ROLE_MODULES: Dict[str, Set[str]] = {
@@ -158,6 +160,13 @@ def catalog() -> List[Dict[str, Any]]:
             "price_label": "$199/mo",
             "price_usd": 199,
             "stripe_price_env": "STRIPE_PRICE_CLOSER",
+        },
+        {
+            "id": "job_match",
+            "name": "Job Matching",
+            "price_label": "$149/mo",
+            "price_usd": 149,
+            "stripe_price_env": "STRIPE_PRICE_JOB_MATCH",
         },
         {
             "id": "suite",
