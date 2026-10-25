@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import localFont from "next/font/local";
 import { AuthReturn } from "@/components/AuthReturn";
 import { Nav } from "@/components/Nav";
@@ -44,6 +45,7 @@ export default function RootLayout({
         <AuthReturn />
         <Nav />
         <main>{children}</main>
+        <Analytics />
       </body>
     </html>
   );
