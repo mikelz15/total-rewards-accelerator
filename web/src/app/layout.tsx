@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/next";
 import localFont from "next/font/local";
 import { AuthReturn } from "@/components/AuthReturn";
 import { Nav } from "@/components/Nav";
+import { AskTra } from "@/components/AskTra";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -45,6 +46,7 @@ export default function RootLayout({
         <AuthReturn />
         <Nav />
         <main>{children}</main>
+        <AskTra />
         <Analytics />
       </body>
     </html>
