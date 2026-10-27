@@ -58,3 +58,6 @@ BEGIN
     updated_at    = now();
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.ask_tra_usage_monthly TO service_role;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.ask_tra_handoffs TO service_role;
+GRANT EXECUTE ON FUNCTION public.ask_tra_add_usage(TEXT, INTEGER, INTEGER, INTEGER, BIGINT, BIGINT, NUMERIC) TO service_role;
