@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Fold } from "@/components/Fold";
 import { SEAT_PATHS } from "@/lib/paths";
 
 export const metadata: Metadata = {
@@ -39,16 +40,14 @@ export default function PathsPage() {
             <p className="mt-1 text-sm text-slate-600">{path.line}</p>
             <ol className="mt-4 divide-y divide-slate-200 border-y border-slate-200">
               {path.steps.map((step, index) => (
-                <li key={`${path.id}-${step.label}`} className="grid gap-1 py-4 sm:grid-cols-[7rem_1fr] sm:gap-6">
-                  <span className="text-sm tabular-nums text-slate-400">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <span>
-                    <Link href={step.href} className="font-medium text-slate-900 hover:underline">
-                      {step.label}
-                    </Link>
-                    <span className="mt-1 block text-sm leading-relaxed text-slate-600">{step.note}</span>
-                  </span>
+                <li key={`${path.id}-${step.label}`}>
+                  <Fold
+                    kicker={String(index + 1).padStart(2, "0")}
+                    title={step.label}
+                    href={step.href}
+                  >
+                    {step.note}
+                  </Fold>
                 </li>
               ))}
             </ol>

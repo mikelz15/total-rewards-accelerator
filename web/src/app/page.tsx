@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Fold } from "@/components/Fold";
 import { HeroFilm } from "@/components/HeroFilm";
 import { SEAT_PATHS } from "@/lib/paths";
 
@@ -64,6 +65,12 @@ const included = [
     title: "Rules",
     blurb: "Signed in, for the places on that file. Not a module. A card chips when it is in the time window.",
   },
+  {
+    href: "/paths#rewards",
+    title: "Job Match",
+    blurb:
+      "Included with Cleaner or Equity. One internal job to three external matches. Not an invoice.",
+  },
 ];
 
 const workflow = [
@@ -113,7 +120,7 @@ export default function HomePage() {
           <span className="mt-1 block text-ember">Start designing strategy.</span>
         </h1>
         <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-slate-600">
-          Watch a messy HRIS extract become a cleaned file, in under a minute.
+          The sample file, from a messy extract to a cycle, an offer, and a credited resume.
         </p>
         <HeroFilm />
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -243,36 +250,16 @@ export default function HomePage() {
         </p>
         <div className="mt-4 divide-y divide-slate-200 border-y border-slate-200">
           {modules.map((module) => (
-            <Link
-              key={module.href}
-              href={module.href}
-              className="group grid gap-1 py-4 sm:grid-cols-[7rem_1fr] sm:items-baseline sm:gap-6"
-            >
-              <span className="text-sm tabular-nums text-slate-400">{module.step}</span>
-              <span>
-                <span className="text-base font-medium text-slate-900 group-hover:underline">
-                  {module.title}
-                </span>
-                <span className="mt-1 block text-sm leading-relaxed text-slate-600">{module.blurb}</span>
-              </span>
-            </Link>
+            <Fold key={module.href} kicker={module.step} title={module.title} href={module.href}>
+              {module.blurb}
+            </Fold>
           ))}
         </div>
         <div className="mt-8 divide-y divide-slate-200 border-y border-slate-200">
           {included.map((item) => (
-            <Link
-              key={item.title}
-              href={item.href}
-              className="group grid gap-1 py-4 sm:grid-cols-[7rem_1fr] sm:items-baseline sm:gap-6"
-            >
-              <span className="text-sm text-slate-400">With</span>
-              <span>
-                <span className="text-base font-medium text-slate-900 group-hover:underline">
-                  {item.title}
-                </span>
-                <span className="mt-1 block text-sm leading-relaxed text-slate-600">{item.blurb}</span>
-              </span>
-            </Link>
+            <Fold key={item.title} kicker="With" title={item.title} href={item.href}>
+              {item.blurb}
+            </Fold>
           ))}
         </div>
       </section>
