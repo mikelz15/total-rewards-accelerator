@@ -76,11 +76,13 @@ def effective_modules(
     if suspended:
         return set()
     mods = modules_for_plan(plan, entitlement_override) & modules_for_role(role)
-    # A Cleaner or Equity purchase already paid for the Rewards path. Job Match
-    # rides with that path when the stored override names only the invoice.
-    if normalize_role(role) in {"owner", "admin", "member", "viewer"} and (
-        {"cleaner", "equity"} & mods
-    ):
+    role_name = normalize_role(role)
+    # A Rewards seat includes Job Match on a full plan, and on Cleaner or Equity.
+    # A stored override that names only the invoice must not drop it.
+    # Talent, HRBP, and Executive stay off this module.
+    rewards = role_name in {"owner", "admin", "member", "viewer"}
+    full_plan = normalize_plan(plan) in {"trial", "demo", "pilot", "starter", "suite"}
+    if rewards and (full_plan or ({"cleaner", "equity"} & mods)):
         mods.add("job_match")
     return mods
 

@@ -47,6 +47,10 @@ class JobMatchTests(unittest.TestCase):
             "job_match",
             effective_modules("tracker", "member", entitlement_override=["tracker"]),
         )
+        self.assertIn(
+            "job_match",
+            effective_modules("suite", "member", entitlement_override=["tracker", "closer"]),
+        )
 
 
 if __name__ == "__main__":

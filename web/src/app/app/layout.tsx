@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { AppNav } from "@/components/AppNav";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { saasApi, type MeResponse } from "@/lib/saas-api";
@@ -10,6 +11,7 @@ import type { Permissions } from "@/lib/permissions";
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [me, setMe] = useState<MeResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const pathname = usePathname();
 
   const load = useCallback(async () => {
     if (!isSupabaseConfigured()) {
@@ -34,7 +36,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     void load();
-  }, [load]);
+  }, [load, pathname]);
 
   const permissions = (me?.permissions as Permissions | undefined) || null;
 

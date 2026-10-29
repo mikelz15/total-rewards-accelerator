@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { getAccessToken, saasApi } from "@/lib/saas-api";
 import { Button, Card } from "@/components/ModuleShell";
 
@@ -11,7 +10,6 @@ import { Button, Card } from "@/components/ModuleShell";
  * Controlled by SYSTEM_ADMIN_EMAILS on the API (default: mikez.lopez15@gmail.com).
  */
 export default function PlatformAdminPage() {
-  const router = useRouter();
   const [allowed, setAllowed] = useState<boolean | null>(null);
   const [orgs, setOrgs] = useState<
     Awaited<ReturnType<typeof saasApi.adminOrgs>>["orgs"]
@@ -46,8 +44,7 @@ export default function PlatformAdminPage() {
       const token = await getAccessToken();
       const seat = await saasApi.adminSitAs(token, role);
       setInfo(`You are sitting as ${seat.role}. Opening that home.`);
-      router.push("/app");
-      router.refresh();
+      window.location.assign("/app");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not switch seats");
     }
