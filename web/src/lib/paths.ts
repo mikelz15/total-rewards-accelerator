@@ -34,6 +34,11 @@ export const SEAT_PATHS: SeatPath[] = [
         note: "The cleaned file stays here. The next module opens it. You do not upload it again.",
       },
       {
+        label: "Job Match",
+        href: "/app/job-match",
+        note: "Included with Cleaner or Equity. One internal job to three external matches, from the description, the duties, the family, and the level. Not title alone. Not an invoice. The sample catalog is ours.",
+      },
+      {
         label: "Equity + Merit",
         href: "/auditor",
         note: "Market mid and expected placement. Flight risk is a 0–100 score from under-market pay, a strong performer under the range, and tenure. The pool can fund to mid, to expected placement, or to the max of both.",
@@ -182,7 +187,7 @@ export function workspaceHref(href: string): string {
   return WORKSPACE_HREF[href] ?? href;
 }
 
-export type BoardGate = "cleaner" | "equity" | "tracker" | "closer" | "datasets" | "rules";
+export type BoardGate = "cleaner" | "equity" | "tracker" | "closer" | "job_match" | "datasets" | "rules";
 
 export type BoardCard = {
   step: string;
@@ -205,6 +210,15 @@ export const BOARD: BoardCard[] = [
     body: "Map the HRIS extract and save it.",
     seats: "Rewards",
     gate: "cleaner",
+    roles: REWARDS,
+  },
+  {
+    step: "—",
+    href: "/app/job-match",
+    title: "Job Match",
+    body: "Included with Cleaner or Equity. One internal job, three external matches. Not an invoice.",
+    seats: "Rewards",
+    gate: "job_match",
     roles: REWARDS,
   },
   {

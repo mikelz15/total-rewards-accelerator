@@ -39,6 +39,7 @@ from app.routers.saas import datasets as saas_datasets
 from app.routers.saas import governance as saas_governance
 from app.routers.saas import me as saas_me
 from app.routers.saas import team as saas_team
+from app.routers import job_match as job_match_router
 from app.routers import muse as muse_router
 from app.routers import resume_credit as resume_credit_router
 from app.services.auditor import audit_equity
@@ -91,12 +92,12 @@ _cors = _cors_config()
 app = FastAPI(
     title="Total Rewards Accelerator API",
     description=(
-        "Comp Engineering Toolkit — Cleaner, Equity + Merit, Candidate Tracker, Closer. "
+        "Comp Engineering Toolkit — Cleaner, Equity + Merit, Candidate Tracker, Closer, Job Matching. "
         "Shared Placement Engine (YOE + education). Public demo enforces row caps, "
         "PHI header scan, and upload rate limits. SaaS routes under /api/v1 require "
         "Supabase Bearer tokens when DATABASE_URL + SUPABASE_JWT_SECRET are set."
     ),
-    version="0.6.6",
+    version="0.6.7",
 )
 
 # Multi-tenant SaaS (no-op impact on demo routes)
@@ -112,6 +113,8 @@ app.include_router(saas_governance.router)
 app.include_router(muse_router.router)
 app.include_router(resume_credit_router.public_router)
 app.include_router(resume_credit_router.saas_router)
+app.include_router(job_match_router.public_router)
+app.include_router(job_match_router.saas_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -326,7 +329,7 @@ def health() -> Dict[str, Any]:
     return {
         "status": "ok",
         "service": "total-rewards-accelerator",
-        "version": "0.6.6",
+        "version": "0.6.7",
         "demo_password_required": bool(_DEMO_PASSWORD),
         "saas": {
             "enabled": saas_enabled(),

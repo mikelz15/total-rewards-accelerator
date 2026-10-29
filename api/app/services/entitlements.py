@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Iterable, List, Optional, Set
 
-MODULES = ("cleaner", "equity", "tracker", "closer")
+MODULES = ("cleaner", "equity", "tracker", "closer", "job_match")
 
 ALL_MODULES: Set[str] = set(MODULES)
 
@@ -26,15 +26,18 @@ PLAN_MODULES: Dict[str, Set[str]] = {
 }
 
 # What each seat role may use (intersected with plan entitlements).
+# job_match is included for a Rewards seat that already has Cleaner or Equity.
+# It is not a Talent door, an HRBP door, or an Executive door, and it is not
+# its own invoice.
 # hrbp places one person and can read the group file. executive is a read of
-# every module. Neither seat manages the team or the bill.
+# every module except Job Match. Neither seat manages the team or the bill.
 ROLE_MODULES: Dict[str, Set[str]] = {
     "owner": set(ALL_MODULES),
     "admin": set(ALL_MODULES),
     "member": set(ALL_MODULES),  # Comp analyst
     "ta": {"tracker", "closer"},
     "hrbp": {"closer", "equity"},
-    "executive": set(ALL_MODULES),
+    "executive": set(ALL_MODULES) - {"job_match"},
     "viewer": set(ALL_MODULES),  # read paths; write checks use can_write
 }
 
@@ -72,7 +75,14 @@ def effective_modules(
 ) -> Set[str]:
     if suspended:
         return set()
-    return modules_for_plan(plan, entitlement_override) & modules_for_role(role)
+    mods = modules_for_plan(plan, entitlement_override) & modules_for_role(role)
+    # A Cleaner or Equity purchase already paid for the Rewards path. Job Match
+    # rides with that path when the stored override names only the invoice.
+    if normalize_role(role) in {"owner", "admin", "member", "viewer"} and (
+        {"cleaner", "equity"} & mods
+    ):
+        mods.add("job_match")
+    return mods
 
 
 def can_access_module(

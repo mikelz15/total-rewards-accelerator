@@ -108,6 +108,38 @@ class Candidate(Base):
     )
 
 
+class JobMatchJob(Base):
+    __tablename__ = "job_match_jobs"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    org_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"))
+    title: Mapped[str] = mapped_column(Text, nullable=False)
+    family: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    function: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    focus: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    level: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    duties_json: Mapped[Any] = mapped_column(JSONB, nullable=False, default=list)
+    created_by: Mapped[Optional[uuid.UUID]] = mapped_column(UUID(as_uuid=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class JobMatchLedger(Base):
+    __tablename__ = "job_match_ledgers"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    org_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"))
+    job_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("job_match_jobs.id", ondelete="CASCADE"))
+    matches_json: Mapped[Any] = mapped_column(JSONB, nullable=False, default=list)
+    overall_match: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    confirmed_by: Mapped[Optional[uuid.UUID]] = mapped_column(UUID(as_uuid=True), nullable=True)
+    confirmed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
 class AuditLog(Base):
     __tablename__ = "audit_log"
 

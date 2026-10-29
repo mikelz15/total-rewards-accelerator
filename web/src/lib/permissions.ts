@@ -1,4 +1,4 @@
-export type ModuleId = "cleaner" | "equity" | "tracker" | "closer";
+export type ModuleId = "cleaner" | "equity" | "tracker" | "closer" | "job_match";
 
 export type Permissions = {
   plan: string;
@@ -23,12 +23,13 @@ export const MODULE_LABELS: Record<ModuleId, string> = {
   equity: "Equity + Merit",
   tracker: "Candidates",
   closer: "Closer",
+  job_match: "Job Match",
 };
 
 export const ROLE_HELP: Record<string, string> = {
   owner: "Rewards path, plus billing and team",
   admin: "Rewards path and team. No billing.",
-  member: "Rewards path. No team and no billing.",
+  member: "Rewards path, including Job Match. No team and no billing.",
   ta: "Talent path. Tracker, resume tally, and Closer.",
   hrbp: "HRBP path. Place one person, the four-year page, one group line.",
   executive: "Executive path. Read offers, the cycle, philosophy, and rules in force.",

@@ -143,7 +143,8 @@ export default function PathsPage() {
         <h2 className="text-sm font-medium text-slate-900">The four invoices</h2>
         <p className="mt-2 max-w-2xl text-sm text-slate-600">
           Suite is $499 a month and includes all four. A talent workspace can be Tracker and
-          Closer together. That is those two prices, not a fifth product.
+          Closer together. That is those two prices, not a fifth product. Job Match is included
+          with Cleaner or Equity. It is not an invoice.
         </p>
         <ul className="mt-4 divide-y divide-slate-200 border-y border-slate-200">
           {invoices.map((row) => (

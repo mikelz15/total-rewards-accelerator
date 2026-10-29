@@ -89,11 +89,64 @@ export type DatasetSummary = {
   created_at?: string | null;
 };
 
+export type JobMatchRow = {
+  title: string | null;
+  code?: string | null;
+  family?: string | null;
+  level?: number | null;
+  credit: string;
+  overlap: number;
+  reason: string;
+};
+
+export type JobMatchResult = {
+  internal: {
+    title: string;
+    family?: string | null;
+    level?: number | null;
+  };
+  matches: JobMatchRow[];
+  overall_match: number;
+  can_confirm: boolean;
+  stored: boolean;
+};
+
+export type SavedJobMatch = {
+  id: string;
+  title: string;
+  family?: string | null;
+  level?: number | null;
+  overall_match: number | null;
+  matches: JobMatchRow[];
+  confirmed_at?: string | null;
+};
+
 export const saasApi = {
   me: (token: string) => saasRequest<MeResponse>("/api/v1/me", token),
 
   listDatasets: (token: string) =>
     saasRequest<{ datasets: DatasetSummary[] }>("/api/v1/datasets", token),
+
+  jobMatch: (
+    token: string,
+    body: {
+      internal: {
+        title: string;
+        family?: string;
+        level?: number;
+        description?: string;
+        duties?: string[];
+      };
+      confirm?: boolean;
+    }
+  ) =>
+    saasRequest<JobMatchResult>("/api/v1/job-match", token, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  listJobMatches: (token: string) =>
+    saasRequest<{ matches: SavedJobMatch[]; can_write: boolean }>("/api/v1/job-match", token),
 
   governance: (token: string, asOf?: string) =>
     saasRequest<GovernanceLibrary>(

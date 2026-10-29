@@ -11,10 +11,11 @@ import { navHrefsForRole, showDatasets, showRules } from "@/lib/paths";
 const moduleLinks: {
   href: string;
   label: string;
-  module?: "cleaner" | "equity" | "tracker" | "closer";
+  module?: "cleaner" | "equity" | "tracker" | "closer" | "job_match";
 }[] = [
   { href: "/app", label: "Dashboard" },
   { href: "/app/cleaner", label: "Cleaner", module: "cleaner" },
+  { href: "/app/job-match", label: "Job Match", module: "job_match" },
   { href: "/app/equity", label: "Equity", module: "equity" },
   { href: "/app/cycle", label: "Cycle", module: "equity" },
   { href: "/app/philosophy", label: "Philosophy", module: "equity" },
