@@ -4,6 +4,14 @@ import { useRef, useState } from "react";
 
 const FILMS = [
   {
+    id: "hero",
+    src: "/films/tra-hero.mp4",
+    poster: "/films/tra-hero.jpg",
+    label: "Tour",
+    length: "1:34",
+    caption: "Every door, tool, and invoice on the public pages.",
+  },
+  {
     id: "cleaner",
     src: "/films/tra-cleaner.mp4",
     poster: "/films/tra-cleaner.jpg",
