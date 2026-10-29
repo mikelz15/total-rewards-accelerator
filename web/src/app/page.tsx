@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HeroFilm } from "@/components/HeroFilm";
+import { SEAT_PATHS } from "@/lib/paths";
 
 const modules = [
   {
@@ -14,7 +15,7 @@ const modules = [
     step: "02",
     title: "Equity + Merit",
     blurb:
-      "Dual-lens equity (market mid + expected placement), flight risk, and merit pool remediation you can defend.",
+      "Market mid and expected placement. Flight risk scores under-market pay, a strong performer under the range, and tenure. The pool funds to mid, expected, or the max of both.",
   },
   {
     href: "/cycle",
@@ -42,7 +43,26 @@ const modules = [
     step: "05",
     title: "Candidate Closer",
     blurb:
-      "Base / bonus / LTI → four-year total wealth projection and a one-page PDF most tools never produce.",
+      "Base / bonus / LTI → four-year total wealth and a one-page PDF. Resume tally on this page credits the resume, then confirm fills Years of experience.",
+  },
+];
+
+const included = [
+  {
+    href: "/closer",
+    title: "Resume tally",
+    blurb:
+      "On Closer, not its own invoice. Same benchmark is full credit, a near match is half, a different function is none.",
+  },
+  {
+    href: "/paths#datasets",
+    title: "Datasets",
+    blurb: "Signed in, the cleaned file stays for Equity, Cycle, and Philosophy. The public demo does not keep it.",
+  },
+  {
+    href: "/paths#rules",
+    title: "Rules",
+    blurb: "Signed in, for the places on that file. Not a module. A card chips when it is in the time window.",
   },
 ];
 
@@ -190,6 +210,33 @@ export default function HomePage() {
       </section>
 
       <section className="mt-20">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 className="text-sm font-medium text-slate-900">Four ways in</h2>
+            <p className="mt-2 max-w-xl text-sm text-slate-500">
+              The modules stay the same. The seat decides the door.
+            </p>
+          </div>
+          <Link href="/paths" className="text-sm font-medium text-slate-900 hover:underline">
+            See the paths
+          </Link>
+        </div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {SEAT_PATHS.map((path) => (
+            <Link
+              key={path.id}
+              href={`/paths#${path.id}`}
+              className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-slate-300"
+            >
+              <p className="text-xs font-medium uppercase tracking-wide text-slate-400">{path.who}</p>
+              <h3 className="mt-1 text-base font-medium text-slate-900">{path.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">{path.line}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-20">
         <h2 className="text-sm font-medium text-slate-900">Tools</h2>
         <p className="mt-2 max-w-2xl text-sm text-slate-500">
           Cycle Lock and Philosophy Check ship with Equity. Four invoices.
@@ -207,6 +254,23 @@ export default function HomePage() {
                   {module.title}
                 </span>
                 <span className="mt-1 block text-sm leading-relaxed text-slate-600">{module.blurb}</span>
+              </span>
+            </Link>
+          ))}
+        </div>
+        <div className="mt-8 divide-y divide-slate-200 border-y border-slate-200">
+          {included.map((item) => (
+            <Link
+              key={item.title}
+              href={item.href}
+              className="group grid gap-1 py-4 sm:grid-cols-[7rem_1fr] sm:items-baseline sm:gap-6"
+            >
+              <span className="text-sm text-slate-400">With</span>
+              <span>
+                <span className="text-base font-medium text-slate-900 group-hover:underline">
+                  {item.title}
+                </span>
+                <span className="mt-1 block text-sm leading-relaxed text-slate-600">{item.blurb}</span>
               </span>
             </Link>
           ))}

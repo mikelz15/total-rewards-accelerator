@@ -39,7 +39,7 @@ export default function AppDatasetsPage() {
             Saved cleaned data
           </h1>
           <p className="mt-2 text-slate-600">
-            Org-scoped only. Use these as the source for Equity + Merit runs.
+            Org-scoped only. Equity, Cycle Lock, and Philosophy open this file. You do not upload it again.
           </p>
         </div>
         <Link

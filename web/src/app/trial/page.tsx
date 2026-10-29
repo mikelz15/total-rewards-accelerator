@@ -15,7 +15,7 @@ const included = [
   },
   {
     name: "Closer",
-    blurb: "Four-year total wealth projection and a one-page offer PDF.",
+    blurb: "Four-year total wealth, a one-page offer PDF, and resume tally.",
   },
 ];
 

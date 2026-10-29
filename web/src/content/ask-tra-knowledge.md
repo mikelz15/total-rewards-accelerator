@@ -82,9 +82,46 @@ four-year total wealth trajectory. It generates a one-page PDF that turns an
 offer letter into a closing tool — the four-year view most market tools skip.
 You enter the offer's numbers yourself.
 
+Resume tally is on this same page. It is not its own module and not its own
+invoice. Paste one resume and name the target job. Same benchmark is full
+credit. Same family, or a match a grade off, is half. A different function is
+none. Overlapping time counts once. Confirm fills Years of experience. The
+homepage film is labelled Resume tally.
+
 Closer does not compare an offer against your internal pay ranges or your
 existing employees' pay, and it does not test offer scenarios against internal
 equity. Questions about internal equity belong to the audit side of the suite.
+
+# Seats
+
+The public paths page is /paths. The modules stay the same. The seat decides
+which door a person opens. Ask TRA is the public demo chat. It is not a tool
+inside the signed-in workspace.
+
+Rewards is the owner, admin, or member. That door is Cleaner, Datasets,
+Equity + Merit, Cycle Lock, Philosophy Check, and Rules. The owner holds
+billing and the team. An admin holds the team. A member does the work.
+
+Talent is the TA seat. That door is Tracker, resume tally, and Closer.
+
+HRBP places one person, hands off the four-year page, and reads one line about
+the group.
+
+Executive is a read: offers, Cycle Lock, Philosophy Check, and the rules in
+force. That seat does not edit.
+
+A viewer reads whatever the plan includes and cannot upload or confirm.
+
+# Datasets, Rules, and Muse
+
+Datasets is the signed-in library for a cleaned file. The next module opens
+that file. The public demo does not keep uploads.
+
+Rules is the signed-in library for the places on that file. It is not a module.
+A card chips when it is inside the time window.
+
+Muse is a propose-only connector at /muse. It can propose a clean, a placement,
+an audit, a pool, a four-year total, and a short brief. It does not post pay.
 
 # The public demo and the sample file
 

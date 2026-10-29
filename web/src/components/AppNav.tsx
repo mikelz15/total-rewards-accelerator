@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { BrandLogo } from "@/components/BrandLogo";
 import type { Permissions } from "@/lib/permissions";
 import { canUseModule } from "@/lib/permissions";
+import { navHrefsForRole, showDatasets, showRules } from "@/lib/paths";
 
 const moduleLinks: {
   href: string;
@@ -48,20 +49,14 @@ export function AppNav({
   }
 
   const role = permissions?.role;
-  const links =
-    role === "hrbp"
-      ? moduleLinks.filter((link) =>
-          ["/app", "/app/equity", "/app/closer"].includes(link.href)
-        )
-      : role === "executive"
-        ? moduleLinks.filter((link) =>
-            ["/app", "/app/equity", "/app/cycle", "/app/philosophy", "/app/closer"].includes(
-              link.href
-            )
-          )
-        : moduleLinks;
+  const allowed = navHrefsForRole(role);
+  const links = moduleLinks.filter((link) => {
+    if (link.href === "/app/datasets") return showDatasets(role);
+    if (!allowed) return true;
+    return allowed.includes(link.href);
+  });
   const settings = [
-    ...(role === "hrbp" ? [] : [{ href: "/app/governance", label: "Rules" }]),
+    ...(showRules(role) ? [{ href: "/app/governance", label: "Rules" }] : []),
     ...(role === "hrbp" || role === "executive"
       ? []
       : [

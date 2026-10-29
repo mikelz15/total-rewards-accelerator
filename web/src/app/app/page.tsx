@@ -1,56 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { saasApi, type DatasetSummary, type GovernanceLibrary, type MeResponse } from "@/lib/saas-api";
-import { Card, Stat } from "@/components/ModuleShell";
-import { ExecutiveHome, HrbpHome } from "@/components/ViewpointHome";
-
-const modules = [
-  {
-    href: "/app/cleaner",
-    step: "01",
-    title: "Cleaner",
-    body: "Upload HRIS → clean → save an org-scoped dataset for equity and merit.",
-    accent: "border-t-blue-500",
-  },
-  {
-    href: "/app/equity",
-    step: "02",
-    title: "Equity + Merit",
-    body: "Dual-lens equity, flight risk, and merit pool remediation on saved data.",
-    accent: "border-t-teal-600",
-  },
-  {
-    href: "/app/cycle",
-    step: "03",
-    title: "Cycle Lock",
-    body: "Included with Equity + Merit. Range-first 3.2% envelope. Confirm-chip exceptions. $0 above midpoint.",
-    accent: "border-t-slate-900",
-  },
-  {
-    href: "/app/philosophy",
-    step: "—",
-    title: "Philosophy Check",
-    body: "Included with Equity. Score a saved dataset against midpoint, performance, and department.",
-    accent: "border-t-amber-600",
-  },
-  {
-    href: "/app/candidates",
-    step: "04",
-    title: "Candidates",
-    body: "Persistent recruiting pipeline — hand off packages into Closer.",
-    accent: "border-t-violet-500",
-  },
-  {
-    href: "/app/closer",
-    step: "05",
-    title: "Closer",
-    body: "Four-year total wealth projection and one-page offer PDF.",
-    accent: "border-t-rose-500",
-  },
-];
+import { SeatDashboard } from "@/components/SeatDashboard";
 
 export default function AppDashboardPage() {
   const [me, setMe] = useState<MeResponse | null>(null);
@@ -97,175 +50,14 @@ export default function AppDashboardPage() {
     };
   }, []);
 
-  if (me?.membership.role === "hrbp") {
-    return <HrbpHome datasets={datasets} />;
-  }
-  if (me?.membership.role === "executive") {
-    return (
-      <ExecutiveHome datasets={datasets} offerCount={offerCount} governance={governance} />
-    );
-  }
-
   return (
-    <div className="space-y-8">
-      <div className="max-w-2xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
-          Workspace
-        </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
-          {me ? `Welcome back${me.user.email ? `, ${me.user.email.split("@")[0]}` : ""}` : "Your workspace"}
-        </h1>
-        <p className="mt-2 text-slate-600">
-          Authenticated Total Rewards Accelerator — durable datasets, equity runs, Cycle Lock, and
-          offer tools for your organization. Public sample demo stays at{" "}
-          <Link href="/" className="font-medium text-teal-800 hover:underline">
-            the marketing site
-          </Link>
-          .
-        </p>
-      </div>
-
-      <div className="grid gap-3 sm:grid-cols-3">
-        <Stat label="Organization" value={loading ? "…" : me?.org.name || "—"} />
-        <Stat
-          label="Plan · row limit"
-          value={
-            loading
-              ? "…"
-              : `${me?.org.plan || "—"} · ${(me?.org.max_upload_rows ?? 0).toLocaleString()}`
-          }
-        />
-        <Stat
-          label="Datasets · candidates"
-          value={loading ? "…" : `${datasets.length} · ${candidateCount}`}
-          tone="good"
-        />
-      </div>
-
-      <div>
-        <h2 className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500">
-          {me?.membership.role === "ta" ? "Recruiting" : "End-to-end modules"}
-        </h2>
-        {me?.membership.role === "ta" && (
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            <Link
-              href="/app/closer?door=tally"
-              className="rounded-2xl border border-slate-200 border-t-4 border-t-teal-700 bg-white p-5 shadow-sm"
-            >
-              <p className="text-[10px] font-semibold tracking-widest text-teal-700">Door 1</p>
-              <h3 className="mt-1 font-semibold text-slate-900">Resume tally</h3>
-              <p className="mt-2 text-sm text-slate-600">
-                Break the resume into jobs. Same benchmark is full credit, a near match is half.
-              </p>
-            </Link>
-            <Link
-              href="/app/closer"
-              className="rounded-2xl border border-slate-200 border-t-4 border-t-rose-500 bg-white p-5 shadow-sm"
-            >
-              <p className="text-[10px] font-semibold tracking-widest text-teal-700">Door 2</p>
-              <h3 className="mt-1 font-semibold text-slate-900">Four-year trajectory</h3>
-              <p className="mt-2 text-sm text-slate-600">
-                The years are already known. Project the offer. No resume required.
-              </p>
-            </Link>
-          </div>
-        )}
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {(me?.membership.role === "ta"
-            ? modules.filter((m) => m.href === "/app/candidates" || m.href === "/app/closer")
-            : modules
-          ).map((m) => (
-            <Link
-              key={m.href}
-              href={m.href}
-              className={`rounded-2xl border border-slate-200 border-t-4 bg-white p-5 shadow-sm transition hover:shadow-md ${m.accent}`}
-            >
-              <p className="text-[10px] font-semibold tracking-widest text-teal-700">{m.step}</p>
-              <h3 className="mt-1 font-semibold text-slate-900">{m.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">{m.body}</p>
-              <p className="mt-3 text-sm font-medium text-teal-800">Open →</p>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="text-sm font-semibold text-slate-900">Recent datasets</h2>
-            <Link href="/app/datasets" className="text-sm font-medium text-teal-800 hover:underline">
-              View all
-            </Link>
-          </div>
-          {datasets.length === 0 ? (
-            <p className="mt-4 text-sm text-slate-500">
-              No datasets yet.{" "}
-              <Link href="/app/cleaner" className="font-medium text-teal-800 hover:underline">
-                Clean & save one
-              </Link>
-              .
-            </p>
-          ) : (
-            <ul className="mt-3 divide-y divide-slate-100">
-              {datasets.slice(0, 5).map((d) => (
-                <li key={d.id} className="flex items-center justify-between gap-3 py-2.5 text-sm">
-                  <div>
-                    <p className="font-medium text-slate-900">{d.name}</p>
-                    <p className="text-slate-500">
-                      {d.row_count} rows
-                      {d.source_filename ? ` · ${d.source_filename}` : ""}
-                    </p>
-                  </div>
-                  <Link
-                    href="/app/equity"
-                    className="shrink-0 font-medium text-teal-800 hover:underline"
-                  >
-                    Equity →
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Card>
-
-        <Card>
-          <h2 className="text-sm font-semibold text-slate-900">Suggested path</h2>
-          <ol className="mt-4 space-y-3 text-sm text-slate-600">
-            <li className="flex gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold text-white">
-                1
-              </span>
-              Clean an HRIS export and save it to your org.
-            </li>
-            <li className="flex gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold text-white">
-                2
-              </span>
-              Run equity, then lock the merit pool on range — not ratings.
-            </li>
-            <li className="flex gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold text-white">
-                3
-              </span>
-              Track candidates and close offers with a four-year wealth PDF.
-            </li>
-          </ol>
-          <div className="mt-5 flex flex-wrap gap-2">
-            <Link
-              href="/app/cleaner"
-              className="rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800"
-            >
-              Start with Cleaner
-            </Link>
-            <Link
-              href="/pricing"
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
-            >
-              Pricing
-            </Link>
-          </div>
-        </Card>
-      </div>
-    </div>
+    <SeatDashboard
+      me={me}
+      loading={loading}
+      datasets={datasets}
+      candidateCount={candidateCount}
+      offerCount={offerCount}
+      governance={governance}
+    />
   );
 }

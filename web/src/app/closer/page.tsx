@@ -127,7 +127,7 @@ export default function CloserPage() {
     <ModuleShell
       eyebrow="Module 05"
       title="Candidate Closer"
-      description="Translate base, bonus, and LTI into a multi-year total wealth trajectory. Generate a one-page PDF that turns offer letters into closing tools — the four-year view most market tools skip."
+      description="Translate base, bonus, and LTI into a four-year total wealth trajectory and a one-page PDF. Resume tally, on this page, credits a pasted resume against the target job: same benchmark is full credit, a near match is half, a different function is none. Confirm fills Years of experience for placement."
     >
       <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50/90 px-4 py-3 text-sm text-rose-950">
         <p className="font-semibold">Sample data only (public demo)</p>

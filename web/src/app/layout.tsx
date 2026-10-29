@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import { AuthReturn } from "@/components/AuthReturn";
 import { Nav } from "@/components/Nav";
 import { AskTra } from "@/components/AskTra";
+import { SiteFooter } from "@/components/SiteFooter";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -19,7 +20,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://tra-web.onrender.com"
+    process.env.NEXT_PUBLIC_SITE_URL || "https://totalrewardsaccelerator.com"
   ),
   title: "Total Rewards Accelerator",
   description:
@@ -46,6 +47,7 @@ export default function RootLayout({
         <AuthReturn />
         <Nav />
         <main>{children}</main>
+        <SiteFooter />
         <AskTra />
         <Analytics />
       </body>

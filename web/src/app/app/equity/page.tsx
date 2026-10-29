@@ -239,8 +239,9 @@ export default function AppEquityPage() {
           Pay equity &amp; merit remediation
         </h1>
         <p className="mt-2 text-slate-600">
-          Dual-lens equity (market mid + YOE/education placement), flight risk, and defendable merit
-          pool allocation on your saved org datasets.
+          Dual-lens equity (market mid + YOE/education placement) on a saved dataset. Flight risk
+          is a 0–100 score from under-market pay, a strong performer under the range, and tenure.
+          The pool can fund to mid, expected placement, or the max of both.
         </p>
       </div>
 

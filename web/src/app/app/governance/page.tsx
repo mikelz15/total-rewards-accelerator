@@ -91,7 +91,8 @@ export default function GovernancePage() {
         </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">Governance</h1>
         <p className="mt-2 text-slate-600">
-          Past, current, and later rules for the places on this file. {data?.disclaimer || "Not legal advice."}
+          Rules for the places on the latest file. Federal cards ride along once any place is present.
+          A card chips inside the time window. This is not a module. {data?.disclaimer || "Not legal advice."}
         </p>
       </div>
 

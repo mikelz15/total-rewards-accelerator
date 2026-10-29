@@ -26,11 +26,11 @@ export const MODULE_LABELS: Record<ModuleId, string> = {
 };
 
 export const ROLE_HELP: Record<string, string> = {
-  owner: "Full access + billing + team",
-  admin: "Full modules + team (no billing)",
-  member: "Comp access to all entitled modules",
-  ta: "Tracker + Closer only",
-  hrbp: "Place one person, hand off the four-year page, one group line",
-  executive: "Read offers, the cycle, philosophy, and rules in force",
-  viewer: "Read access (no uploads/edits)",
+  owner: "Rewards path, plus billing and team",
+  admin: "Rewards path and team. No billing.",
+  member: "Rewards path. No team and no billing.",
+  ta: "Talent path. Tracker, resume tally, and Closer.",
+  hrbp: "HRBP path. Place one person, the four-year page, one group line.",
+  executive: "Executive path. Read offers, the cycle, philosophy, and rules in force.",
+  viewer: "Reads the modules on the plan. No uploads or confirms.",
 };

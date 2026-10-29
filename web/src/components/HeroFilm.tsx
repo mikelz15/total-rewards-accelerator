@@ -31,9 +31,9 @@ const FILMS = [
     id: "tally",
     src: "/films/tra-tally.mp4",
     poster: "/films/tra-tally.jpg",
-    label: "Tally",
+    label: "Resume tally",
     length: "0:57",
-    caption: "Six credit years from nine on the calendar.",
+    caption: "Six credit years from nine on the calendar. It lives on Closer.",
   },
 ] as const;
 

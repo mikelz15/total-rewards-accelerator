@@ -230,8 +230,8 @@ export default function AppCloserPage() {
           Candidate closer
         </h1>
         <p className="mt-2 text-slate-600">
-          Turn base, bonus, and LTI into a multi-year total wealth trajectory and one-page offer PDF
-          — real org data, not the public sample-only demo.
+          Turn base, bonus, and LTI into a four-year total and a one-page PDF. Resume tally
+          credits the resume against this job, then confirm fills Years of experience.
         </p>
       </div>
 

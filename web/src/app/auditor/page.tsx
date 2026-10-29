@@ -152,7 +152,7 @@ export default function AuditorPage() {
     <ModuleShell
       eyebrow="Module 02"
       title="Pay Equity Auditor + Remediation"
-      description="Market mid-compa plus wage-calc placement (years of experience + education → expected rate). Merit pool can fund to mid, expected placement, or the max of both."
+      description="Market mid-compa plus wage-calc placement (years of experience + education → expected rate). Flight risk is a 0–100 score from under-market pay, a strong performer under the range, and tenure. The merit pool can fund to mid, expected placement, or the max of both."
     >
       <Card className="mb-6">
         <div className="flex flex-wrap items-center justify-between gap-3">

@@ -14,6 +14,7 @@ const links = [
   { href: "/philosophy", label: "Philosophy" },
   { href: "/candidates", label: "Tracker" },
   { href: "/closer", label: "Closer" },
+  { href: "/paths", label: "Paths" },
   { href: "/pricing", label: "Pricing" },
 ];
 
@@ -56,9 +57,9 @@ export function Nav() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-4">
+      <div className="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2">
         <BrandLogo variant="nav" priority />
-        <nav className="hidden items-center gap-5 lg:flex">
+        <nav className="hidden items-center gap-3.5 lg:flex">
           {links.map((link) => (
             <Link key={link.href} href={link.href} className={itemClass(pathname === link.href)}>
               {link.label}

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SEAT_PATHS } from "@/lib/paths";
 
 /** Fixed commercial prices — match Stripe test/live Price objects */
 const saasModules = [
@@ -25,7 +26,7 @@ const saasModules = [
     name: "Closer",
     price: "$199",
     unit: "/ month",
-    blurb: "Four-year total wealth projection and one-page offer PDF.",
+    blurb: "Four-year total wealth, a one-page offer PDF, and resume tally. Tally is not a separate charge.",
   },
 ];
 
@@ -127,6 +128,40 @@ export default function PricingPage() {
         </div>
       </section>
 
+      <section className="mt-14" id="seats">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div className="max-w-2xl">
+            <h2 className="text-xl font-semibold text-slate-900">Seats on top of the plan</h2>
+            <p className="mt-1 text-sm leading-relaxed text-slate-600">
+              The invoice unlocks modules for the workspace. The seat decides which of those a
+              person opens. A talent workspace can hold Tracker and Closer together. That is
+              those two prices, not a new product.
+            </p>
+          </div>
+          <Link href="/paths" className="text-sm font-medium text-teal-800 hover:underline">
+            See the paths
+          </Link>
+        </div>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          {SEAT_PATHS.map((path) => (
+            <Link
+              key={path.id}
+              href={`/paths#${path.id}`}
+              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-300"
+            >
+              <p className="text-xs font-medium uppercase tracking-wide text-slate-400">{path.who}</p>
+              <h3 className="mt-1 font-semibold text-slate-900">{path.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">{path.line}</p>
+            </Link>
+          ))}
+        </div>
+        <p className="mt-4 text-sm text-slate-500">
+          Owner holds billing and the team. Admin holds the team. A member does the rewards work.
+          A viewer reads the plan and cannot upload or confirm. An executive reads offers, the
+          cycle, philosophy, and the rules in force.
+        </p>
+      </section>
+
       <section className="mt-14">
         <h2 className="text-xl font-semibold text-slate-900">One-time / annual licensing</h2>
         <p className="mt-1 text-sm text-slate-500">
@@ -161,8 +196,9 @@ export default function PricingPage() {
             <li>· Shared Placement Engine (YOE + education)</li>
             <li>· Dual-lens equity + merit remediation</li>
             <li>· Cycle Lock on Equity + Merit and the suite</li>
-            <li>· Four-year total wealth closeouts</li>
-            <li>· Three-click Comp Engineering workflow</li>
+            <li>· Four-year total wealth closeouts and resume tally</li>
+            <li>· Datasets and Rules for the places on the file</li>
+            <li>· A seat path for Rewards, Talent, HRBP, and Executive</li>
           </ul>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-slate-900 p-5 text-white shadow-sm">

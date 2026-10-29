@@ -9,6 +9,7 @@ import { Button, Card, Stat } from "@/components/ModuleShell";
 import { ModuleGate } from "@/components/ModuleGate";
 import { CreditLedger, ResumeCredit } from "@/components/ResumeCredit";
 import { useWorkspace } from "@/lib/workspace-context";
+import { canUseModule } from "@/lib/permissions";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 const STAGES = ["sourced", "screen", "interview", "offer", "accepted", "declined", "withdrawn"];
@@ -123,6 +124,7 @@ export default function AppCandidatesPage() {
         </p>
       </div>
 
+      {permissions && canUseModule(permissions, "closer") ? (
       <ResumeCredit
         jobTitle={role || "Role"}
         loadSample={async () => {
@@ -140,6 +142,11 @@ export default function AppCandidatesPage() {
           router.push(`/app/closer?${params.toString()}`);
         }}
       />
+      ) : permissions ? (
+        <p className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
+          Resume tally sits on Closer. This plan does not include it, so the tally stays off this screen.
+        </p>
+      ) : null}
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Total" value={String(rows.length)} />
