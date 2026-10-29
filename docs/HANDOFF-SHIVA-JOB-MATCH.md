@@ -24,10 +24,9 @@ Credit distance reuses the survey-match rules already locked for the résumé ta
 - Sample catalog is TRA-owned and short. Survey books and market rates stay out.
 - Public compute-and-drop does not store. Confirm is signed in, and only a Rewards seat that can write.
 
-## Still needs Executive before it is on the live site
+## Live
 
-1. Apply `api/app/db/migrations/007_job_match.sql` to the database. It is not applied.
-2. Deploy this branch. It is not on production.
+Applied and deployed 2026-10-29. Commit `7a96bb8` is on main. The Starter API is 0.6.7. The two tables are in the database with row security forced. Do not run the migration again as a change. Running the file again is safe only because it uses `IF NOT EXISTS`.
 
 ## Leave alone
 
