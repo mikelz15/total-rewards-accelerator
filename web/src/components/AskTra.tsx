@@ -198,8 +198,7 @@ export function AskTra() {
               <p className="font-semibold text-slate-900">Ask TRA is paused for this month.</p>
               <p>
                 The chat has hit its monthly limit, so it rests until the 1st. A person is still
-                easy to reach — email Rio, Mike&apos;s assistant, and it will get forwarded to
-                Mike:
+                easy to reach — email Mike&apos;s team and a person will pick it up:
               </p>
               <a
                 href={`mailto:${contactEmail}`}
@@ -280,7 +279,7 @@ export function AskTra() {
                 <div className="text-sm text-slate-700">
                   <p className="font-semibold text-slate-900">Sent. Thanks.</p>
                   <p className="mt-2">
-                    Your message went to Rio, Mike&apos;s assistant, who forwards it to Mike.
+                    Your message went to Mike&apos;s team.
                     Replies come back by email — it isn&apos;t instant, and nobody will auto-reply
                     in Mike&apos;s name.
                   </p>
@@ -288,7 +287,7 @@ export function AskTra() {
               ) : (
                 <form onSubmit={submitHandoff} className="space-y-3">
                   <p className="text-sm text-slate-600">
-                    Goes to Rio (Mike&apos;s assistant) at {contactEmail}, who forwards it to Mike.
+                    Goes to Mike&apos;s team at {contactEmail}.
                     Replies come by email.
                   </p>
                   <label className="block">
@@ -336,7 +335,7 @@ export function AskTra() {
                     disabled={hState === "sending"}
                     className="w-full rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50"
                   >
-                    {hState === "sending" ? "Sending…" : "Send to Rio"}
+                    {hState === "sending" ? "Sending…" : "Send"}
                   </button>
                   <p className="text-xs text-slate-500">
                     Prefer email? Write to{" "}

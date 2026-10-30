@@ -6,8 +6,19 @@
  */
 
 export const ASK_TRA = {
-  /** Grok Bot / Rio inbox. Handoffs are addressed here; Rio forwards to Mike. */
-  contactEmail: process.env.ASK_TRA_CONTACT_EMAIL || "heyrio@mail.grokbot.com",
+  /**
+   * Shiva's HQ inbox. Talk to Mike handoffs are addressed here (switched
+   * from Rio 2026-10-29, Michael's approval): Shiva triages and drafts for
+   * Mike's red pen. Rio and Michael are cc'd on every handoff (handoffCc),
+   * so Rio keeps visibility without being a forwarding hop.
+   */
+  contactEmail: process.env.ASK_TRA_CONTACT_EMAIL || "shiva@send.totalrewardsaccelerator.com",
+
+  /** Cc list for handoff + ops-alert email (comma-separated env override). */
+  handoffCc: (process.env.ASK_TRA_HANDOFF_CC || "heyrio@mail.grokbot.com,mikez.lopez15@gmail.com")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean),
 
   /**
    * Model served through the Vercel AI Gateway (string model IDs are routed
