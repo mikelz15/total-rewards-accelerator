@@ -87,14 +87,14 @@ function crossings(before: MonthUsage, after: MonthUsage): Pick<RecordResult, "c
 export interface AskTraStore {
   getUsage(month: string): Promise<MonthUsage>;
   record(month: string, delta: UsageDelta): Promise<RecordResult>;
-  saveHandoff(h: { name: string; email: string; question: string }): Promise<{ id: string; stored: boolean }>;
+  saveHandoff(h: { name: string; email: string; question: string }, delivered: boolean): Promise<{ id: string; stored: boolean }>;
 }
 
 /* ---------------- In-memory fallback (local dev only) ---------------- */
 
 class MemoryStore implements AskTraStore {
   private months = new Map<string, MonthUsage>();
-  private handoffQueue: Array<{ id: string; name: string; email: string; question: string }> = [];
+  private handoffQueue: Array<{ id: string; name: string; email: string; question: string; delivered: boolean }> = [];
 
   async getUsage(month: string): Promise<MonthUsage> {
     return this.months.get(month) ?? emptyUsage(month);
@@ -107,9 +107,9 @@ class MemoryStore implements AskTraStore {
     return { usage: after, ...crossings(before, after) };
   }
 
-  async saveHandoff(h: { name: string; email: string; question: string }) {
+  async saveHandoff(h: { name: string; email: string; question: string }, delivered: boolean) {
     const id = `mem-${this.handoffQueue.length + 1}`;
-    this.handoffQueue.push({ id, ...h });
+    this.handoffQueue.push({ id, ...h, delivered });
     return { id, stored: true };
   }
 }
@@ -166,10 +166,10 @@ class SupabaseStore implements AskTraStore {
     return { usage: after, ...crossings(before, after) };
   }
 
-  async saveHandoff(h: { name: string; email: string; question: string }) {
+  async saveHandoff(h: { name: string; email: string; question: string }, delivered: boolean) {
     const { data, error } = await this.client
       .from("ask_tra_handoffs")
-      .insert({ name: h.name, email: h.email, question: h.question, delivered: false })
+      .insert({ name: h.name, email: h.email, question: h.question, delivered })
       .select("id")
       .single();
     if (error || !data) {
