@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends
 from app.auth.deps import CurrentUser, OrgContext, ensure_user_org, get_current_user
 from app.db.session import get_session
 from app.services.access import perms_for
+from app.services.branding import get_brand_image_path
 
 router = APIRouter(prefix="/api/v1", tags=["saas"])
 
@@ -39,6 +40,7 @@ def me(user: CurrentUser = Depends(get_current_user)) -> Dict[str, Any]:
                 "max_upload_rows": ctx.org.max_upload_rows,
                 "suspended": bool(getattr(ctx.org, "suspended", False)),
                 "entitlements": getattr(ctx.org, "entitlements_json", None),
+                "brand_image_path": get_brand_image_path(session, ctx.org.id),
             },
             "membership": {
                 "role": ctx.membership.role,

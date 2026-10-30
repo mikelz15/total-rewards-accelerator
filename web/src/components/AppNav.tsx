@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { BrandLogo } from "@/components/BrandLogo";
+import { OrgBrandMark } from "@/components/OrgBrandMark";
 import type { Permissions } from "@/lib/permissions";
 import { canUseModule } from "@/lib/permissions";
 import { navHrefsForRole, showDatasets, showRules } from "@/lib/paths";
@@ -29,8 +29,11 @@ export function AppNav({
   email,
   permissions,
   isSystemAdmin,
+  brandImageUrl,
 }: {
   orgName?: string;
+  /** Public URL of the org's uploaded image. Falls back to the TRA mark. */
+  brandImageUrl?: string | null;
   email?: string | null;
   permissions?: Permissions | null;
   isSystemAdmin?: boolean;
@@ -64,6 +67,7 @@ export function AppNav({
           { href: "/app/team", label: "Team" },
           { href: "/app/billing", label: "Billing" },
         ]),
+    ...(permissions?.can_manage_team ? [{ href: "/app/settings/branding", label: "Branding" }] : []),
     ...(isSystemAdmin ? [{ href: "/app/admin", label: "Admin" }] : []),
   ];
 
@@ -71,7 +75,7 @@ export function AppNav({
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-2.5">
         <div className="flex min-w-0 items-center gap-3">
-          <BrandLogo variant="nav" href="/app" priority />
+          <OrgBrandMark src={brandImageUrl} orgName={orgName} />
           <div className="hidden min-w-0 sm:block">
             <p className="truncate text-sm text-slate-600">{orgName || "Workspace"}</p>
           </div>
