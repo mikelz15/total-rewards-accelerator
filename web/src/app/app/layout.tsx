@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { AppNav } from "@/components/AppNav";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { saasApi, type MeResponse } from "@/lib/saas-api";
+import { brandImageUrl } from "@/lib/branding";
 import { WorkspaceContext } from "@/lib/workspace-context";
 import type { Permissions } from "@/lib/permissions";
 
@@ -50,6 +51,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           email={me?.user.email}
           permissions={permissions}
           isSystemAdmin={Boolean(me?.user.is_system_admin)}
+          brandImageUrl={brandImageUrl(me?.org.brand_image_path)}
         />
         {error && (
           <div className="mx-auto max-w-6xl px-4 pt-4">

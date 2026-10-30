@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Fold } from "@/components/Fold";
 import { HeroFilm } from "@/components/HeroFilm";
+import { SeatPathCard } from "@/components/SeatPathCard";
 import { SEAT_PATHS } from "@/lib/paths";
 
 const modules = [
@@ -228,17 +229,9 @@ export default function HomePage() {
             See the paths
           </Link>
         </div>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        <div className="mt-4 grid items-start gap-4 sm:grid-cols-2">
           {SEAT_PATHS.map((path) => (
-            <Link
-              key={path.id}
-              href={`/paths#${path.id}`}
-              className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-slate-300"
-            >
-              <p className="text-xs font-medium uppercase tracking-wide text-slate-400">{path.who}</p>
-              <h3 className="mt-1 text-base font-medium text-slate-900">{path.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">{path.line}</p>
-            </Link>
+            <SeatPathCard key={path.id} path={path} />
           ))}
         </div>
       </section>

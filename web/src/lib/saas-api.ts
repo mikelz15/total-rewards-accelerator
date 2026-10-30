@@ -44,10 +44,18 @@ export type MeResponse = {
     max_upload_rows: number;
     suspended?: boolean;
     entitlements?: string[] | null;
+    /** Storage key in the org-branding bucket. Null means the TRA mark. */
+    brand_image_path?: string | null;
   };
   membership: { role: string };
   permissions?: Permissions;
   workspace: { id: string; name: string } | null;
+};
+
+export type BrandingResponse = {
+  available: boolean;
+  bucket: string;
+  brand_image_path: string | null;
 };
 
 export type GovernanceCard = {
@@ -279,6 +287,15 @@ export const saasApi = {
     }
     return res.blob();
   },
+
+  branding: (token: string) =>
+    saasRequest<BrandingResponse>("/api/v1/org/branding", token),
+
+  setBranding: (token: string, path: string | null) =>
+    saasRequest<BrandingResponse & { previous_path?: string | null }>("/api/v1/org/branding", token, {
+      method: "PUT",
+      body: JSON.stringify({ path }),
+    }),
 
   team: (token: string) =>
     saasRequest<{

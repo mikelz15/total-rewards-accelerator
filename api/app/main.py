@@ -33,6 +33,7 @@ from app.db.session import saas_config_status, saas_enabled
 from app.routers.saas import admin as saas_admin
 from app.routers.saas import analysis as saas_analysis
 from app.routers.saas import billing as saas_billing
+from app.routers.saas import branding as saas_branding
 from app.routers.saas import candidates as saas_candidates
 from app.routers.saas import cleaner as saas_cleaner
 from app.routers.saas import datasets as saas_datasets
@@ -110,6 +111,7 @@ app.include_router(saas_team.router)
 app.include_router(saas_billing.router)
 app.include_router(saas_admin.router)
 app.include_router(saas_governance.router)
+app.include_router(saas_branding.router)
 app.include_router(muse_router.router)
 app.include_router(resume_credit_router.public_router)
 app.include_router(resume_credit_router.saas_router)
