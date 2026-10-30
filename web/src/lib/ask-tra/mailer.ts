@@ -3,11 +3,12 @@ import { ASK_TRA } from "./config";
 /**
  * Handoff delivery.
  *
- * When RESEND_API_KEY and ASK_TRA_FROM_EMAIL are configured, handoffs are
- * emailed straight to Rio's inbox (ASK_TRA.contactEmail) and marked
- * delivered. Until then this returns "queued" and the caller stores the
- * submission in the ask_tra_handoffs table instead — the deploy-time wiring
- * item. Either way the visitor also sees the direct email address in the UI.
+ * When RESEND_API_KEY and ASK_TRA_FROM_EMAIL are configured (done
+ * 2026-10-29), handoffs are emailed straight to Rio's inbox
+ * (ASK_TRA.contactEmail). The caller stores every submission in the
+ * ask_tra_handoffs table as the backup of record, marked delivered or
+ * unsent. Either way the visitor also sees the direct email address in
+ * the UI.
  *
  * Handoff content is delivered/stored as a message TO Rio only. It is never
  * written to the anonymous usage log.
