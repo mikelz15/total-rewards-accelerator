@@ -69,6 +69,27 @@ def require_module(org: Organization, role: str, module: str) -> None:
         )
 
 
+def require_any_module(org: Organization, role: str, modules: List[str]) -> None:
+    """Pass when the seat can use at least one of `modules`.
+
+    Some tools serve more than one module's screen — the resume tally sits on
+    both the Candidate Tracker and Closer screens — so either entitlement is
+    enough. When none match, the first module's denial is raised so the error
+    shape (402 upgrade vs 403 role) matches a single-module gate.
+    """
+    if not modules:
+        raise ValueError("modules must name at least one module")
+    if org_suspended(org):
+        raise HTTPException(status_code=403, detail="Organization is suspended. Contact support.")
+    override = org_override(org)
+    if any(
+        can_access_module(m, org.plan, role, suspended=False, entitlement_override=override)
+        for m in modules
+    ):
+        return
+    require_module(org, role, modules[0])
+
+
 def require_write(role: str) -> None:
     if not can_write(role):
         raise HTTPException(status_code=403, detail="Viewers cannot modify data.")
