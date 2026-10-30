@@ -11,10 +11,9 @@ import { deliverHandoff } from "@/lib/ask-tra/mailer";
  *
  * The submission goes to Rio's inbox (heyrio@mail.grokbot.com) — Rio forwards
  * to Mike and never auto-replies, so this endpoint never promises an answer
- * time either. When no mail transport is configured (the deploy-time wiring
- * item: RESEND_API_KEY + ASK_TRA_FROM_EMAIL), the submission is stored in the
- * ask_tra_handoffs table for Rio to pick up, and the UI shows the direct
- * email address as a fallback.
+ * time either. Every submission is also stored in the ask_tra_handoffs table
+ * as the backup of record, marked delivered or unsent (Resend wiring
+ * completed 2026-10-29: RESEND_API_KEY + ASK_TRA_FROM_EMAIL).
  *
  * The handoff text itself is a message to Rio, not analytics: the usage log
  * only gets an anonymous +1 on the handoffs counter.
@@ -57,17 +56,17 @@ export async function POST(request: NextRequest) {
 
   const store = getStore();
   const { delivered } = await deliverHandoff(handoff);
-  let stored = false;
-  if (!delivered) {
-    const saved = await store.saveHandoff(handoff);
-    stored = saved.stored;
-    if (stored) {
-      // Content-free server log line so an operator can find the queue row;
-      // the message itself lives only in the handoffs table / Rio's inbox.
-      console.log(`[ask-tra] handoff queued id=${saved.id} (mail transport not configured)`);
-    }
+  // The queue is the backup of record either way: every handoff is stored,
+  // marked delivered or unsent, so a failed send stays visible in the queue
+  // instead of being silently lost. The message itself lives only in the
+  // handoffs table / Rio's inbox; log lines stay content-free.
+  const saved = await store.saveHandoff(handoff, delivered);
+  if (delivered) {
+    console.log(`[ask-tra] handoff emailed to Rio; queue backup id=${saved.id}`);
+  } else {
+    console.error(`[ask-tra] HANDOFF EMAIL NOT SENT - queued unsent id=${saved.id}`);
   }
-  if (!delivered && !stored) {
+  if (!delivered && !saved.stored) {
     return NextResponse.json(
       { error: "handoff_failed", contactEmail: ASK_TRA.contactEmail },
       { status: 500 }
