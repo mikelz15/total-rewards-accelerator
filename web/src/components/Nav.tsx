@@ -15,6 +15,7 @@ const links = [
   { href: "/candidates", label: "Tracker" },
   { href: "/closer", label: "Closer" },
   { href: "/paths", label: "Paths" },
+  { href: "/muse", label: "Muse API" },
   { href: "/pricing", label: "Pricing" },
 ];
 

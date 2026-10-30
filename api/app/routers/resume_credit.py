@@ -1,4 +1,8 @@
-"""Resume credit tally. Public route stores nothing. Signed-in route is Closer."""
+"""Resume credit tally. Public route stores nothing.
+
+The signed-in route serves Tracker and Closer: the tally widget is embedded
+on both the Candidate Tracker screen and the Closer screen, so either module
+entitlement opens it."""
 
 from __future__ import annotations
 
@@ -12,7 +16,7 @@ from pydantic import BaseModel, Field
 
 from app.auth.deps import CurrentUser, ensure_user_org, get_current_user
 from app.db.session import get_session
-from app.services.access import require_module, require_write
+from app.services.access import require_any_module, require_write
 from app.services.resume_credit import extract_text, infer_family, infer_level, tally_jobs, tally_text
 
 SAMPLE_PATH = Path(__file__).resolve().parents[1] / "data" / "sample_resume.txt"
@@ -124,7 +128,7 @@ async def resume_credit_upload(
 def saas_resume_credit_sample(user: CurrentUser = Depends(get_current_user)) -> Dict[str, Any]:
     with get_session() as session:
         ctx = ensure_user_org(session, user)
-        require_module(ctx.org, ctx.membership.role, "closer")
+        require_any_module(ctx.org, ctx.membership.role, ["closer", "tracker"])
     return _sample()
 
 
@@ -135,6 +139,6 @@ def saas_resume_credit_tally(
 ) -> Dict[str, Any]:
     with get_session() as session:
         ctx = ensure_user_org(session, user)
-        require_module(ctx.org, ctx.membership.role, "closer")
+        require_any_module(ctx.org, ctx.membership.role, ["closer", "tracker"])
         require_write(ctx.membership.role)
     return run_tally(payload)
