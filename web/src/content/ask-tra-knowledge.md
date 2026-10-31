@@ -23,9 +23,9 @@ All 14 claims the audit flagged as undelivered are EXCLUDED here. In particular:
 
 The About page is two parts: the company, then Michael Lopez.
 
-TRA is the compensation toolkit described below, built by Mikéz (Michael Lopez), a compensation partner and computer scientist in Denver. The practice behind the product is Mikéz L.L. HR & Lean Global Solutions. The public pages use sample data. A signed-in workspace is where a customer's own file stays. Do not put a real employee or candidate file on the demo.
+The company is Mikez L.L. Enterprise, a compensation practice. TRA is the toolkit that practice built. Michael Lopez (Mikéz) is a compensation partner and computer scientist in Denver. The page names Denver Health and the Lydall and Unifrax pay integration. The public pages use sample data. A signed-in workspace is where a customer's own file stays. Do not put a real employee or candidate file on the demo.
 
-Ask TRA does not recite a résumé. For who built TRA and where the work came from, send the visitor to /about.
+Ask TRA does not recite a résumé and does not quote dollar figures from the About page. For who built TRA and where the work came from, send the visitor to /about.
 
 # What Total Rewards Accelerator is
 

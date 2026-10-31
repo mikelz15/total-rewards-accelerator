@@ -263,8 +263,8 @@ export default function HomePage() {
           The company, and the person who built it
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-slate-600">
-          Total Rewards Accelerator is a compensation toolkit for people who run pay. Michael Lopez
-          built it from the work: clean the file, place the person, fund the gap, close the offer.
+          Mikez L.L. Enterprise is a compensation practice. Total Rewards Accelerator is the toolkit
+          Michael Lopez built from that work.
         </p>
         <Link href="/about" className="mt-3 inline-block text-sm font-medium text-slate-900 hover:underline">
           Read about TRA
