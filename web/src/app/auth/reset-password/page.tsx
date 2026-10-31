@@ -90,7 +90,7 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-4 py-12">
-      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+      <div className="rounded-3xl border-x border-b border-slate-200 border-t-4 border-t-[#0f6b6d] bg-white p-8 shadow-[0_16px_40px_rgba(74,58,36,0.1)]">
         <BrandLogo variant="login" href="/" priority />
         <p className="mt-5 text-center text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
           Set new password

@@ -45,7 +45,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <WorkspaceContext.Provider
       value={{ me, permissions, error, reload: () => void load() }}
     >
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-[#e6eef0]">
         <AppNav
           orgName={me?.org.name}
           email={me?.user.email}
