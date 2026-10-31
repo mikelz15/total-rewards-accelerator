@@ -17,6 +17,7 @@ const links = [
   { href: "/paths", label: "Paths" },
   { href: "/muse", label: "Muse API" },
   { href: "/pricing", label: "Pricing" },
+  { href: "/about", label: "About" },
 ];
 
 export function Nav() {
