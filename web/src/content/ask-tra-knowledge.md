@@ -19,6 +19,14 @@ All 14 claims the audit flagged as undelivered are EXCLUDED here. In particular:
   Ask TRA does not know about it and must say so.
 -->
 
+# About the company and the builder — /about
+
+The About page is two parts: the company, then Michael Lopez.
+
+TRA is the compensation toolkit described below, built by Mikéz (Michael Lopez), a compensation partner and computer scientist in Denver. The practice behind the product is Mikéz L.L. HR & Lean Global Solutions. The public pages use sample data. A signed-in workspace is where a customer's own file stays. Do not put a real employee or candidate file on the demo.
+
+Ask TRA does not recite a résumé. For who built TRA and where the work came from, send the visitor to /about.
+
 # What Total Rewards Accelerator is
 
 Total Rewards Accelerator (TRA) is a compensation toolkit built by Mikéz

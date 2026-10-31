@@ -257,6 +257,20 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="mt-20 max-w-2xl">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">About</p>
+        <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-900">
+          The company, and the person who built it
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-slate-600">
+          Total Rewards Accelerator is a compensation toolkit for people who run pay. Michael Lopez
+          built it from the work: clean the file, place the person, fund the gap, close the offer.
+        </p>
+        <Link href="/about" className="mt-3 inline-block text-sm font-medium text-slate-900 hover:underline">
+          Read about TRA
+        </Link>
+      </section>
+
       <p className="mt-12 max-w-2xl text-sm leading-relaxed text-slate-500">
         The public demo prefers the sample file. A custom upload is capped at 10 rows, scanned for
         sensitive headers, and limited to five a week from one address. Tracker and Closer stay on
