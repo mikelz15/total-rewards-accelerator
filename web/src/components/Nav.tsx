@@ -58,7 +58,7 @@ export function Nav() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white">
+    <header className="sticky top-0 z-50 border-b-2 border-[#0f6b6d] bg-white">
       <div className="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2">
         <BrandLogo variant="nav" priority />
         <nav className="hidden items-center gap-3.5 lg:flex">

@@ -8,6 +8,55 @@ import { downloadCsv, stamp } from "@/lib/export";
 import { money, ratio } from "@/lib/format";
 import { Button, Card, ModuleShell, Stat } from "@/components/ModuleShell";
 
+const SAMPLE_MAP = [
+  ["Worker ID", "employee_id"],
+  ["Legal Name", "name"],
+  ["Total Base Pay Annualized", "base_salary"],
+  ["Pay Range Midpoint", "range_mid"],
+];
+
+function SampleShape() {
+  return (
+    <div className="mt-4 rounded-xl border border-dashed border-teal-300/80 bg-teal-50/50 p-4">
+      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-800">Sample shape</p>
+      <p className="mt-1 text-sm text-slate-600">
+        Run the sample and this pane fills with that file. These labels are the shape, not a score.
+      </p>
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        <div className="rounded-xl bg-white/80 px-3 py-3">
+          <div className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Rows in → out</div>
+          <div className="mt-1 text-xl font-semibold text-slate-300">10 → —</div>
+        </div>
+        <div className="rounded-xl bg-white/80 px-3 py-3">
+          <div className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Quality score</div>
+          <div className="mt-1 text-xl font-semibold text-slate-300">—</div>
+        </div>
+        <div className="rounded-xl bg-white/80 px-3 py-3">
+          <div className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Source guess</div>
+          <div className="mt-1 text-xl font-semibold text-slate-300">HRIS</div>
+        </div>
+        <div className="rounded-xl bg-white/80 px-3 py-3">
+          <div className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Issues</div>
+          <div className="mt-1 text-xl font-semibold text-slate-300">—</div>
+        </div>
+      </div>
+      <p className="mt-4 text-[11px] font-medium uppercase tracking-wide text-slate-400">Column mapping</p>
+      <ul className="mt-2 space-y-1.5">
+        {SAMPLE_MAP.map(([from, to]) => (
+          <li key={from} className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
+            <span className="rounded bg-white px-1.5 py-0.5 font-mono text-xs text-slate-400">{from}</span>
+            <span className="text-teal-700/50">→</span>
+            <span className="font-medium text-teal-800/70">{to}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-4 text-xs text-slate-500">
+        A cleaned row keeps the name, the base, the midpoint, the years, and the education.
+      </p>
+    </div>
+  );
+}
+
 const PREVIEW_COLS = [
   "employee_id",
   "name",
@@ -141,11 +190,7 @@ export default function CleanerPage() {
 
         <Card>
           <h2 className="text-sm font-semibold text-slate-900">2. Cleaning results</h2>
-          {!result ? (
-            <p className="mt-6 text-sm text-slate-500">
-              Quality score, source-system guess, column map, and issues appear here after clean.
-            </p>
-          ) : (
+          {!result ? <SampleShape /> : (
             <div className="mt-4 space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <Stat label="Rows in → out" value={`${result.stats.rows_in} → ${result.stats.rows_out}`} />

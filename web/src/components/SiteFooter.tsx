@@ -24,7 +24,7 @@ export function SiteFooter() {
   }
 
   return (
-    <footer className="mt-8 border-t border-slate-200">
+    <footer className="mt-8 border-t border-[#0f6b6d]/15">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-5 gap-y-2 px-4 py-8 text-sm text-slate-500">
         <span className="text-slate-700">Total Rewards Accelerator</span>
         {links.map((link) => (
