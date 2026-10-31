@@ -21,6 +21,7 @@ export default function BrandingSettingsPage() {
   const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
+  const [confirmingRemove, setConfirmingRemove] = useState(false);
   const [busy, setBusy] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -53,6 +54,7 @@ export default function BrandingSettingsPage() {
   function onPick(e: ChangeEvent<HTMLInputElement>) {
     setError(null);
     setInfo(null);
+    setConfirmingRemove(false);
     const picked = e.target.files?.[0] ?? null;
     if (!picked) {
       setFile(null);
@@ -107,8 +109,11 @@ export default function BrandingSettingsPage() {
     }
   }
 
+  // Removal is confirmed inline, in the page. The previous version gated this
+  // on the native window.confirm() dialog; where that dialog is suppressed or
+  // auto-dismissed (automated browsers, some embedded contexts) the handler
+  // exited silently and Remove image did nothing at all.
   async function onClear() {
-    if (!confirm("Remove the organization image? The header goes back to the TRA mark.")) return;
     setBusy(true);
     setError(null);
     setInfo(null);
@@ -117,6 +122,7 @@ export default function BrandingSettingsPage() {
       const saved = await saasApi.setBranding(token, null);
       await removeObject(saved.previous_path);
       setPath(null);
+      setConfirmingRemove(false);
       setInfo("Removed. The header shows the TRA mark again.");
       reload();
     } catch (err) {
@@ -168,9 +174,35 @@ export default function BrandingSettingsPage() {
         </div>
         {current && canManage && (
           <div className="mt-4">
-            <Button variant="ghost" onClick={onClear} disabled={busy || available === false}>
-              Remove image
-            </Button>
+            {confirmingRemove ? (
+              <div className="flex flex-wrap items-center gap-3">
+                <p className="text-sm text-slate-600">
+                  Remove the organization image? The header goes back to the TRA mark.
+                </p>
+                <Button onClick={onClear} disabled={busy || available === false}>
+                  {busy ? "Removing…" : "Confirm removal"}
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => setConfirmingRemove(false)}
+                  disabled={busy}
+                >
+                  Cancel
+                </Button>
+              </div>
+            ) : (
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setError(null);
+                  setInfo(null);
+                  setConfirmingRemove(true);
+                }}
+                disabled={busy || available === false}
+              >
+                Remove image
+              </Button>
+            )}
           </div>
         )}
       </Card>
