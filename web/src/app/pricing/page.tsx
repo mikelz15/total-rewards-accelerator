@@ -125,7 +125,7 @@ export default function PricingPage() {
             <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Seats on top of the plan</h2>
             <p className="mt-4 text-lg leading-relaxed text-slate-600">
               The invoice unlocks modules for the workspace. The seat decides which of those a
-              person opens. A talent workspace can hold Tracker and Closer together. That is
+              person opens. A Talent workspace can hold Tracker and Closer together. That is
               those two prices, not a new product.
             </p>
           </div>
