@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button, Card, ModuleShell } from "@/components/ModuleShell";
+import { api } from "@/lib/api";
 
 type FormulaIssue = {
   code: string;
@@ -32,15 +33,9 @@ export default function FormulaEvaluatorPage() {
     setLoading(true);
     setError(null);
     try {
-      const form = new FormData();
-      form.append("file", file);
-      const res = await fetch("/api/formula-evaluator/run", {
-        method: "POST",
-        body: form,
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || data.error || "Run failed");
-      setResult(data);
+      const data = await api.formulaEvaluatorRun(file);
+      if (data.error) throw new Error(data.error);
+      setResult(data as FormulaEvaluatorResult);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed");
     } finally {

@@ -462,6 +462,26 @@ export const api = {
     }),
   candidatesDelete: (id: string) =>
     request<{ deleted: boolean }>(`/api/candidates/${id}`, { method: "DELETE" }),
+  // Live Starter serves this path. The site route /api/formula-evaluator/run is the Next app and returns HTML.
+  formulaEvaluatorRun: (file: File) => {
+    const form = new FormData();
+    form.append("file", file);
+    return request<{
+      logic_health_score?: number;
+      row_count?: number;
+      issue_count?: number;
+      issues?: Array<{
+        code: string;
+        severity: string;
+        title: string;
+        explanation: string;
+        suggested_action: string;
+        affected_count: number;
+      }>;
+      disclaimer?: string;
+      error?: string;
+    }>("/formula-evaluator/run", { method: "POST", body: form });
+  },
 };
 
 export { API_BASE };
