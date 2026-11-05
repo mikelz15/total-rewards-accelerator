@@ -92,7 +92,7 @@ export function AppNav({
               <Link
                 key={link.href}
                 href={link.href}
-                className={`rounded-full px-2.5 py-1.5 text-xs transition sm:px-3 sm:text-sm ${
+                className={`rounded-full px-3 py-1.5 text-sm transition ${
                   active
                     ? "bg-slate-900 text-white"
                     : locked
@@ -112,7 +112,7 @@ export function AppNav({
               <Link
                 key={link.href}
                 href={link.href}
-                className={`rounded-full px-2.5 py-1.5 text-xs transition sm:px-3 sm:text-sm ${
+                className={`rounded-full px-3 py-1.5 text-sm transition ${
                   active
                     ? "bg-teal-800 text-white"
                     : "text-slate-600 hover:bg-slate-100"

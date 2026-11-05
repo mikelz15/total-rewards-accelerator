@@ -92,16 +92,16 @@ export default function ResetPasswordPage() {
     <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-4 py-12">
       <div className="rounded-3xl border-x border-b border-slate-200 border-t-4 border-t-[#0f6b6d] bg-white p-8 shadow-[0_16px_40px_rgba(74,58,36,0.1)]">
         <BrandLogo variant="login" href="/" priority />
-        <p className="mt-5 text-center text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
+        <h1 className="mt-6 text-center text-2xl font-semibold tracking-tight text-slate-900">
           Set new password
-        </p>
-        <p className="mt-2 text-center text-sm text-slate-600">
+        </h1>
+        <p className="mt-3 text-center text-base leading-relaxed text-slate-600">
           Choose a new password for your TRA workspace account.
         </p>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <label className="block">
-            <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            <span className="text-base text-slate-600">
               New password
             </span>
             <input
@@ -116,7 +116,7 @@ export default function ResetPasswordPage() {
             />
           </label>
           <label className="block">
-            <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            <span className="text-base text-slate-600">
               Confirm password
             </span>
             <input

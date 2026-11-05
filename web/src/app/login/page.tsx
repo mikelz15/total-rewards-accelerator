@@ -111,12 +111,12 @@ function LoginForm() {
 
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-4 py-12">
-      <div className="rounded-3xl border-x border-b border-slate-200 border-t-4 border-t-[#0f6b6d] bg-white p-8 shadow-[0_16px_40px_rgba(74,58,36,0.1)]">
+      <div className="rounded-3xl border border-slate-200/80 border-t-4 border-t-[#0f6b6d] bg-white p-8 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
         <BrandLogo variant="login" href="/" priority />
-        <p className="mt-5 text-center text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
+        <h1 className="mt-6 text-center text-2xl font-semibold tracking-tight text-slate-900">
           {title}
-        </p>
-        <p className="mt-2 text-center text-sm text-slate-600">{subtitle}</p>
+        </h1>
+        <p className="mt-3 text-center text-base leading-relaxed text-slate-600">{subtitle}</p>
 
         {search.get("error") === "confirm" && (
           <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
@@ -169,7 +169,7 @@ function LoginForm() {
         {mode === "forgot" && configured ? (
           <form onSubmit={onForgotSubmit} className="mt-6 space-y-4">
             <label className="block">
-              <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              <span className="text-base text-slate-600">
                 Email
               </span>
               <input
@@ -213,7 +213,7 @@ function LoginForm() {
         ) : mode === "account" && configured ? (
           <form onSubmit={onAccountSubmit} className="mt-6 space-y-4">
             <label className="block">
-              <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              <span className="text-base text-slate-600">
                 Email
               </span>
               <input
@@ -227,7 +227,7 @@ function LoginForm() {
             </label>
             <label className="block">
               <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                <span className="text-base text-slate-600">
                   Password
                 </span>
                 <button
@@ -275,7 +275,7 @@ function LoginForm() {
         ) : (
           <form onSubmit={onDemoSubmit} className="mt-6 space-y-4">
             <label className="block">
-              <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              <span className="text-base text-slate-600">
                 Password
               </span>
               <input

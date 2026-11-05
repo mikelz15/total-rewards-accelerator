@@ -12,11 +12,13 @@ export function ModuleShell({
   children: ReactNode;
 }) {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8">
-      <div className="mb-8 max-w-2xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">{eyebrow}</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">{title}</h1>
-        <p className="mt-2 text-slate-600">{description}</p>
+    <div className="mx-auto max-w-6xl px-4 py-12">
+      <div className="mb-12 max-w-2xl">
+        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          <h1 className="text-4xl font-semibold tracking-tight text-slate-900">{title}</h1>
+          <p className="text-base text-teal-800">{eyebrow}</p>
+        </div>
+        <p className="mt-5 text-lg leading-relaxed text-slate-600">{description}</p>
       </div>
       {children}
     </div>
@@ -31,7 +33,7 @@ export function Card({
   className?: string;
 }) {
   return (
-    <div className={`rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_12px_32px_rgba(74,58,36,0.07)] ${className}`}>
+    <div className={`rounded-2xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_18px_40px_rgba(15,23,42,0.05)] ${className}`}>
       {children}
     </div>
   );
@@ -53,9 +55,9 @@ export function Stat({
     bad: "text-rose-600",
   };
   return (
-    <div className="rounded-xl bg-slate-50 px-4 py-3">
-      <div className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</div>
-      <div className={`mt-1 text-2xl font-semibold tabular-nums ${tones[tone]}`}>{value}</div>
+    <div className="rounded-2xl bg-white px-5 py-4">
+      <div className={`text-3xl font-semibold tabular-nums tracking-tight ${tones[tone]}`}>{value}</div>
+      <div className="mt-2 text-base text-slate-600">{label}</div>
     </div>
   );
 }
