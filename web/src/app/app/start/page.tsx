@@ -19,9 +19,9 @@ const DO: Record<string, string> = {
 
 const NORTHLINE = {
   slug: "northline-regional",
-  line: "Fourteen outpatient clinics on the Front Range. About 2,400 people. This workspace holds a 12-person slice of Clinic 4 in Boulder, plus three candidates.",
-  places: "Boulder, Longmont, Lafayette",
-  file: "Clinic 4 pay file, March cycle",
+  line: "Fourteen outpatient clinics on the Front Range. The March file is the full staff, 2,400 people, plus three candidates.",
+  places: "Boulder to Wheat Ridge",
+  file: "Northline staff file, March cycle",
 };
 
 export default function StartPage() {

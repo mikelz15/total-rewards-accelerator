@@ -28,10 +28,29 @@ export function CycleLockBoard({
   confirming?: boolean;
 }) {
   const [openId, setOpenId] = useState<string | null>(data.people[0]?.id ?? null);
+  const large = data.people.length > 24;
+  const [band, setBand] = useState(large ? "under_range" : "all");
   const selected: CycleLockPerson | undefined = useMemo(
     () => data.people.find((p) => p.id === openId) || data.people[0],
     [data.people, openId]
   );
+  const counts = useMemo(() => {
+    const tally = { all: data.people.length, under_range: 0, to_mid: 0, above_mid: 0, chips: data.chips.length };
+    for (const person of data.people) {
+      if (person.band === "under_range" || person.band === "to_mid" || person.band === "above_mid") {
+        tally[person.band] += 1;
+      }
+    }
+    return tally;
+  }, [data.people, data.chips.length]);
+  const visible = useMemo(() => {
+    if (band === "chips") {
+      const ids = new Set(data.chips.map((chip) => chip.id));
+      return data.people.filter((person) => ids.has(person.id));
+    }
+    if (band === "all") return data.people;
+    return data.people.filter((person) => person.band === band);
+  }, [band, data.chips, data.people]);
 
   return (
     <div className="space-y-4">
@@ -46,10 +65,37 @@ export function CycleLockBoard({
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
           {data.team.name}
         </p>
+        <p className="mt-1 text-sm text-slate-700">
+          {data.team.headcount.toLocaleString("en-US")} people · salary base {money(data.team.salary_base)}
+        </p>
         <p className="mt-1 text-sm text-slate-600">{data.philosophy.rule}</p>
         <p className="mt-2 text-xs text-slate-500">
           A 0.5% rating notch on average pay for this team is about {money(data.summary.paycheck_half_point)} per paycheck.
         </p>
+        {large && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {(
+              [
+                ["under_range", "Under range"],
+                ["to_mid", "To midpoint"],
+                ["above_mid", "Above mid"],
+                ["chips", "Chips"],
+                ["all", "Everyone"],
+              ] as const
+            ).map(([key, label]) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setBand(key)}
+                className={`rounded-full px-3 py-1 text-xs ${
+                  band === key ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-600"
+                }`}
+              >
+                {label} · {counts[key].toLocaleString("en-US")}
+              </button>
+            ))}
+          </div>
+        )}
         <div className="mt-4 overflow-x-auto">
           <table className="min-w-full text-left text-sm">
             <thead className="text-xs uppercase tracking-wide text-slate-500">
@@ -62,7 +108,7 @@ export function CycleLockBoard({
               </tr>
             </thead>
             <tbody>
-              {data.people.map((p) => {
+              {visible.map((p) => {
                 const chip = data.chips.find((c) => c.id === p.id);
                 const active = selected?.id === p.id;
                 return (

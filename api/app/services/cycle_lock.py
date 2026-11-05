@@ -77,6 +77,7 @@ def lock_cycle(
     mid_pen: float = 1.00,
     pool_split: Optional[Dict[str, float]] = None,
     confirm_exceptions: Optional[Dict[str, bool]] = None,
+    team_name: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
     Allocate a merit envelope by range physics.
@@ -222,7 +223,12 @@ def lock_cycle(
             "envelope_pct": envelope_pct,
         },
         "team": {
-            "name": "Monday 8:00 cycle lock — Plant + Eng sample",
+            "name": team_name
+            or (
+                "Monday 8:00 cycle lock — Plant + Eng sample"
+                if not records
+                else "Workspace file"
+            ),
             "headcount": len(people),
             "salary_base": round(salary_base, 2),
         },
@@ -240,5 +246,5 @@ def lock_cycle(
         },
         "people": rows,
         "chips": pending,
-        "demo": True,
+        "demo": not bool(records),
     }
