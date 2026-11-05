@@ -9,18 +9,15 @@ export const metadata: Metadata = {
 
 export default function ContestPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
-      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
-        Contest
-      </p>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-900">
+    <div className="mx-auto max-w-3xl px-5 py-20">
+      <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
         Design Partner Year
       </h1>
-      <p className="mt-2 text-sm text-slate-500">Applications open December 1, 2026 · Winners announced January 2, 2027</p>
+      <p className="mt-6 text-xl leading-relaxed text-slate-600">Applications open December 1, 2026. Winners announced January 2, 2027.</p>
 
-      <div className="mt-8 space-y-6 text-sm leading-relaxed text-slate-700">
+      <div className="mt-12 space-y-10 text-lg leading-relaxed text-slate-700">
         <section>
-          <h2 className="text-lg font-semibold text-slate-900">The offer</h2>
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900">The offer</h2>
           <p className="mt-2">
             Three companies will receive one year of Total Rewards Accelerator free, with up to 5 licenses each.
             This is a selective program, not a raffle. Applications open December 1, 2026. Winners are announced January 2, 2027.
@@ -28,9 +25,9 @@ export default function ContestPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-900">To apply</h2>
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900">To apply</h2>
           <p className="mt-2">Submit the following:</p>
-          <ul className="mt-2 list-disc space-y-1 pl-5">
+          <ul className="mt-4 list-disc space-y-2 pl-5">
             <li>Company name, headcount, industry, and HQ location</li>
             <li>Name and title of the decision-maker who will sponsor the work (comp, Total Rewards, or HR leader)</li>
             <li>Your HRIS and how you handle comp today (spreadsheets, tools, or both)</li>
@@ -47,8 +44,8 @@ export default function ContestPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-900">What winners commit to</h2>
-          <ul className="mt-2 list-disc space-y-1 pl-5">
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900">What winners commit to</h2>
+          <ul className="mt-4 list-disc space-y-2 pl-5">
             <li>A 30-minute kickoff and a monthly 30-minute feedback session</li>
             <li>Using TRA in at least one live comp cycle or review during the year</li>
             <li>Tracking before-and-after numbers on time spent and steps taken</li>
@@ -60,8 +57,8 @@ export default function ContestPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-900">After the free year</h2>
-          <ul className="mt-2 list-disc space-y-1 pl-5">
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900">After the free year</h2>
+          <ul className="mt-4 list-disc space-y-2 pl-5">
             <li>Renewal conversation at Full Suite pricing ($499/mo or $4,990/yr). No auto-renewal without a signed agreement.</li>
             <li>A 60-day renewal review that compares results to the success measure you named in your application</li>
             <li>First access to a Design Partnership (custom system starting around $50,000) for teams that want a build fitted to their grades, rules, and data</li>
@@ -69,28 +66,28 @@ export default function ContestPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-900">Selection and non-winners</h2>
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900">Selection and non-winners</h2>
           <p className="mt-2">
             Selection is based on fit, specificity of the time-savings plan, willingness to contribute feedback and a case study, and overall readiness. Top-scoring applicants who do not win are offered a paid pilot or Design Partnership conversation. Everyone else receives continued access to the demo and updates.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-900">Design Partnership (available now)</h2>
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900">Design Partnership (available now)</h2>
           <p className="mt-2">
             Separate from the contest: a limited number of Design Partnerships are open now for teams that want a custom system built on their data, grades, and merit rules (starting around $50,000). The same three-click, explainable approach applies.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-900">Fine print</h2>
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900">Fine print</h2>
           <p className="mt-2">
             Licenses are for the Full Suite unless otherwise agreed. TRA outputs are decision support; you remain responsible for pay decisions and compliance. The program may be modified or canceled before applications open. Official rules are as published on this page. Questions: use the contact path shown in the product or LinkedIn.
           </p>
         </section>
       </div>
 
-      <p className="mt-10 text-sm">
+      <p className="mt-12 text-base">
         <Link href="/" className="font-medium text-teal-700 hover:underline">
           ← Back to home
         </Link>
