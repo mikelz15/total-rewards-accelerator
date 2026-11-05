@@ -5,16 +5,7 @@ import { Card, Stat } from "@/components/ModuleShell";
 import { groupLine } from "@/components/ViewpointHome";
 import type { DatasetSummary, GovernanceLibrary, MeResponse } from "@/lib/saas-api";
 import { BOARD, boardOpens, pathForRole, showDatasets, workspaceHref } from "@/lib/paths";
-
-const SEAT_LABEL: Record<string, string> = {
-  owner: "Rewards · owner",
-  admin: "Rewards · admin",
-  member: "Rewards · member",
-  viewer: "Viewer",
-  ta: "Talent",
-  hrbp: "HRBP",
-  executive: "Executive",
-};
+import { seatHomeLabel } from "@/lib/permissions";
 
 export function SeatDashboard({
   me,
@@ -61,7 +52,7 @@ export function SeatDashboard({
         />
         <Stat
           label="Seat"
-          value={loading ? "…" : SEAT_LABEL[role || ""] || role || "—"}
+          value={loading ? "…" : seatHomeLabel(role)}
         />
         <Stat
           label="Datasets · candidates"

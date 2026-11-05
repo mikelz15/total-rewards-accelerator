@@ -4,6 +4,7 @@ import { FormEvent, Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getAccessToken, saasApi } from "@/lib/saas-api";
 import { CLIENT_DOORS, INVITE_ROLES } from "@/lib/paths";
+import { roleLabel } from "@/lib/permissions";
 import { Button, Card } from "@/components/ModuleShell";
 
 function TeamInner() {
@@ -27,7 +28,7 @@ function TeamInner() {
         if (accept) {
           const token = await getAccessToken();
           await saasApi.acceptInvite(token, accept);
-          setInfo("Invite accepted. You are now a member of that organization.");
+          setInfo("Invite accepted. You are on that workspace.");
         }
         await load();
       } catch (e) {
@@ -69,7 +70,7 @@ function TeamInner() {
   }
 
   async function remove(userId: string) {
-    if (!confirm("Remove this member from the organization?")) return;
+    if (!confirm("Remove this person from the workspace?")) return;
     try {
       const token = await getAccessToken();
       await saasApi.removeMember(token, userId);
@@ -92,8 +93,8 @@ function TeamInner() {
           People &amp; roles
         </h1>
         <p className="mt-2 max-w-2xl text-slate-600">
-          Customer admins control who is in the workspace and what they can open (within the paid
-          plan). Platform admin does not manage your seat list day-to-day.
+          Admin controls who is in the workspace and what they can open, inside the paid plan.
+          The platform console does not manage that list.
         </p>
       </div>
 
@@ -107,7 +108,7 @@ function TeamInner() {
       <Card>
         <h2 className="text-sm font-semibold text-slate-900">Four doors</h2>
         <p className="mt-2 text-sm text-slate-600">
-          Rewards is one door. Owner, admin, and member share it. An invite uses this workspace&apos;s plan. It does not add a charge.
+          Rewards is one door. Owner, Admin, and Member share it. An invite uses this workspace&apos;s plan. It does not add a charge.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {CLIENT_DOORS.map((door) => (
@@ -189,16 +190,16 @@ function TeamInner() {
                     <select
                       value={m.role}
                       onChange={(e) => void changeRole(m.user_id, e.target.value)}
-                      className="rounded-lg border border-slate-200 px-2 py-1 capitalize"
+                      className="rounded-lg border border-slate-200 px-2 py-1"
                     >
                       {(data?.roles || []).map((r) => (
                         <option key={r} value={r}>
-                          {r}
+                          {roleLabel(r)}
                         </option>
                       ))}
                     </select>
                   ) : (
-                    <span className="capitalize">{m.role}</span>
+                    <span>{roleLabel(m.role)}</span>
                   )}
                 </td>
                 <td className="px-5 py-3">
@@ -226,7 +227,7 @@ function TeamInner() {
           <ul className="mt-3 space-y-2 text-sm text-slate-600">
             {data!.invites.map((i) => (
               <li key={i.id} className="rounded-xl bg-slate-50 px-3 py-2">
-                <strong>{i.email}</strong> · {i.role}
+                <strong>{i.email}</strong> · {roleLabel(i.role)}
                 <div className="mt-1 font-mono text-xs text-slate-500">
                   {i.accept_path || `/app/team?accept=${i.token}`}
                 </div>
