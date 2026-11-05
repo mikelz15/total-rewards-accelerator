@@ -120,7 +120,7 @@ export default function PathsPage() {
       <section className="mt-16">
         <h2 className="text-3xl font-semibold tracking-tight text-slate-900">The four invoices</h2>
         <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600">
-          Suite is $499 a month and includes all four. A talent workspace can be Tracker and
+          Suite is $499 a month and includes all four. A Talent workspace can be Tracker and
           Closer together. That is those two prices, not a fifth product. Job Match is included
           with Cleaner or Equity. It is not an invoice.
         </p>
