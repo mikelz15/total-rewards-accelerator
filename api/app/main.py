@@ -183,6 +183,7 @@ class CycleLockRequest(BaseModel):
     records: Optional[List[Dict[str, Any]]] = None
     envelope_pct: float = Field(0.032, ge=0, le=0.2)
     confirm_exceptions: Optional[Dict[str, bool]] = None
+    team_name: Optional[str] = None
 
 
 class PhilosophyRequest(BaseModel):
@@ -502,6 +503,7 @@ def cycle_lock_run(payload: CycleLockRequest) -> Dict[str, Any]:
         payload.records,
         envelope_pct=payload.envelope_pct,
         confirm_exceptions=payload.confirm_exceptions,
+        team_name=payload.team_name,
     )
 
 

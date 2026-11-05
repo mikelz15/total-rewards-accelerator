@@ -235,6 +235,21 @@ export const saasApi = {
       body: JSON.stringify(body),
     }),
 
+  cycleRun: (
+    token: string,
+    body: {
+      dataset_id?: string;
+      records?: Record<string, unknown>[];
+      envelope_pct?: number;
+      confirm_exceptions?: Record<string, boolean>;
+      team_name?: string;
+    }
+  ) =>
+    saasRequest<import("@/lib/api").CycleLockResult>("/api/v1/cycle/run", token, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
   remediationRun: (
     token: string,
     body: {

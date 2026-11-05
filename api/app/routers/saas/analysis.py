@@ -17,6 +17,7 @@ from app.services.entitlements import can_write
 from app.services.auditor import audit_equity
 from app.services.closer import build_wealth_pdf, project_total_wealth
 from app.services.flight_risk import assess_flight_risk
+from app.services.cycle_lock import lock_cycle
 from app.services.philosophy_check import check_philosophy
 from app.services.remediation import remediate
 
@@ -51,6 +52,15 @@ class PhilosophyBody(BaseModel):
     market_high: float = Field(1.03, gt=0, lt=3)
     dept_log_cap: float = Field(0.08, gt=0, le=1)
     save: bool = True
+
+
+class CycleBody(BaseModel):
+    records: Optional[List[Dict[str, Any]]] = None
+    dataset_id: Optional[UUID] = None
+    envelope_pct: float = Field(0.032, ge=0, le=0.2)
+    confirm_exceptions: Optional[Dict[str, bool]] = None
+    team_name: Optional[str] = None
+    save: bool = False
 
 
 class CloserBody(BaseModel):
@@ -273,6 +283,55 @@ def saas_philosophy_run(
                     "usable": result.get("usable"),
                     "headcount": result.get("headcount"),
                     "caveat": result.get("caveat"),
+                },
+            )
+        result["run_id"] = run_id
+        return result
+
+
+@router.post("/cycle/run")
+def saas_cycle_run(
+    payload: CycleBody,
+    user: CurrentUser = Depends(get_current_user),
+) -> Dict[str, Any]:
+    """Range-first lock on the org file. The public sample stays on the open page."""
+    with get_session() as session:
+        ctx = ensure_user_org(session, user)
+        require_module(ctx.org, ctx.membership.role, "equity")
+        records, dataset_id = _load_records(
+            session, ctx.org.id, payload.records, payload.dataset_id
+        )
+        label = payload.team_name
+        if not label and dataset_id:
+            ds = session.get(Dataset, dataset_id)
+            label = ds.name if ds else None
+        result = lock_cycle(
+            records,
+            envelope_pct=payload.envelope_pct,
+            confirm_exceptions=payload.confirm_exceptions,
+            team_name=label,
+        )
+        result["source"] = "dataset" if dataset_id else "records"
+        result["dataset_id"] = str(dataset_id) if dataset_id else None
+        result["saas"] = {"org_id": str(ctx.org.id), "sample_only": False}
+        run_id = None
+        save = bool(payload.save) and can_write(ctx.membership.role)
+        if save:
+            run_id = _save_run(
+                session,
+                org_id=ctx.org.id,
+                user_id=user.user_id,
+                kind="cycle",
+                dataset_id=dataset_id,
+                params={
+                    "envelope_pct": payload.envelope_pct,
+                    "confirm_exceptions": payload.confirm_exceptions or {},
+                },
+                result={
+                    "team": result.get("team"),
+                    "summary": result.get("summary"),
+                    "philosophy": result.get("philosophy"),
+                    "chips": result.get("chips"),
                 },
             )
         result["run_id"] = run_id
