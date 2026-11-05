@@ -3,7 +3,7 @@
 import { FormEvent, Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getAccessToken, saasApi } from "@/lib/saas-api";
-import { ROLE_HELP } from "@/lib/permissions";
+import { CLIENT_DOORS, INVITE_ROLES } from "@/lib/paths";
 import { Button, Card } from "@/components/ModuleShell";
 
 function TeamInner() {
@@ -105,14 +105,24 @@ function TeamInner() {
       )}
 
       <Card>
-        <h2 className="text-sm font-semibold text-slate-900">Role matrix</h2>
-        <ul className="mt-3 grid gap-2 sm:grid-cols-2 text-sm text-slate-600">
-          {Object.entries(ROLE_HELP).map(([r, help]) => (
-            <li key={r} className="rounded-xl bg-slate-50 px-3 py-2">
-              <strong className="capitalize text-slate-900">{r}</strong> — {help}
-            </li>
+        <h2 className="text-sm font-semibold text-slate-900">Four doors</h2>
+        <p className="mt-2 text-sm text-slate-600">
+          Rewards is one door. Owner, admin, and member share it. An invite uses this workspace&apos;s plan. It does not add a charge.
+        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {CLIENT_DOORS.map((door) => (
+            <div key={door.title} className="rounded-xl bg-slate-50 px-3 py-3">
+              <p className="font-medium text-slate-900">{door.title}</p>
+              <ul className="mt-2 space-y-1 text-sm text-slate-600">
+                {door.keys.map((key) => (
+                  <li key={key.role}>
+                    <span className="text-slate-900">{key.name}.</span> {key.note}
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
-        </ul>
+        </div>
       </Card>
 
       {canManage && (
@@ -140,13 +150,13 @@ function TeamInner() {
                 onChange={(e) => setRole(e.target.value)}
                 className="mt-1 block rounded-xl border border-slate-200 px-3 py-2 text-sm"
               >
-                {(data?.roles || ["member", "ta", "viewer", "admin"])
-                  .filter((r) => r !== "owner")
-                  .map((r) => (
-                    <option key={r} value={r}>
-                      {r}
+                {INVITE_ROLES.filter((item) => (data?.roles || INVITE_ROLES.map((r) => r.role)).includes(item.role)).map(
+                  (item) => (
+                    <option key={item.role} value={item.role}>
+                      {item.label}
                     </option>
-                  ))}
+                  )
+                )}
               </select>
             </label>
             <Button type="submit" disabled={busy}>
