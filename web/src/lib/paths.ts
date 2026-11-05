@@ -147,9 +147,17 @@ const ROLE_NAV: Record<string, string[] | null> = {
   admin: null,
   member: null,
   viewer: null,
-  ta: ["/app", "/app/candidates", "/app/closer"],
-  hrbp: ["/app", "/app/equity", "/app/closer"],
-  executive: ["/app", "/app/equity", "/app/cycle", "/app/philosophy", "/app/closer"],
+  ta: ["/app", "/app/start", "/app/workbook", "/app/candidates", "/app/closer"],
+  hrbp: ["/app", "/app/start", "/app/workbook", "/app/equity", "/app/closer"],
+  executive: [
+    "/app",
+    "/app/start",
+    "/app/workbook",
+    "/app/equity",
+    "/app/cycle",
+    "/app/philosophy",
+    "/app/closer",
+  ],
 };
 
 export function pathForRole(role?: string | null): SeatPath {

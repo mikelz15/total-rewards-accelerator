@@ -41,6 +41,7 @@ from app.routers.saas import formula_evaluator as saas_formula_evaluator
 from app.routers.saas import governance as saas_governance
 from app.routers.saas import me as saas_me
 from app.routers.saas import team as saas_team
+from app.routers.saas import workbook as saas_workbook
 from app.routers import job_match as job_match_router
 from app.routers import muse as muse_router
 from app.routers import resume_credit as resume_credit_router
@@ -119,6 +120,7 @@ app.include_router(resume_credit_router.saas_router)
 app.include_router(job_match_router.public_router)
 app.include_router(job_match_router.saas_router)
 app.include_router(saas_formula_evaluator.router)
+app.include_router(saas_workbook.router)
 
 app.add_middleware(
     CORSMiddleware,

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" role="img" aria-label="Northline Regional">
+  <rect width="640" height="200" rx="28" fill="#e7eef0"/>
+  <rect x="28" y="36" width="128" height="128" rx="24" fill="#0f6b6d"/>
+  <path d="M92 58 v84 M64 92 h56" stroke="#f4efe6" stroke-width="10" stroke-linecap="round"/>
+  <text x="180" y="98" fill="#12181c" font-family="Georgia, serif" font-size="40">Northline Regional</text>
+  <text x="180" y="136" fill="#3d4a50" font-family="Georgia, serif" font-size="18">Outpatient clinics</text>
+</svg>

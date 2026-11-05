@@ -9,7 +9,8 @@ import { ModuleGate } from "@/components/ModuleGate";
 import { useWorkspace } from "@/lib/workspace-context";
 
 export default function AppCleanerPage() {
-  const { permissions } = useWorkspace();
+  const { permissions, me } = useWorkspace();
+  const rowCap = me?.org.max_upload_rows;
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -68,8 +69,9 @@ export default function AppCleanerPage() {
           Market data cleaner
         </h1>
         <p className="mt-2 text-slate-600">
-          Messy HRIS → analysis-ready records with org row limits and durable storage. Prefer
-          scrubbed files.
+          Messy HRIS becomes analysis-ready rows, then stays in this workspace.
+          {rowCap ? ` This workspace holds ${rowCap.toLocaleString("en-US")} rows.` : ""} Prefer a
+          scrubbed file.
         </p>
       </div>
 
