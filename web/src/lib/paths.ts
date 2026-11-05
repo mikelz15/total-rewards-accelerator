@@ -20,7 +20,7 @@ export const SEAT_PATHS: SeatPath[] = [
   {
     id: "rewards",
     title: "Rewards",
-    who: "One door, three keys",
+    who: "Owner, Admin, and Member",
     line: "Clean the file, keep it, then design the cycle.",
     steps: [
       {
@@ -63,7 +63,7 @@ export const SEAT_PATHS: SeatPath[] = [
   {
     id: "talent",
     title: "Talent",
-    who: "TA seat",
+    who: "Talent seat",
     line: "Credit the resume, then show the four years.",
     steps: [
       {
@@ -212,7 +212,7 @@ export type BoardCard = {
 export const CLIENT_DOORS = [
   {
     title: "Rewards",
-    line: "One door. Owner, admin, and member all walk it.",
+    line: "One door. Owner, Admin, and Member all walk it.",
     keys: [
       { role: "owner", name: "Owner", note: "Holds the bill and the team." },
       { role: "admin", name: "Admin", note: "The team. Not the bill." },
@@ -237,8 +237,8 @@ export const CLIENT_DOORS = [
 ] as const;
 
 export const INVITE_ROLES = [
-  { role: "member", label: "Rewards · member" },
-  { role: "admin", label: "Rewards · admin" },
+  { role: "member", label: "Rewards · Member" },
+  { role: "admin", label: "Rewards · Admin" },
   { role: "ta", label: "Talent" },
   { role: "hrbp", label: "HRBP" },
   { role: "executive", label: "Executive" },

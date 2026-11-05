@@ -26,6 +26,31 @@ export const MODULE_LABELS: Record<ModuleId, string> = {
   job_match: "Job Match",
 };
 
+/** Names a client reads. The role key stays lowercase. */
+export const ROLE_LABEL: Record<string, string> = {
+  owner: "Owner",
+  admin: "Admin",
+  member: "Member",
+  ta: "Talent",
+  hrbp: "HRBP",
+  executive: "Executive",
+  viewer: "Viewer",
+};
+
+export function roleLabel(role?: string | null): string {
+  if (!role) return "";
+  return ROLE_LABEL[role] ?? role;
+}
+
+/** Home stat. Rewards is one door, so the three keys name the door. */
+export function seatHomeLabel(role?: string | null): string {
+  if (!role) return "—";
+  if (role === "owner" || role === "admin" || role === "member") {
+    return `Rewards · ${roleLabel(role)}`;
+  }
+  return roleLabel(role) || "—";
+}
+
 export const ROLE_HELP: Record<string, string> = {
   owner: "Rewards path, plus billing and team",
   admin: "Rewards path and team. No billing.",

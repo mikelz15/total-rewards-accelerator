@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getAccessToken, saasApi } from "@/lib/saas-api";
 import { Button, Card } from "@/components/ModuleShell";
+import { roleLabel } from "@/lib/permissions";
 
 /**
  * System admin console — Mikéz platform operators only.
@@ -43,7 +44,7 @@ export default function PlatformAdminPage() {
     try {
       const token = await getAccessToken();
       const seat = await saasApi.adminSitAs(token, role);
-      setInfo(`You are sitting as ${seat.role}. Opening that home.`);
+      setInfo(`You are sitting as ${roleLabel(seat.role)}. Opening that home.`);
       window.location.assign("/app");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not switch seats");
@@ -119,8 +120,8 @@ export default function PlatformAdminPage() {
           <li>Visibility into member &amp; dataset counts (support)</li>
         </ul>
         <p className="mt-3 text-sm text-slate-500">
-          Customers invite owner, admin, member, ta, hrbp, executive, and viewer from Team.
-          They cannot flip their own row, and the only owner cannot demote themselves there.
+          Customers invite Owner, Admin, Member, Talent, HRBP, Executive, and Viewer from Team.
+          They cannot flip their own row, and the only Owner cannot demote themselves there.
         </p>
       </Card>
 
@@ -128,13 +129,13 @@ export default function PlatformAdminPage() {
         <h2 className="text-sm font-semibold text-slate-900">Sit as a seat</h2>
         <p className="mt-2 text-sm text-slate-600">
           This changes your seat in this workspace so you can film the home. Admin stays on the
-          bar. Sit back as owner when the shot is done. It does not invite anyone and it does not
+          bar. Sit back as Owner when the shot is done. It does not invite anyone and it does not
           touch another workspace.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           {["owner", "member", "ta", "hrbp", "executive", "viewer"].map((role) => (
             <Button key={role} type="button" onClick={() => void sitAs(role)}>
-              {role}
+              {roleLabel(role)}
             </Button>
           ))}
         </div>

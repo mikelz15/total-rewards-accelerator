@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import type { ModuleId, Permissions } from "@/lib/permissions";
-import { MODULE_LABELS, canUseModule } from "@/lib/permissions";
+import { MODULE_LABELS, canUseModule, roleLabel } from "@/lib/permissions";
 import { Card } from "@/components/ModuleShell";
 
 
@@ -55,7 +55,7 @@ export function ModuleGate({
         {permissions?.suspended
           ? "This organization is suspended. Contact support or your platform admin."
           : planHas
-            ? `Your role (${permissions?.role}) cannot open ${label}. Ask an org owner/admin to change your role.`
+            ? `Your role (${roleLabel(permissions?.role)}) cannot open ${label}. Ask an Owner or an Admin to change it.`
             : `Your plan (${permissions?.plan || "—"}) does not include ${label}. Upgrade in Billing or ask your admin.`}
       </p>
       <div className="mt-4 flex flex-wrap gap-2">

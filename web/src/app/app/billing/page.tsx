@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getAccessToken, saasApi } from "@/lib/saas-api";
 import { Button, Card, Stat } from "@/components/ModuleShell";
+import { roleLabel } from "@/lib/permissions";
 
 export default function BillingPage() {
   const [status, setStatus] = useState<Awaited<ReturnType<typeof saasApi.billingStatus>> | null>(
@@ -77,8 +78,7 @@ export default function BillingPage() {
           Plan &amp; licenses
         </h1>
         <p className="mt-2 max-w-2xl text-slate-600">
-          Org owners manage subscription licenses here. Module access is enforced for every seat
-          based on plan + role.
+          Owner manages the subscription here. Module access follows the plan and the seat.
         </p>
       </div>
 
@@ -117,7 +117,7 @@ export default function BillingPage() {
           ))}
         </div>
         <p className="mt-3 text-xs text-slate-500">
-          Role: <strong>{status?.permissions?.role}</strong> · Plan modules:{" "}
+          Role: <strong>{roleLabel(status?.permissions?.role)}</strong> · Plan modules:{" "}
           {(status?.permissions?.plan_modules || []).join(", ") || "—"}
         </p>
       </Card>
@@ -182,7 +182,7 @@ export default function BillingPage() {
                       {cta}
                     </Button>
                   ) : (
-                    <p className="text-xs text-slate-500">Only the org owner can checkout.</p>
+                    <p className="text-xs text-slate-500">Only the Owner can check out.</p>
                   )}
                 </div>
               </div>

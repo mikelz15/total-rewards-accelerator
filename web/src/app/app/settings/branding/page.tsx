@@ -238,7 +238,7 @@ export default function BrandingSettingsPage() {
         </Card>
       ) : (
         permissions && (
-          <p className="text-sm text-slate-500">Only an owner or admin can change the organization image.</p>
+          <p className="text-sm text-slate-500">Only an Owner or an Admin can change the organization image.</p>
         )
       )}
     </div>

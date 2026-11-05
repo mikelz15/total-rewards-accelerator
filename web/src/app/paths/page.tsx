@@ -57,7 +57,7 @@ export default function PathsPage() {
       <section id="seats" className="mt-16 scroll-mt-24">
         <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Who holds the keys</h2>
         <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600">
-          Four doors. Rewards is one of them. Owner, admin, and member share that door.
+          Four doors. Rewards is one of them. Owner, Admin, and Member share that door.
           The keys are the only difference, and an invite does not buy a second plan.
         </p>
         <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
@@ -86,7 +86,7 @@ export default function PathsPage() {
           ))}
         </div>
         <p className="mt-4 text-base text-slate-600">
-          A viewer reads whatever the plan includes and cannot upload or confirm. That is not another door.
+          Viewer reads whatever the plan includes and cannot upload or confirm. That is not another door.
         </p>
       </section>
 

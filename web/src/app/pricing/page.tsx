@@ -147,8 +147,8 @@ export default function PricingPage() {
           ))}
         </div>
         <p className="mt-6 text-base leading-relaxed text-slate-600">
-          A paid workspace holds 25,000 rows. The public demo holds 10. Owner holds billing and the team. Admin holds the team. A member does the rewards work.
-          A viewer reads the plan and cannot upload or confirm. An executive reads offers, the
+          A paid workspace holds 25,000 rows. The public demo holds 10. Owner holds billing and the team. Admin holds the team. Member does the rewards work.
+          Viewer reads the plan and cannot upload or confirm. Executive reads offers, the
           cycle, philosophy, and the rules in force.
         </p>
       </section>
