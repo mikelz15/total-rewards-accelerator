@@ -37,6 +37,7 @@ from app.routers.saas import branding as saas_branding
 from app.routers.saas import candidates as saas_candidates
 from app.routers.saas import cleaner as saas_cleaner
 from app.routers.saas import datasets as saas_datasets
+from app.routers.saas import formula_evaluator as saas_formula_evaluator
 from app.routers.saas import governance as saas_governance
 from app.routers.saas import me as saas_me
 from app.routers.saas import team as saas_team
@@ -117,6 +118,7 @@ app.include_router(resume_credit_router.public_router)
 app.include_router(resume_credit_router.saas_router)
 app.include_router(job_match_router.public_router)
 app.include_router(job_match_router.saas_router)
+app.include_router(saas_formula_evaluator.router)
 
 app.add_middleware(
     CORSMiddleware,
