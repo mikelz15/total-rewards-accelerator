@@ -80,12 +80,12 @@ export default function WorkbookPage() {
   return (
     <div className="space-y-8">
       <div className="max-w-2xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">Workbook</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">Playbook</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
           {SEAT_LABEL[seat] || "Chair"}
         </h1>
         <p className="mt-2 text-slate-600">
-          The file sits next to the steps. Notes stay with the chair who owns the step.
+          The file sits next to the steps. A note saved here is the chair’s own, and the other chairs can read it.
         </p>
       </div>
 
@@ -131,7 +131,10 @@ export default function WorkbookPage() {
                     setDrafts((current) => ({ ...current, [item.id]: event.target.value }))
                   }
                 />
-                <button type="submit" className="text-sm font-medium text-teal-800">
+                <button
+                  type="submit"
+                  className="rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800"
+                >
                   Save note
                 </button>
               </form>
