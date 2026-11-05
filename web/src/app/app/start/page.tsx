@@ -25,7 +25,7 @@ const NORTHLINE = {
 };
 
 export default function StartPage() {
-  const { me, loading } = useWorkspace();
+  const { me, error } = useWorkspace();
   const path = pathForRole(me?.membership.role);
   const northline = me?.org.slug === NORTHLINE.slug;
 
@@ -58,7 +58,7 @@ export default function StartPage() {
             Plan {me.org.plan}. {me.org.max_upload_rows.toLocaleString("en-US")} rows.
           </p>
         )}
-        {loading && <p className="mt-3 text-sm text-slate-500">Loading the workspace.</p>}
+        {!me && !error && <p className="mt-3 text-sm text-slate-500">Loading the workspace.</p>}
       </Card>
 
       <ol className="space-y-3">
