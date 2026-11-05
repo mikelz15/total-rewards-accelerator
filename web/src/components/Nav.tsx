@@ -10,6 +10,7 @@ import { BrandLogo } from "@/components/BrandLogo";
 const links = [
   { href: "/cleaner", label: "Cleaner" },
   { href: "/auditor", label: "Equity" },
+  { href: "/formula-evaluator", label: "Evaluator" },
   { href: "/cycle", label: "Cycle" },
   { href: "/philosophy", label: "Philosophy" },
   { href: "/candidates", label: "Tracker" },
