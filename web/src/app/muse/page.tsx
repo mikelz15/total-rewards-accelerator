@@ -8,16 +8,13 @@ export const metadata = {
 
 export default function MuseConnectorPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
-      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
-        Connector
-      </p>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-900">
+    <div className="mx-auto max-w-3xl px-5 py-20">
+      <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
         Total Rewards Accelerator for Muse
       </h1>
-      <p className="mt-2 text-sm text-slate-500">Propose only. Humans post pay.</p>
+      <p className="mt-6 text-xl text-slate-600">Propose only. Humans post pay.</p>
 
-      <div className="mt-8 space-y-6 text-sm leading-relaxed text-slate-700">
+      <div className="mt-12 space-y-10 text-lg leading-relaxed text-slate-700">
         <section>
           <h2 className="text-lg font-semibold text-slate-900">What Muse can do</h2>
           <p className="mt-2">

@@ -17,40 +17,39 @@ const SAMPLE_MAP = [
 
 function SampleShape() {
   return (
-    <div className="mt-4 rounded-xl border border-dashed border-teal-300/80 bg-teal-50/50 p-4">
-      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-800">Sample shape</p>
-      <p className="mt-1 text-sm text-slate-600">
-        Run the sample and this pane fills with that file. These labels are the shape, not a score.
+    <div className="mt-6 rounded-3xl border border-dashed border-teal-300/80 bg-white p-6">
+      <p className="text-lg leading-relaxed text-slate-600">
+        Run the sample and this pane fills with that file. These are the shape, not a score.
       </p>
-      <div className="mt-4 grid grid-cols-2 gap-3">
-        <div className="rounded-xl bg-white/80 px-3 py-3">
-          <div className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Rows in → out</div>
-          <div className="mt-1 text-xl font-semibold text-slate-300">10 → —</div>
+      <div className="mt-8 grid grid-cols-2 gap-8">
+        <div>
+          <div className="text-3xl font-semibold tracking-tight text-slate-300">10 → —</div>
+          <div className="mt-2 text-base text-slate-500">Rows in, then out</div>
         </div>
-        <div className="rounded-xl bg-white/80 px-3 py-3">
-          <div className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Quality score</div>
-          <div className="mt-1 text-xl font-semibold text-slate-300">—</div>
+        <div>
+          <div className="text-3xl font-semibold tracking-tight text-slate-300">—</div>
+          <div className="mt-2 text-base text-slate-500">Quality score</div>
         </div>
-        <div className="rounded-xl bg-white/80 px-3 py-3">
-          <div className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Source guess</div>
-          <div className="mt-1 text-xl font-semibold text-slate-300">HRIS</div>
+        <div>
+          <div className="text-3xl font-semibold tracking-tight text-slate-300">HRIS</div>
+          <div className="mt-2 text-base text-slate-500">Source guess</div>
         </div>
-        <div className="rounded-xl bg-white/80 px-3 py-3">
-          <div className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Issues</div>
-          <div className="mt-1 text-xl font-semibold text-slate-300">—</div>
+        <div>
+          <div className="text-3xl font-semibold tracking-tight text-slate-300">—</div>
+          <div className="mt-2 text-base text-slate-500">Issues</div>
         </div>
       </div>
-      <p className="mt-4 text-[11px] font-medium uppercase tracking-wide text-slate-400">Column mapping</p>
-      <ul className="mt-2 space-y-1.5">
+      <p className="mt-8 text-base text-slate-500">Column mapping</p>
+      <ul className="mt-4 space-y-3">
         {SAMPLE_MAP.map(([from, to]) => (
-          <li key={from} className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
-            <span className="rounded bg-white px-1.5 py-0.5 font-mono text-xs text-slate-400">{from}</span>
+          <li key={from} className="flex flex-wrap items-baseline gap-3 text-base text-slate-600">
+            <span>{from}</span>
             <span className="text-teal-700/50">→</span>
-            <span className="font-medium text-teal-800/70">{to}</span>
+            <span className="font-medium text-teal-900">{to}</span>
           </li>
         ))}
       </ul>
-      <p className="mt-4 text-xs text-slate-500">
+      <p className="mt-6 text-base leading-relaxed text-slate-600">
         A cleaned row keeps the name, the base, the midpoint, the years, and the education.
       </p>
     </div>
@@ -230,13 +229,11 @@ export default function CleanerPage() {
               )}
 
               <div>
-                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                  Column mapping
-                </p>
-                <ul className="mt-2 max-h-36 space-y-1 overflow-auto text-sm">
+                <p className="text-base text-slate-600">Column mapping</p>
+                <ul className="mt-3 max-h-48 space-y-2 overflow-auto text-base">
                   {Object.entries(result.stats.columns_mapped).map(([from, to]) => (
-                    <li key={from} className="flex items-center gap-2 text-slate-700">
-                      <span className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs">{from}</span>
+                    <li key={from} className="flex items-center gap-3 text-slate-700">
+                      <span className="rounded bg-slate-100 px-2 py-0.5 font-mono text-sm">{from}</span>
                       <span className="text-slate-400">→</span>
                       <span className="font-medium text-teal-800">{to}</span>
                     </li>
@@ -246,8 +243,8 @@ export default function CleanerPage() {
 
               {result.issues.length > 0 && (
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Issues</p>
-                  <ul className="mt-2 max-h-32 space-y-1 overflow-auto text-sm">
+                  <p className="text-base text-slate-600">Issues</p>
+                  <ul className="mt-3 max-h-40 space-y-2 overflow-auto text-base">
                     {result.issues.map((issue, i) => (
                       <li
                         key={i}

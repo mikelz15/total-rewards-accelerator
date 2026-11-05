@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #f4efe6;
-  --foreground: #0f172a;
+  --background: #e7eef0;
+  --foreground: #12181c;
   /* Brand from TRA logo */
   --brand-teal: #0f6b6d;
   --brand-teal-deep: #0a4f52;
@@ -13,15 +13,21 @@
   /* Public-page accent. The star in the mark. The workspace stays teal. */
   --brand-ember: #c45c26;
   --brand-ember-deep: #a34b1e;
-  /* Warm paper for the public site. Cool desk for the signed-in workspace. */
-  --paper: #f4efe6;
-  --desk: #e6eef0;
+  /* Luminous field for the public site. Cool desk for the signed-in workspace. */
+  --paper: #e7eef0;
+  --desk: #e4ecee;
+}
+
+html {
+  font-size: 17px;
 }
 
 body {
   color: var(--foreground);
   background-color: var(--paper);
-  background-image: linear-gradient(180deg, #f8f4ec 0%, var(--paper) 16rem, #efe6d8 100%);
+  background-image:
+    radial-gradient(900px 420px at 50% -120px, #ffffff 0%, transparent 72%),
+    linear-gradient(180deg, #f4f8f8 0%, var(--paper) 22rem, #e1eaec 100%);
   min-height: 100vh;
 }
 

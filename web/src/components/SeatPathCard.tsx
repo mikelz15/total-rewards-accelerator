@@ -31,18 +31,18 @@ export function SeatPathCard({ path }: { path: SeatPath }) {
 
   return (
     <div
-      className={`group rounded-2xl border bg-white p-5 transition-colors motion-reduce:transition-none ${
-        open ? "border-slate-300" : "border-slate-200"
+      className={`group rounded-3xl border bg-white p-7 transition-colors motion-reduce:transition-none ${
+        open ? "border-slate-300" : "border-slate-200/80"
       } [@media(hover:hover)]:hover:border-slate-300 focus-within:border-slate-300`}
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-4">
         <Link
           href={`/paths#${path.id}`}
           className="-m-1 block min-w-0 flex-1 rounded-lg p-1 outline-none focus-visible:ring-2 focus-visible:ring-ember focus-visible:ring-offset-2"
         >
-          <p className="text-xs font-medium uppercase tracking-wide text-slate-400">{path.who}</p>
-          <h3 className="mt-1 text-base font-medium text-slate-900">{path.title}</h3>
-          <p className="mt-2 text-sm leading-relaxed text-slate-600">{path.line}</p>
+          <h3 className="text-2xl font-medium tracking-tight text-slate-900">{path.title}</h3>
+          <p className="mt-3 text-base leading-relaxed text-slate-600">{path.line}</p>
+          <p className="mt-3 text-base text-slate-500">{path.who}</p>
         </Link>
         <button
           type="button"
@@ -74,12 +74,12 @@ export function SeatPathCard({ path }: { path: SeatPath }) {
         className={`grid transition-all duration-200 ease-out motion-reduce:transition-none ${reveal}`}
       >
         <div className="overflow-hidden">
-          <ol className="mt-4 space-y-2 border-t border-slate-100 pt-4">
+          <ol className="mt-6 space-y-5 border-t border-slate-100 pt-6">
             {path.steps.map((step, index) => {
               const href = demoHref(step.href);
               return (
-                <li key={`${step.label}-${index}`} className="flex gap-3 text-sm">
-                  <span className="w-5 shrink-0 tabular-nums text-slate-400">
+                <li key={`${step.label}-${index}`} className="flex gap-4 text-base">
+                  <span className="w-6 shrink-0 tabular-nums text-slate-400">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <span className="min-w-0">
@@ -93,12 +93,10 @@ export function SeatPathCard({ path }: { path: SeatPath }) {
                     ) : (
                       <span className="font-medium text-slate-900">
                         {step.label}
-                        <span className="ml-2 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-normal text-slate-500">
-                          Signed in
-                        </span>
+                        <span className="ml-3 text-base font-normal text-slate-500">Signed in</span>
                       </span>
                     )}
-                    <span className="block text-slate-500">{shortNote(step.note)}</span>
+                    <span className="mt-1 block leading-relaxed text-slate-600">{shortNote(step.note)}</span>
                   </span>
                 </li>
               );

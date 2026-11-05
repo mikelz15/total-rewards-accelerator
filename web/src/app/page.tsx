@@ -114,82 +114,80 @@ const after = [
 
 export default function HomePage() {
   return (
-    <div className="mx-auto max-w-5xl overflow-x-hidden px-4 py-14 sm:py-16">
+    <div className="mx-auto max-w-5xl overflow-x-hidden px-5 py-20 sm:py-28">
       <section className="text-center">
-        <h1 className="mx-auto max-w-3xl text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+        <h1 className="mx-auto max-w-3xl text-5xl font-semibold tracking-tight text-slate-900 sm:text-6xl">
           Stop crunching rows.
-          <span className="mt-1 block text-ember">Start designing strategy.</span>
+          <span className="mt-3 block text-ember">Start designing strategy.</span>
         </h1>
-        <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-slate-600">
+        <p className="mx-auto mt-8 max-w-xl text-xl leading-relaxed text-slate-600">
           The sample file, from a messy extract to a cycle, an offer, and a credited resume.
         </p>
         <HeroFilm />
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link
             href="/signup"
-            className="rounded-lg bg-ember px-5 py-2.5 text-sm font-medium text-white hover:bg-ember-deep"
+            className="rounded-full bg-ember px-6 py-3 text-base font-medium text-white hover:bg-ember-deep"
           >
             Start free trial
           </Link>
           <Link
             href="/cleaner"
-            className="rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50"
+            className="rounded-full border border-slate-300 bg-white px-6 py-3 text-base font-medium text-slate-800 hover:bg-slate-50"
           >
             Try the demo
           </Link>
         </div>
-        <p className="mt-4 text-sm text-slate-500">
+        <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-slate-600">
           First 30 days free. Card required. Cancel anytime. The films use the sample file.
         </p>
       </section>
 
-      <section className="mt-16">
-        <h2 className="text-center text-sm font-medium text-slate-900">The same two people</h2>
-        <p className="mx-auto mt-2 max-w-xl text-center text-sm text-slate-500">
+      <section className="mt-28">
+        <h2 className="text-center text-3xl font-semibold tracking-tight text-slate-900">
+          The same two people
+        </h2>
+        <p className="mx-auto mt-4 max-w-xl text-center text-lg leading-relaxed text-slate-600">
           The extract on the left is the sample. The columns on the right are what Cleaner keeps.
         </p>
-        <div className="mt-6 grid gap-4 lg:grid-cols-2">
-          <div className="min-w-0 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-            <p className="border-b border-slate-200 bg-slate-50 px-4 py-2 text-xs font-medium uppercase tracking-wide text-slate-500">
-              Extract
-            </p>
-            <table className="w-full text-left text-sm">
+        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+          <div className="min-w-0 overflow-x-auto rounded-3xl border border-slate-200/80 bg-white">
+            <p className="px-6 pt-6 text-lg font-medium text-slate-900">Extract</p>
+            <table className="mt-2 w-full text-left text-base">
               <thead>
-                <tr className="text-xs text-slate-400">
-                  <th className="px-4 py-2 font-medium">Column</th>
-                  <th className="px-4 py-2 font-medium">Jane Doe</th>
-                  <th className="px-4 py-2 font-medium">Marcus Chen</th>
+                <tr className="text-slate-500">
+                  <th className="px-6 py-3 font-medium">Column</th>
+                  <th className="px-6 py-3 font-medium">Jane Doe</th>
+                  <th className="px-6 py-3 font-medium">Marcus Chen</th>
                 </tr>
               </thead>
               <tbody>
                 {before.map((row) => (
                   <tr key={row[0]} className="border-t border-slate-100">
-                    <td className="px-4 py-2 font-mono text-xs text-slate-500">{row[0]}</td>
-                    <td className="px-4 py-2 text-slate-800">{row[1]}</td>
-                    <td className="px-4 py-2 text-slate-800">{row[2]}</td>
+                    <td className="px-6 py-3.5 text-slate-500">{row[0]}</td>
+                    <td className="px-6 py-3.5 text-slate-800">{row[1]}</td>
+                    <td className="px-6 py-3.5 text-slate-800">{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div className="min-w-0 overflow-x-auto rounded-2xl border border-teal-200 bg-white">
-            <p className="border-b border-teal-100 bg-teal-50 px-4 py-2 text-xs font-medium uppercase tracking-wide text-teal-800">
-              Cleaned
-            </p>
-            <table className="w-full text-left text-sm">
+          <div className="min-w-0 overflow-x-auto rounded-3xl border border-teal-200/80 bg-white">
+            <p className="px-6 pt-6 text-lg font-medium text-teal-900">Cleaned</p>
+            <table className="mt-2 w-full text-left text-base">
               <thead>
-                <tr className="text-xs text-teal-700/70">
-                  <th className="px-4 py-2 font-medium">Column</th>
-                  <th className="px-4 py-2 font-medium">Jane Doe</th>
-                  <th className="px-4 py-2 font-medium">Marcus Chen</th>
+                <tr className="text-teal-800/70">
+                  <th className="px-6 py-3 font-medium">Column</th>
+                  <th className="px-6 py-3 font-medium">Jane Doe</th>
+                  <th className="px-6 py-3 font-medium">Marcus Chen</th>
                 </tr>
               </thead>
               <tbody>
                 {after.map((row) => (
                   <tr key={row[0]} className="border-t border-teal-50">
-                    <td className="px-4 py-2 font-mono text-xs text-teal-800">{row[0]}</td>
-                    <td className="px-4 py-2 text-slate-900">{row[1]}</td>
-                    <td className="px-4 py-2 text-slate-900">{row[2]}</td>
+                    <td className="px-6 py-3.5 text-teal-900">{row[0]}</td>
+                    <td className="px-6 py-3.5 text-slate-900">{row[1]}</td>
+                    <td className="px-6 py-3.5 text-slate-900">{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -198,57 +196,56 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ol className="mx-auto mt-14 flex max-w-3xl flex-wrap justify-center gap-x-6 gap-y-2">
+      <ol className="mx-auto mt-20 grid max-w-4xl grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-5">
         {workflow.map((step) => (
-          <li key={step.n} className="flex items-baseline gap-2 text-sm">
-            <span className="tabular-nums text-slate-400">{step.n}</span>
-            <span className="font-medium text-slate-900">{step.label}</span>
-            <span className="text-slate-500">{step.detail}</span>
+          <li key={step.n}>
+            <p className="text-2xl font-semibold tracking-tight text-slate-900">{step.label}</p>
+            <p className="mt-2 text-base text-slate-600">{step.detail}</p>
           </li>
         ))}
       </ol>
 
-      <section className="mt-20 grid gap-8 sm:grid-cols-3">
+      <section className="mt-28 grid gap-12 sm:grid-cols-3">
         {edges.map((edge) => (
           <div key={edge.title}>
-            <h2 className="text-sm font-medium text-slate-900">{edge.title}</h2>
-            <p className="mt-2 text-sm leading-relaxed text-slate-600">{edge.body}</p>
+            <h2 className="text-xl font-medium tracking-tight text-slate-900">{edge.title}</h2>
+            <p className="mt-3 text-base leading-relaxed text-slate-600">{edge.body}</p>
           </div>
         ))}
       </section>
 
-      <section className="mt-20">
-        <div className="flex flex-wrap items-end justify-between gap-3">
+      <section className="mt-28">
+        <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <h2 className="text-sm font-medium text-slate-900">Four ways in</h2>
-            <p className="mt-2 max-w-xl text-sm text-slate-500">
+            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Four ways in</h2>
+            <p className="mt-4 max-w-xl text-lg text-slate-600">
               The modules stay the same. The seat decides the door.
             </p>
           </div>
-          <Link href="/paths" className="text-sm font-medium text-slate-900 hover:underline">
+          <Link href="/paths" className="text-base font-medium text-slate-900 hover:underline">
             See the paths
           </Link>
         </div>
-        <div className="mt-4 grid items-start gap-4 sm:grid-cols-2">
+        <div className="mt-10 grid items-start gap-6 sm:grid-cols-2">
           {SEAT_PATHS.map((path) => (
             <SeatPathCard key={path.id} path={path} />
           ))}
         </div>
       </section>
 
-      <section className="mt-20">
-        <h2 className="text-sm font-medium text-slate-900">Tools</h2>
-        <p className="mt-2 max-w-2xl text-sm text-slate-500">
+      <section className="mt-28">
+        <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Tools</h2>
+        <p className="mt-4 max-w-2xl text-lg text-slate-600">
           Cycle Lock and Philosophy Check ship with Equity. Four invoices.
         </p>
-        <div className="mt-4 divide-y divide-slate-200 border-y border-slate-200">
+        <div className="mt-8">
           {modules.map((module) => (
             <Fold key={module.href} kicker={module.step} title={module.title} href={module.href}>
               {module.blurb}
             </Fold>
           ))}
         </div>
-        <div className="mt-8 divide-y divide-slate-200 border-y border-slate-200">
+        <div className="mt-14">
           {included.map((item) => (
             <Fold key={item.title} kicker="With" title={item.title} href={item.href}>
               {item.blurb}
@@ -257,21 +254,20 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mt-20 max-w-2xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">About</p>
-        <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-900">
+      <section className="mt-28 max-w-2xl">
+        <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
           The company, and the person who built it
         </h2>
-        <p className="mt-3 text-sm leading-relaxed text-slate-600">
+        <p className="mt-5 text-lg leading-relaxed text-slate-600">
           Mikez L.L. Enterprise is a compensation practice. Total Rewards Accelerator is the toolkit
           Michael Lopez built from that work.
         </p>
-        <Link href="/about" className="mt-3 inline-block text-sm font-medium text-slate-900 hover:underline">
+        <Link href="/about" className="mt-6 inline-block text-base font-medium text-slate-900 hover:underline">
           Read about TRA
         </Link>
       </section>
 
-      <p className="mt-12 max-w-2xl text-sm leading-relaxed text-slate-500">
+      <p className="mt-16 max-w-2xl text-base leading-relaxed text-slate-600">
         The public demo prefers the sample file. A custom upload is capped at 10 rows, scanned for
         sensitive headers, and limited to five a week from one address. Tracker and Closer stay on
         synthetic data. Do not upload a real employee or candidate file.

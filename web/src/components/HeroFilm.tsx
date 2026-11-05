@@ -102,14 +102,14 @@ export function HeroFilm() {
                 <path d="M8 5v14l11-7z" />
               </svg>
             </span>
-            <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-black/75 to-transparent px-4 py-3 text-left text-xs text-white/95">
+            <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-black/80 to-transparent px-6 py-5 text-left text-base text-white">
               <span>{film.caption}</span>
-              <span className="rounded bg-black/70 px-1.5 py-0.5 tabular-nums">{film.length}</span>
+              <span className="tabular-nums text-white/80">{film.length}</span>
             </span>
           </button>
         )}
       </div>
-      <div className="mt-3 flex min-w-0 flex-wrap justify-center gap-2">
+      <div className="mt-5 flex min-w-0 flex-wrap justify-center gap-3">
         {FILMS.map((item, index) => (
           <button
             key={item.id}
@@ -117,13 +117,13 @@ export function HeroFilm() {
             onClick={() => choose(index)}
             className={
               index === active
-                ? "rounded-full bg-slate-900 px-3 py-1.5 text-xs font-medium text-white"
-                : "rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:border-slate-300"
+                ? "rounded-full bg-slate-900 px-4 py-2 text-base font-medium text-white"
+                : "rounded-full border border-slate-200 bg-white px-4 py-2 text-base text-slate-700 hover:border-slate-300"
             }
             aria-pressed={index === active}
           >
             {item.label}
-            <span className={`ml-1.5 tabular-nums ${index === active ? "text-white/70" : "text-slate-400"}`}>
+            <span className={`ml-2 tabular-nums ${index === active ? "text-white/70" : "text-slate-400"}`}>
               {item.length}
             </span>
           </button>

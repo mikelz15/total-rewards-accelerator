@@ -43,13 +43,10 @@ export default function StorePage() {
           className="h-64 w-full object-cover opacity-80 sm:h-80"
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-t from-slate-900/70 to-transparent px-6 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-300">
-            Store
-          </p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+          <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
             Standalone tools and templates
           </h1>
-          <p className="mt-3 max-w-xl text-sm text-slate-200">
+          <p className="mt-4 max-w-xl text-lg text-white/90">
             Instant download. No subscription required.
           </p>
         </div>
@@ -68,11 +65,11 @@ export default function StorePage() {
               key={p.name}
               className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
             >
-              <h3 className="text-base font-semibold text-slate-900">{p.name}</h3>
-              <div className="mt-3 text-2xl font-semibold tabular-nums text-slate-900">
+              <h3 className="text-xl font-medium tracking-tight text-slate-900">{p.name}</h3>
+              <div className="mt-4 text-3xl font-semibold tabular-nums tracking-tight text-slate-900">
                 {p.price}
               </div>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">{p.blurb}</p>
+              <p className="mt-4 flex-1 text-base leading-relaxed text-slate-600">{p.blurb}</p>
               <a
                 href={p.gumroad}
                 target="_blank"

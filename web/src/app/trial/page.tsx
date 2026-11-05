@@ -21,23 +21,15 @@ const included = [
 
 export default function TrialPage() {
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:py-16">
+    <div className="mx-auto max-w-5xl px-5 py-20 sm:py-24">
       <div className="max-w-2xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
-          Free trial
-        </p>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
+        <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
           Try the full suite free for 30 days
         </h1>
-        <div className="mt-6 rounded-2xl border border-teal-200 bg-teal-50 px-4 py-3">
-          <p className="text-sm font-semibold text-teal-950">
-            First 30 days free — every module included
-          </p>
-          <p className="mt-1 text-sm text-teal-900/80">
-            Card required at checkout. You won&apos;t be charged until day 31. Cancel
-            anytime from Billing.
-          </p>
-        </div>
+        <p className="mt-6 text-xl leading-relaxed text-slate-600">
+          First 30 days free. Every module included. Card required at checkout. You won&apos;t be
+          charged until day 31. Cancel anytime from Billing.
+        </p>
         <p className="mt-4 text-lg text-slate-600">
           Run a real cycle on your own data: clean a file, place people, fund the
           merit pool, and close an offer. No demo call, no workbook — the sandbox
