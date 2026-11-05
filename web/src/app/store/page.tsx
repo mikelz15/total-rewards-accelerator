@@ -36,15 +36,28 @@ const products = [
 export default function StorePage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
+      <div className="relative mb-10 overflow-hidden rounded-2xl bg-slate-900">
+        <img
+          src="/brand/store-hero.jpg"
+          alt="TRA Store"
+          className="h-64 w-full object-cover opacity-80 sm:h-80"
+        />
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-t from-slate-900/70 to-transparent px-6 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-300">
+            Store
+          </p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            Standalone tools and templates
+          </h1>
+          <p className="mt-3 max-w-xl text-sm text-slate-200">
+            Instant download. No subscription required.
+          </p>
+        </div>
+      </div>
+
       <div className="max-w-2xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
-          Store
-        </p>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-900">
-          Standalone tools and templates
-        </h1>
-        <p className="mt-4 text-lg text-slate-600">
-          Instant download. No subscription required. These are offline or lightweight versions of the modules. Full hosted access with saved datasets and multi-seat workspaces is on the Pricing page.
+        <p className="text-lg text-slate-600">
+          These are offline or lightweight versions of the modules. Full hosted access with saved datasets and multi-seat workspaces is on the Pricing page.
         </p>
       </div>
 
@@ -73,18 +86,32 @@ export default function StorePage() {
         </div>
       </section>
 
-      <section className="mt-14 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+      <section className="mt-14 rounded-2xl border border-teal-200 bg-teal-50 p-6">
         <h2 className="text-lg font-semibold text-slate-900">Formula Evaluator — coming soon</h2>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-slate-700">
           Upload a merit or bonus file and get ranked flags for data, logic, and equity issues. First-pass screening, not a legal determination. Hosted version of the same checks behind the Pay-Equity Auditor template.
         </p>
+        <div className="mt-4 flex flex-wrap gap-4 text-sm">
+          <div>
+            <span className="font-semibold text-slate-900">$59 / month</span>
+            <span className="text-slate-600"> add-on to Equity + Merit</span>
+          </div>
+          <div>
+            <span className="font-semibold text-slate-900">$69</span>
+            <span className="text-slate-600"> one-time run</span>
+          </div>
+          <div>
+            <span className="font-semibold text-slate-900">Free</span>
+            <span className="text-slate-600"> limited (50 rows / 3 checks)</span>
+          </div>
+        </div>
         <p className="mt-3 text-sm text-slate-500">
-          Pricing and waitlist details will appear here once the MVP is live.
+          MVP checks locked. Build in progress for both the Gumroad one-time and the TRA SaaS add-on.
         </p>
       </section>
 
       <p className="mt-10 text-xs text-slate-500">
-        Prices are one-time. Files are delivered immediately via Gumroad. These tools are for review and planning. They are not legal or compliance determinations. Looking for hosted modules? See <Link href="/pricing" className="underline">Pricing</Link>.
+        Prices are one-time for templates. Files are delivered immediately via Gumroad. These tools are for review and planning. They are not legal or compliance determinations. Looking for hosted modules? See <Link href="/pricing" className="underline">Pricing</Link>. Prefer the full auditor? See <Link href="/auditor" className="underline">Equity + Merit</Link>.
       </p>
     </div>
   );
