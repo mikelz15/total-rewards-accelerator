@@ -407,6 +407,26 @@ export const saasApi = {
       method: "PATCH",
       body: JSON.stringify(body),
     }),
+
+  workbook: (token: string) =>
+    saasRequest<{ items: WorkbookItem[] }>("/api/v1/workbook", token),
+
+  workbookNote: (token: string, id: string, body: { note: string; status?: string }) =>
+    saasRequest<WorkbookItem>(`/api/v1/workbook/${id}`, token, {
+      method: "PATCH",
+      body: JSON.stringify(body),
+    }),
+};
+
+export type WorkbookItem = {
+  id: string;
+  seat: string;
+  step_key: string;
+  title: string;
+  note: string;
+  assignee_role: string | null;
+  status: string;
+  updated_at: string | null;
 };
 
 export async function getAccessToken(): Promise<string> {
