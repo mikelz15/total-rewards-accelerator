@@ -70,7 +70,10 @@ export default function StartPage() {
                 <p className="text-xs font-semibold text-teal-800">Step {index + 1}</p>
                 <h3 className="mt-1 font-semibold text-slate-900">{step.label}</h3>
                 <p className="mt-2 text-sm text-slate-600">{DO[href] || step.note}</p>
-                <Link href={href} className="mt-3 inline-block text-sm font-medium text-teal-800">
+                <Link
+                  href={href}
+                  className="mt-3 inline-block rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800"
+                >
                   Do this
                 </Link>
               </Card>

@@ -42,6 +42,20 @@ export function SeatDashboard({
           Every seat sees this board. Your door is marked. The other modules stay visible so the
           map is the same for the whole workspace.
         </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Link
+            href="/app/workbook"
+            className="rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800"
+          >
+            Open the playbook
+          </Link>
+          <Link
+            href="/app/start"
+            className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50"
+          >
+            Start the steps
+          </Link>
+        </div>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

@@ -15,7 +15,7 @@ const moduleLinks: {
 }[] = [
   { href: "/app", label: "Dashboard" },
   { href: "/app/start", label: "Start" },
-  { href: "/app/workbook", label: "Workbook" },
+  { href: "/app/workbook", label: "Playbook" },
   { href: "/app/cleaner", label: "Cleaner", module: "cleaner" },
   { href: "/app/job-match", label: "Job Match", module: "job_match" },
   { href: "/app/equity", label: "Equity", module: "equity" },
