@@ -4,10 +4,27 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button, Card, ModuleShell } from "@/components/ModuleShell";
 
+type FormulaIssue = {
+  code: string;
+  severity: string;
+  title: string;
+  explanation: string;
+  suggested_action: string;
+  affected_count: number;
+};
+
+type FormulaEvaluatorResult = {
+  logic_health_score: number;
+  row_count: number;
+  issue_count: number;
+  issues?: FormulaIssue[];
+  disclaimer?: string;
+};
+
 export default function FormulaEvaluatorPage() {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<FormulaEvaluatorResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   async function handleRun() {
@@ -75,7 +92,7 @@ export default function FormulaEvaluatorPage() {
           </div>
 
           <div className="space-y-3">
-            {result.issues?.map((issue: any) => (
+            {result.issues?.map((issue: FormulaIssue) => (
               <Card key={issue.code}>
                 <div className="flex items-start justify-between gap-3">
                   <div>
