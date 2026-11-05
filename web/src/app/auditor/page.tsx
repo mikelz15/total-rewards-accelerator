@@ -154,6 +154,22 @@ export default function AuditorPage() {
       title="Pay Equity Auditor + Remediation"
       description="Market mid-compa plus wage-calc placement (years of experience + education → expected rate). Flight risk is a 0–100 score from under-market pay, a strong performer under the range, and tenure. The merit pool can fund to mid, expected placement, or the max of both."
     >
+      <Card className="mb-6 border-teal-200 bg-teal-50">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-sm font-semibold text-slate-900">Prefer a one-time template?</h2>
+            <p className="mt-1 text-sm text-slate-600">
+              The Pay-Equity Auditor spreadsheet and other offline tools are in the Store. The Formula Evaluator is a $59/month add-on or $69 one-time run.
+            </p>
+          </div>
+          <Link
+            href="/store"
+            className="inline-flex items-center rounded-xl border border-teal-300 bg-white px-4 py-2.5 text-sm font-medium text-teal-900 hover:bg-teal-100"
+          >
+            See Store
+          </Link>
+        </div>
+      </Card>
       <Card className="mb-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
