@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Fold } from "@/components/Fold";
-import { SEAT_PATHS } from "@/lib/paths";
+import { CLIENT_DOORS, SEAT_PATHS } from "@/lib/paths";
 
 export const metadata: Metadata = {
   title: "Paths · Total Rewards Accelerator",
@@ -57,57 +57,37 @@ export default function PathsPage() {
       <section id="seats" className="mt-16 scroll-mt-24">
         <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Who holds the keys</h2>
         <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600">
-          Owner, admin, and member share the rewards path. The difference is the keys, not the modules.
-          A viewer reads whatever the plan includes and cannot upload or confirm.
+          Four doors. Rewards is one of them. Owner, admin, and member share that door.
+          The keys are the only difference, and an invite does not buy a second plan.
         </p>
-        <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-          <table className="min-w-full text-left text-base">
-            <thead className="text-slate-500">
-              <tr>
-                <th className="px-6 py-4 font-medium">Seat</th>
-                <th className="px-6 py-4 font-medium">Opens</th>
-                <th className="px-6 py-4 font-medium">Keys</th>
-              </tr>
-            </thead>
-            <tbody className="text-slate-700">
-              <tr className="border-t border-slate-100">
-                <td className="px-6 py-4 font-medium text-slate-900">Owner</td>
-                <td className="px-6 py-4">Rewards path, inside the plan</td>
-                <td className="px-6 py-4">Billing and team</td>
-              </tr>
-              <tr className="border-t border-slate-100">
-                <td className="px-6 py-4 font-medium text-slate-900">Admin</td>
-                <td className="px-6 py-4">Rewards path, inside the plan</td>
-                <td className="px-6 py-4">Team. Not billing.</td>
-              </tr>
-              <tr className="border-t border-slate-100">
-                <td className="px-6 py-4 font-medium text-slate-900">Member</td>
-                <td className="px-6 py-4">Rewards path, inside the plan</td>
-                <td className="px-6 py-4">The work. Not team or billing.</td>
-              </tr>
-              <tr className="border-t border-slate-100">
-                <td className="px-6 py-4 font-medium text-slate-900">TA</td>
-                <td className="px-6 py-4">Tracker, resume tally, Closer</td>
-                <td className="px-6 py-4">No pay file, Equity, Cycle, or Rules</td>
-              </tr>
-              <tr className="border-t border-slate-100">
-                <td className="px-6 py-4 font-medium text-slate-900">HRBP</td>
-                <td className="px-6 py-4">Closer and the Equity group line</td>
-                <td className="px-6 py-4">No team, billing, Cycle, or Rules</td>
-              </tr>
-              <tr className="border-t border-slate-100">
-                <td className="px-6 py-4 font-medium text-slate-900">Executive</td>
-                <td className="px-6 py-4">Offers, Cycle, Philosophy, Rules</td>
-                <td className="px-6 py-4">Read only</td>
-              </tr>
-              <tr className="border-t border-slate-100">
-                <td className="px-6 py-4 font-medium text-slate-900">Viewer</td>
-                <td className="px-6 py-4">Whatever the plan includes</td>
-                <td className="px-6 py-4">Read only</td>
-              </tr>
-            </tbody>
-          </table>
+        <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+          <h3 className="text-xl font-semibold tracking-tight text-slate-900">Rewards</h3>
+          <p className="mt-2 text-base text-slate-600">{CLIENT_DOORS[0].line}</p>
+          <dl className="mt-6 grid gap-6 sm:grid-cols-3">
+            {CLIENT_DOORS[0].keys.map((key) => (
+              <div key={key.role}>
+                <dt className="font-medium text-slate-900">{key.name}</dt>
+                <dd className="mt-1 text-base leading-relaxed text-slate-600">{key.note}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
+        <div className="mt-4 grid gap-4 md:grid-cols-3">
+          {CLIENT_DOORS.slice(1).map((door) => (
+            <div key={door.title} className="rounded-2xl border border-slate-200 bg-white p-6">
+              <h3 className="text-xl font-semibold tracking-tight text-slate-900">{door.title}</h3>
+              <p className="mt-2 text-base leading-relaxed text-slate-600">{door.line}</p>
+              {door.keys.map((key) => (
+                <p key={key.role} className="mt-4 text-sm text-slate-500">
+                  {key.note}
+                </p>
+              ))}
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-base text-slate-600">
+          A viewer reads whatever the plan includes and cannot upload or confirm. That is not another door.
+        </p>
       </section>
 
       <section id="datasets" className="mt-16 scroll-mt-24">
