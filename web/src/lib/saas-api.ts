@@ -407,6 +407,25 @@ export const saasApi = {
       body: JSON.stringify({ role }),
     }),
 
+  adminIssueLicense: (
+    token: string,
+    orgId: string,
+    body: { role: string; starts_at: string; ends_at: string; email?: string | null }
+  ) =>
+    saasRequest<{
+      id: string;
+      org_id: string;
+      role: string;
+      starts_at: string;
+      ends_at: string;
+      email: string | null;
+      accept_path: string | null;
+      note: string;
+    }>(`/api/v1/admin/orgs/${orgId}/licenses`, token, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
   adminPatchOrg: (
     token: string,
     orgId: string,

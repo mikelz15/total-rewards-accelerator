@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { getAccessToken, saasApi } from "@/lib/saas-api";
 import { Button, Card } from "@/components/ModuleShell";
@@ -19,6 +19,12 @@ export default function PlatformAdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [orgsLoaded, setOrgsLoaded] = useState(false);
+  const [licenseOrg, setLicenseOrg] = useState("");
+  const [licenseRole, setLicenseRole] = useState("member");
+  const [licenseStart, setLicenseStart] = useState("");
+  const [licenseEnd, setLicenseEnd] = useState("");
+  const [licenseEmail, setLicenseEmail] = useState("");
+  const [licenseBusy, setLicenseBusy] = useState(false);
 
   async function load() {
     try {
@@ -37,6 +43,30 @@ export default function PlatformAdminPage() {
   useEffect(() => {
     load().catch((e) => setError(e instanceof Error ? e.message : "Load failed"));
   }, []);
+
+  async function issueLicense(e: FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setInfo(null);
+    setLicenseBusy(true);
+    try {
+      const token = await getAccessToken();
+      const orgId = licenseOrg || orgs[0]?.id;
+      if (!orgId) throw new Error("Pick a workspace.");
+      const issued = await saasApi.adminIssueLicense(token, orgId, {
+        role: licenseRole,
+        starts_at: new Date(licenseStart).toISOString(),
+        ends_at: new Date(licenseEnd).toISOString(),
+        email: licenseEmail.trim() || null,
+      });
+      setInfo(issued.note);
+      setLicenseEmail("");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not issue the license");
+    } finally {
+      setLicenseBusy(false);
+    }
+  }
 
   async function sitAs(role: string) {
     setError(null);
@@ -99,8 +129,8 @@ export default function PlatformAdminPage() {
         </h1>
         <p className="mt-2 max-w-2xl text-slate-600">
           This is <strong>your</strong> operator console (not a customer screen). Grant pilot/suite
-          licenses, suspend abusive orgs, and adjust row limits — without Stripe when needed.
-          Customers still manage their own team roles under <strong>Team</strong>.
+          plans, issue a seat license, suspend an org, and adjust row limits. A customer
+          workspace cannot add a seat.
         </p>
       </div>
 
@@ -120,9 +150,82 @@ export default function PlatformAdminPage() {
           <li>Visibility into member &amp; dataset counts (support)</li>
         </ul>
         <p className="mt-3 text-sm text-slate-500">
-          Customers invite Owner, Admin, Member, Talent, HRBP, Executive, and Viewer from Team.
-          They cannot flip their own row, and the only Owner cannot demote themselves there.
+          Customers cannot add a seat. Issue a license here first. It has a start and an end.
+          A person already in the workspace can still change doors on Team.
         </p>
+      </Card>
+
+      <Card>
+        <h2 className="text-sm font-semibold text-slate-900">Issue a seat license</h2>
+        <p className="mt-2 text-sm text-slate-600">
+          The license comes first. It has a start and an end. An email opens the passage
+          for that one person. It does not put them in the workspace until they accept,
+          and only while the window is open.
+        </p>
+        <form onSubmit={(e) => void issueLicense(e)} className="mt-4 grid gap-3 sm:grid-cols-2">
+          <label className="text-sm text-slate-700">
+            Workspace
+            <select
+              value={licenseOrg || orgs[0]?.id || ""}
+              onChange={(e) => setLicenseOrg(e.target.value)}
+              className="mt-1 block w-full rounded-lg border border-slate-200 px-2 py-1"
+            >
+              {orgs.map((o) => (
+                <option key={o.id} value={o.id}>
+                  {o.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="text-sm text-slate-700">
+            Seat
+            <select
+              value={licenseRole}
+              onChange={(e) => setLicenseRole(e.target.value)}
+              className="mt-1 block w-full rounded-lg border border-slate-200 px-2 py-1"
+            >
+              {["owner", "admin", "member", "ta", "hrbp", "executive", "viewer"].map((role) => (
+                <option key={role} value={role}>
+                  {roleLabel(role)}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="text-sm text-slate-700">
+            Starts
+            <input
+              type="datetime-local"
+              required
+              value={licenseStart}
+              onChange={(e) => setLicenseStart(e.target.value)}
+              className="mt-1 block w-full rounded-lg border border-slate-200 px-2 py-1"
+            />
+          </label>
+          <label className="text-sm text-slate-700">
+            Ends
+            <input
+              type="datetime-local"
+              required
+              value={licenseEnd}
+              onChange={(e) => setLicenseEnd(e.target.value)}
+              className="mt-1 block w-full rounded-lg border border-slate-200 px-2 py-1"
+            />
+          </label>
+          <label className="text-sm text-slate-700 sm:col-span-2">
+            Email, if the passage should open now
+            <input
+              type="email"
+              value={licenseEmail}
+              onChange={(e) => setLicenseEmail(e.target.value)}
+              className="mt-1 block w-full rounded-lg border border-slate-200 px-2 py-1"
+            />
+          </label>
+          <div>
+            <Button type="submit" disabled={licenseBusy || !orgs.length}>
+              {licenseBusy ? "Issuing…" : "Issue license"}
+            </Button>
+          </div>
+        </form>
       </Card>
 
       <Card>
