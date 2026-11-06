@@ -113,6 +113,17 @@ def can_manage_billing(role: Optional[str]) -> bool:
     return normalize_role(role) in BILLING_ROLES
 
 
+def owner_may_add_license(plan: Optional[str]) -> bool:
+    """Checkout opens a license only while the workspace has none.
+
+    Trial, demo, and an empty plan can take the first one. A plan that is
+    already set, including one the platform granted, does not take another
+    from the owner. Unknown plan names stay closed.
+    """
+    p = (plan or "trial").strip().lower()
+    return p in {"", "trial", "demo", "none"}
+
+
 def can_manage_team(role: Optional[str]) -> bool:
     return normalize_role(role) in TEAM_ADMIN_ROLES
 

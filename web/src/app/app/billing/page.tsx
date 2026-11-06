@@ -67,6 +67,8 @@ export default function BillingPage() {
   }
 
   const mods = status?.permissions?.modules || [];
+  const plan = (status?.plan || "trial").trim().toLowerCase();
+  const mayAddLicense = plan === "" || plan === "trial" || plan === "demo" || plan === "none";
 
   return (
     <div className="space-y-6">
@@ -122,7 +124,7 @@ export default function BillingPage() {
         </p>
       </Card>
 
-      {catalog?.promo?.enabled ? (
+      {mayAddLicense && catalog?.promo?.enabled ? (
         <div className="rounded-2xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-950">
           <p className="font-semibold">{catalog.promo.label}</p>
           <p className="mt-1 text-teal-900/80">{catalog.promo.detail}</p>
@@ -132,13 +134,17 @@ export default function BillingPage() {
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="text-sm font-semibold text-slate-900">Upgrade / subscribe</h2>
+            <h2 className="text-sm font-semibold text-slate-900">
+              {mayAddLicense ? "Upgrade / subscribe" : "Plan"}
+            </h2>
             <p className="mt-1 text-sm text-slate-500">
-              {catalog?.stripe_enabled
-                ? catalog?.promo?.enabled
-                  ? "Start with a free trial — Stripe Checkout collects your card securely."
-                  : "Checkout opens Stripe securely."
-                : catalog?.note || "Stripe not configured — contact your platform admin for a pilot grant."}
+              {mayAddLicense
+                ? catalog?.stripe_enabled
+                  ? catalog?.promo?.enabled
+                    ? "Start with a free trial — Stripe Checkout collects your card securely."
+                    : "Checkout opens Stripe securely."
+                  : catalog?.note || "Stripe not configured — contact your platform admin for a pilot grant."
+                : "This workspace already has a plan. Another license is not added from here."}
             </p>
           </div>
           {status?.can_manage_billing && status.subscription?.stripe_customer_id ? (
@@ -147,48 +153,50 @@ export default function BillingPage() {
             </Button>
           ) : null}
         </div>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {(catalog?.products || []).map((p) => {
-            const trialDays = p.trial_days ?? catalog?.trial_days ?? 0;
-            const cta =
-              busy === p.id
-                ? "Redirecting…"
-                : !p.checkout_ready
-                  ? "Stripe not set"
-                  : trialDays > 0
-                    ? "Start free trial"
-                    : "Subscribe";
-            return (
-              <div
-                key={p.id}
-                className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50/80 p-4"
-              >
-                <h3 className="font-semibold text-slate-900">{p.name}</h3>
-                <p className="mt-1 text-sm text-slate-600">{p.price_label}</p>
-                {trialDays > 0 ? (
-                  <p className="mt-1 text-xs font-medium text-teal-800">
-                    {trialDays} days free, then {p.price_label}
-                  </p>
-                ) : null}
-                {p.modules && (
-                  <p className="mt-2 text-xs text-slate-500">{p.modules.join(" · ")}</p>
-                )}
-                <div className="mt-auto pt-4">
-                  {status?.can_manage_billing ? (
-                    <Button
-                      disabled={!!busy || !p.checkout_ready}
-                      onClick={() => startCheckout(p.id)}
-                    >
-                      {cta}
-                    </Button>
-                  ) : (
-                    <p className="text-xs text-slate-500">Only the Owner can check out.</p>
+        {mayAddLicense ? (
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {(catalog?.products || []).map((p) => {
+              const trialDays = p.trial_days ?? catalog?.trial_days ?? 0;
+              const cta =
+                busy === p.id
+                  ? "Redirecting…"
+                  : !p.checkout_ready
+                    ? "Stripe not set"
+                    : trialDays > 0
+                      ? "Start free trial"
+                      : "Subscribe";
+              return (
+                <div
+                  key={p.id}
+                  className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50/80 p-4"
+                >
+                  <h3 className="font-semibold text-slate-900">{p.name}</h3>
+                  <p className="mt-1 text-sm text-slate-600">{p.price_label}</p>
+                  {trialDays > 0 ? (
+                    <p className="mt-1 text-xs font-medium text-teal-800">
+                      {trialDays} days free, then {p.price_label}
+                    </p>
+                  ) : null}
+                  {p.modules && (
+                    <p className="mt-2 text-xs text-slate-500">{p.modules.join(" · ")}</p>
                   )}
+                  <div className="mt-auto pt-4">
+                    {status?.can_manage_billing ? (
+                      <Button
+                        disabled={!!busy || !p.checkout_ready}
+                        onClick={() => startCheckout(p.id)}
+                      >
+                        {cta}
+                      </Button>
+                    ) : (
+                      <p className="text-xs text-slate-500">Only the Owner can check out.</p>
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        ) : null}
       </Card>
     </div>
   );
