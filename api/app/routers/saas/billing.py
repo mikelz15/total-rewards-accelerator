@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -254,6 +255,7 @@ async def stripe_webhook(request: Request) -> Dict[str, Any]:
                 org = session.get(Organization, UUID(org_id))
                 if org:
                     org.plan = plan
+                    org.access_until = None
                     sub = session.scalar(
                         select(Subscription).where(Subscription.org_id == org.id)
                     )
@@ -291,6 +293,7 @@ async def stripe_webhook(request: Request) -> Dict[str, Any]:
                 org = session.get(Organization, sub.org_id)
                 if org:
                     org.plan = "trial"
+                    org.access_until = datetime.now(timezone.utc)
                     org.entitlements_json = None
         elif etype == "customer.subscription.updated":
             sub_id = data.get("id")
@@ -308,6 +311,7 @@ async def stripe_webhook(request: Request) -> Dict[str, Any]:
 
                     org = session.get(Organization, sub.org_id)
                     if org and status in ("active", "trialing"):
+                        org.access_until = None
                         if plan:
                             org.plan = plan
                         if product == "suite":
@@ -323,5 +327,6 @@ async def stripe_webhook(request: Request) -> Dict[str, Any]:
                     org = session.get(Organization, sub.org_id)
                     if org:
                         org.plan = "trial"
+                        org.access_until = datetime.now(timezone.utc)
                         org.entitlements_json = None
     return {"received": True}

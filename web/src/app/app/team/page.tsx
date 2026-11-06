@@ -1,20 +1,17 @@
 "use client";
 
-import { FormEvent, Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getAccessToken, saasApi } from "@/lib/saas-api";
-import { CLIENT_DOORS, INVITE_ROLES } from "@/lib/paths";
+import { CLIENT_DOORS } from "@/lib/paths";
 import { roleLabel } from "@/lib/permissions";
-import { Button, Card } from "@/components/ModuleShell";
+import { Card } from "@/components/ModuleShell";
 
 function TeamInner() {
   const search = useSearchParams();
   const [data, setData] = useState<Awaited<ReturnType<typeof saasApi.team>> | null>(null);
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("member");
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
 
   async function load() {
     const token = await getAccessToken();
@@ -37,26 +34,6 @@ function TeamInner() {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  async function onInvite(e: FormEvent) {
-    e.preventDefault();
-    setBusy(true);
-    setError(null);
-    setInfo(null);
-    try {
-      const token = await getAccessToken();
-      const inv = await saasApi.invite(token, { email, role });
-      setInfo(
-        `Invite created for ${inv.email}. Share this path after they sign up: ${inv.accept_path}`
-      );
-      setEmail("");
-      await load();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Invite failed");
-    } finally {
-      setBusy(false);
-    }
-  }
 
   async function changeRole(userId: string, newRole: string) {
     setError(null);
@@ -93,8 +70,8 @@ function TeamInner() {
           People &amp; roles
         </h1>
         <p className="mt-2 max-w-2xl text-slate-600">
-          Admin controls who is in the workspace and what they can open, inside the paid plan.
-          The platform console does not manage that list.
+          A person already here can change doors. A new seat is not added from this page.
+          The platform issues a license first. That license has a start and an end.
         </p>
       </div>
 
@@ -108,7 +85,7 @@ function TeamInner() {
       <Card>
         <h2 className="text-sm font-semibold text-slate-900">Four doors</h2>
         <p className="mt-2 text-sm text-slate-600">
-          Rewards is one door. Owner, Admin, and Member share it. An invite uses this workspace&apos;s plan. It does not add a charge.
+          Rewards is one door. Owner, Admin, and Member share it. A new seat is issued from the platform, and only when a license is already open.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {CLIENT_DOORS.map((door) => (
@@ -125,47 +102,6 @@ function TeamInner() {
           ))}
         </div>
       </Card>
-
-      {canManage && (
-        <Card>
-          <h2 className="text-sm font-semibold text-slate-900">Invite teammate</h2>
-          <form onSubmit={onInvite} className="mt-4 flex flex-wrap items-end gap-3">
-            <label className="min-w-[14rem] flex-1">
-              <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                Email
-              </span>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm"
-              />
-            </label>
-            <label>
-              <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                Role
-              </span>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="mt-1 block rounded-xl border border-slate-200 px-3 py-2 text-sm"
-              >
-                {INVITE_ROLES.filter((item) => (data?.roles || INVITE_ROLES.map((r) => r.role)).includes(item.role)).map(
-                  (item) => (
-                    <option key={item.role} value={item.role}>
-                      {item.label}
-                    </option>
-                  )
-                )}
-              </select>
-            </label>
-            <Button type="submit" disabled={busy}>
-              {busy ? "Sending…" : "Create invite"}
-            </Button>
-          </form>
-        </Card>
-      )}
 
       <Card className="overflow-hidden p-0">
         <table className="min-w-full text-left text-sm">

@@ -108,7 +108,9 @@ inside the signed-in workspace.
 
 Rewards is Owner, Admin, or Member. That door is Cleaner, Datasets,
 Equity + Merit, Cycle Lock, Philosophy Check, and Rules. Owner holds
-billing and the team. Admin holds the team. Member does the work.
+billing and the team. Admin can change a door for someone already in the
+workspace. A new seat is issued from the platform, and only when a license
+is already open. The license has a start and an end. Member does the work.
 
 Talent opens Tracker, the resume tally, and Closer.
 
