@@ -95,7 +95,10 @@ export default function BillingPage() {
     }
   }
 
-  const mods = status?.permissions?.modules || [];
+  // Fall back to the workspace profile's permissions if the status call failed.
+  const perms = status?.permissions || me?.permissions || null;
+  const canManageBilling = status?.can_manage_billing ?? perms?.can_manage_billing ?? false;
+  const mods = perms?.modules || [];
   const pending = loadingStatus && !status;
   const plan = (status?.plan || me?.org.plan || "trial").trim().toLowerCase();
   const mayAddLicense = plan === "" || plan === "trial" || plan === "demo" || plan === "none";
@@ -135,7 +138,7 @@ export default function BillingPage() {
         />
         <Stat
           label="Modules unlocked"
-          value={pending ? "…" : status ? String(mods.length) : "—"}
+          value={pending ? "…" : perms ? String(mods.length) : "—"}
           tone="good"
         />
       </div>
@@ -143,8 +146,8 @@ export default function BillingPage() {
       <Card>
         <h2 className="text-sm font-semibold text-slate-900">Your entitlements</h2>
         <div className="mt-3 flex flex-wrap gap-2">
-          {(status?.permissions?.module_access
-            ? Object.entries(status.permissions.module_access)
+          {(perms?.module_access
+            ? Object.entries(perms.module_access)
             : []
           ).map(([id, on]) => (
             <span
@@ -158,8 +161,8 @@ export default function BillingPage() {
           ))}
         </div>
         <p className="mt-3 text-xs text-slate-500">
-          Role: <strong>{roleLabel(status?.permissions?.role)}</strong> · Plan modules:{" "}
-          {(status?.permissions?.plan_modules || []).join(", ") || "—"}
+          Role: <strong>{roleLabel(perms?.role)}</strong> · Plan modules:{" "}
+          {(perms?.plan_modules || []).join(", ") || "—"}
         </p>
       </Card>
 
@@ -190,7 +193,7 @@ export default function BillingPage() {
                 : "This workspace already has a plan. Another license is not added from here."}
             </p>
           </div>
-          {status?.can_manage_billing && status.subscription?.stripe_customer_id ? (
+          {canManageBilling && status?.subscription?.stripe_customer_id ? (
             <Button variant="ghost" disabled={!!busy} onClick={openPortal}>
               Manage payment method
             </Button>
@@ -224,7 +227,7 @@ export default function BillingPage() {
                     <p className="mt-2 text-xs text-slate-500">{p.modules.join(" · ")}</p>
                   )}
                   <div className="mt-auto pt-4">
-                    {status?.can_manage_billing ? (
+                    {canManageBilling ? (
                       <Button
                         disabled={!!busy || !p.checkout_ready}
                         onClick={() => startCheckout(p.id)}
