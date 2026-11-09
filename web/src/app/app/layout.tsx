@@ -1,10 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AppNav } from "@/components/AppNav";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
-import { saasApi, type MeResponse } from "@/lib/saas-api";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { getAccessToken, saasApi, type MeResponse } from "@/lib/saas-api";
 import { brandImageUrl } from "@/lib/branding";
 import { WorkspaceContext } from "@/lib/workspace-context";
 import type { Permissions } from "@/lib/permissions";
@@ -15,22 +15,29 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const pathname = usePathname();
 
+  const hasProfile = useRef(false);
+
   const load = useCallback(async () => {
-    setLoading(true);
+    // Re-checking the profile on navigation should not flip the whole app back
+    // into a loading state (that caused the post-sign-in flicker).
+    if (!hasProfile.current) setLoading(true);
     if (!isSupabaseConfigured()) {
       setError("Supabase is not configured on this deployment.");
       setLoading(false);
       return;
     }
     try {
-      const supabase = createClient();
-      const { data } = await supabase.auth.getSession();
-      const token = data.session?.access_token;
-      if (!token) {
-        setError("Not signed in");
+      // Same short wait-for-session as every page fetch, so the layout and the
+      // page agree on whether the user is signed in right after sign-in.
+      let token: string;
+      try {
+        token = await getAccessToken();
+      } catch {
+        if (!hasProfile.current) setError("Not signed in");
         return;
       }
       const profile = await saasApi.me(token);
+      hasProfile.current = true;
       setMe(profile);
       setError(null);
     } catch (err) {

@@ -6,12 +6,18 @@ import { PhilosophyBoard } from "@/components/PhilosophyBoard";
 import { Button, Card } from "@/components/ModuleShell";
 import { ModuleGate } from "@/components/ModuleGate";
 import type { PhilosophyResult } from "@/lib/api";
-import { getAccessToken, saasApi, type DatasetSummary } from "@/lib/saas-api";
+import { getAccessToken, saasApi } from "@/lib/saas-api";
 import { useWorkspace } from "@/lib/workspace-context";
+import { useSavedDatasets } from "@/lib/use-datasets";
 
 export default function AppPhilosophyPage() {
   const { permissions } = useWorkspace();
-  const [datasets, setDatasets] = useState<DatasetSummary[]>([]);
+  const {
+    datasets,
+    loading: datasetsLoading,
+    error: datasetsError,
+    reload: reloadDatasets,
+  } = useSavedDatasets();
   const [datasetId, setDatasetId] = useState("");
   const [marketLow, setMarketLow] = useState("0.97");
   const [marketHigh, setMarketHigh] = useState("1.03");
@@ -20,23 +26,10 @@ export default function AppPhilosophyPage() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<PhilosophyResult | null>(null);
 
+  // Default to the first saved dataset once the list arrives.
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const token = await getAccessToken();
-        const res = await saasApi.listDatasets(token);
-        if (cancelled) return;
-        setDatasets(res.datasets);
-        if (res.datasets[0]) setDatasetId(res.datasets[0].id);
-      } catch (err) {
-        if (!cancelled) setError(err instanceof Error ? err.message : "Could not load datasets");
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    if (!datasetId && datasets[0]) setDatasetId(datasets[0].id);
+  }, [datasets, datasetId]);
 
   async function run() {
     if (!datasetId) {
@@ -99,7 +92,9 @@ export default function AppPhilosophyPage() {
                 className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm"
               >
                 {datasets.length === 0 ? (
-                  <option value="">No datasets yet</option>
+                  <option value="">
+                    {datasetsLoading ? "Loading saved datasets…" : "No datasets yet"}
+                  </option>
                 ) : (
                   datasets.map((d) => (
                     <option key={d.id} value={d.id}>
@@ -140,7 +135,23 @@ export default function AppPhilosophyPage() {
           <p className="mt-3 text-xs text-slate-500">
             {selected
               ? `${selected.row_count} rows · ${selected.source_filename || "saved dataset"}`
-              : "Run Cleaner in the workspace to save a dataset."}
+              : datasetsLoading
+                ? "Loading your saved datasets…"
+                : datasetsError
+                  ? `Could not load datasets: ${datasetsError}`
+                  : "Run Cleaner in the workspace to save a dataset."}
+            {datasetsError && !datasetsLoading ? (
+              <>
+                {" · "}
+                <button
+                  type="button"
+                  onClick={reloadDatasets}
+                  className="font-medium text-teal-800 hover:underline"
+                >
+                  Retry
+                </button>
+              </>
+            ) : null}
             {" · "}
             <Link href="/app/cleaner" className="font-medium text-teal-800 hover:underline">
               Open Cleaner

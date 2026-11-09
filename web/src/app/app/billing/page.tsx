@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getAccessToken, saasApi } from "@/lib/saas-api";
 import { Button, Card, Stat } from "@/components/ModuleShell";
 import { roleLabel } from "@/lib/permissions";
+import { useWorkspace } from "@/lib/workspace-context";
 
 export default function BillingPage() {
   const [status, setStatus] = useState<Awaited<ReturnType<typeof saasApi.billingStatus>> | null>(
@@ -15,16 +16,44 @@ export default function BillingPage() {
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
+  const [loadingStatus, setLoadingStatus] = useState(true);
+  const { me } = useWorkspace();
 
   async function load() {
-    const token = await getAccessToken();
-    const [s, c] = await Promise.all([saasApi.billingStatus(token), saasApi.billingCatalog(token)]);
-    setStatus(s);
-    setCatalog(c);
+    setLoadingStatus(true);
+    setError(null);
+    try {
+      const token = await getAccessToken();
+      // Status and catalog are independent. One failing must not blank the other
+      // (Promise.all used to drop both and the page fell back to
+      // "Stripe not configured / 0 modules unlocked").
+      const [s, c] = await Promise.allSettled([
+        saasApi.billingStatus(token),
+        saasApi.billingCatalog(token),
+      ]);
+      if (s.status === "fulfilled") setStatus(s.value);
+      if (c.status === "fulfilled") setCatalog(c.value);
+      const failed = [s, c].find((r) => r.status === "rejected") as PromiseRejectedResult | undefined;
+      if (failed) {
+        const reason = failed.reason instanceof Error ? failed.reason.message : "Load failed";
+        setError(`Could not load billing details: ${reason}`);
+      }
+    } catch (e) {
+      setError(`Could not load billing details: ${e instanceof Error ? e.message : "Load failed"}`);
+    } finally {
+      setLoadingStatus(false);
+    }
   }
 
+  // If the first load ran before the session was ready, try again once the
+  // workspace profile arrives.
   useEffect(() => {
-    load().catch((e) => setError(e instanceof Error ? e.message : "Load failed"));
+    if (me?.org.id && !status && !loadingStatus) void load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [me?.org.id]);
+
+  useEffect(() => {
+    void load();
     if (typeof window !== "undefined") {
       const q = new URLSearchParams(window.location.search);
       if (q.get("checkout") === "success") {
@@ -66,8 +95,12 @@ export default function BillingPage() {
     }
   }
 
-  const mods = status?.permissions?.modules || [];
-  const plan = (status?.plan || "trial").trim().toLowerCase();
+  // Fall back to the workspace profile's permissions if the status call failed.
+  const perms = status?.permissions || me?.permissions || null;
+  const canManageBilling = status?.can_manage_billing ?? perms?.can_manage_billing ?? false;
+  const mods = perms?.modules || [];
+  const pending = loadingStatus && !status;
+  const plan = (status?.plan || me?.org.plan || "trial").trim().toLowerCase();
   const mayAddLicense = plan === "" || plan === "trial" || plan === "demo" || plan === "none";
 
   return (
@@ -85,27 +118,36 @@ export default function BillingPage() {
       </div>
 
       {error && (
-        <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>
+        <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">
+          {error}{" "}
+          <button type="button" onClick={() => void load()} className="font-medium underline">
+            Retry
+          </button>
+        </p>
       )}
       {info && (
         <p className="rounded-lg bg-teal-50 px-3 py-2 text-sm text-teal-900">{info}</p>
       )}
 
       <div className="grid gap-3 sm:grid-cols-3">
-        <Stat label="Current plan" value={status?.plan || "—"} />
+        <Stat label="Current plan" value={pending ? "Loading…" : status?.plan || me?.org.plan || "—"} />
         <Stat
           label="Status"
           value={status?.suspended ? "Suspended" : "Active"}
           tone={status?.suspended ? "bad" : "good"}
         />
-        <Stat label="Modules unlocked" value={String(mods.length)} tone="good" />
+        <Stat
+          label="Modules unlocked"
+          value={pending ? "…" : perms ? String(mods.length) : "—"}
+          tone="good"
+        />
       </div>
 
       <Card>
         <h2 className="text-sm font-semibold text-slate-900">Your entitlements</h2>
         <div className="mt-3 flex flex-wrap gap-2">
-          {(status?.permissions?.module_access
-            ? Object.entries(status.permissions.module_access)
+          {(perms?.module_access
+            ? Object.entries(perms.module_access)
             : []
           ).map(([id, on]) => (
             <span
@@ -119,8 +161,8 @@ export default function BillingPage() {
           ))}
         </div>
         <p className="mt-3 text-xs text-slate-500">
-          Role: <strong>{roleLabel(status?.permissions?.role)}</strong> · Plan modules:{" "}
-          {(status?.permissions?.plan_modules || []).join(", ") || "—"}
+          Role: <strong>{roleLabel(perms?.role)}</strong> · Plan modules:{" "}
+          {(perms?.plan_modules || []).join(", ") || "—"}
         </p>
       </Card>
 
@@ -139,7 +181,11 @@ export default function BillingPage() {
             </h2>
             <p className="mt-1 text-sm text-slate-500">
               {mayAddLicense
-                ? catalog?.stripe_enabled
+                ? !catalog
+                  ? pending
+                    ? "Loading plans…"
+                    : "Plans could not be loaded. Use Retry above."
+                  : catalog.stripe_enabled
                   ? catalog?.promo?.enabled
                     ? "Start with a free trial — Stripe Checkout collects your card securely."
                     : "Checkout opens Stripe securely."
@@ -147,7 +193,7 @@ export default function BillingPage() {
                 : "This workspace already has a plan. Another license is not added from here."}
             </p>
           </div>
-          {status?.can_manage_billing && status.subscription?.stripe_customer_id ? (
+          {canManageBilling && status?.subscription?.stripe_customer_id ? (
             <Button variant="ghost" disabled={!!busy} onClick={openPortal}>
               Manage payment method
             </Button>
@@ -181,7 +227,7 @@ export default function BillingPage() {
                     <p className="mt-2 text-xs text-slate-500">{p.modules.join(" · ")}</p>
                   )}
                   <div className="mt-auto pt-4">
-                    {status?.can_manage_billing ? (
+                    {canManageBilling ? (
                       <Button
                         disabled={!!busy || !p.checkout_ready}
                         onClick={() => startCheckout(p.id)}

@@ -8,6 +8,11 @@ import type { Permissions } from "@/lib/permissions";
 import { canUseModule } from "@/lib/permissions";
 import { navHrefsForRole, showDatasets, showRules } from "@/lib/paths";
 
+const toolLinks = [
+  { href: "/formula-evaluator", label: "Evaluator", title: "Formula Evaluator: flags on a merit file" },
+  { href: "/muse", label: "Muse", title: "TRA for Muse: propose only, humans post pay" },
+];
+
 const moduleLinks: {
   href: string;
   label: string;
@@ -124,6 +129,17 @@ export function AppNav({
               </Link>
             );
           })}
+          {/* Tools that live on the public site. Offer Letter has no page yet. */}
+          {toolLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              title={link.title}
+              className="rounded-full px-2.5 py-1.5 text-xs text-slate-500 hover:bg-slate-100 sm:px-3 sm:text-sm"
+            >
+              {link.label}
+            </Link>
+          ))}
           <Link
             href="/"
             className="rounded-full px-2.5 py-1.5 text-xs text-slate-500 hover:bg-slate-100 sm:px-3 sm:text-sm"
