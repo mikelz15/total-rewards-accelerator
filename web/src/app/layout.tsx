@@ -32,7 +32,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Total Rewards Accelerator",
     description: "Making compensation easy for all. Comp engineering toolkit by Mikéz.",
-    images: [{ url: "/brand/tra-logo.png" }],
+    images: [
+      {
+        url: "https://totalrewardsaccelerator.com/og.jpg",
+        width: 1200,
+        height: 630,
+      },
+    ],
   },
 };
 

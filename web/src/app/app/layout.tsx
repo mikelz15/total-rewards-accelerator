@@ -12,11 +12,14 @@ import type { Permissions } from "@/lib/permissions";
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [me, setMe] = useState<MeResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const pathname = usePathname();
 
   const load = useCallback(async () => {
+    setLoading(true);
     if (!isSupabaseConfigured()) {
       setError("Supabase is not configured on this deployment.");
+      setLoading(false);
       return;
     }
     try {
@@ -32,6 +35,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not load workspace");
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -43,7 +48,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <WorkspaceContext.Provider
-      value={{ me, permissions, error, reload: () => void load() }}
+      value={{ me, permissions, error, loading, reload: () => void load() }}
     >
       <div className="min-h-screen bg-[#e6eef0]">
         <AppNav

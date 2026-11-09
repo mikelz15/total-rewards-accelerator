@@ -6,6 +6,11 @@ from typing import Any, Dict, Iterable, List, Optional, Set
 
 MODULES = ("cleaner", "equity", "tracker", "closer", "job_match")
 
+# Public demo stays at 10 rows. A paid plan holds this many. Trial stays 5,000.
+PAID_MAX_ROWS = 25000
+TRIAL_MAX_ROWS = 5000
+PAID_PLANS = frozenset({"starter", "suite", "pilot"})
+
 ALL_MODULES: Set[str] = set(MODULES)
 
 # Org commercial access by plan code
@@ -106,6 +111,17 @@ def can_write(role: Optional[str]) -> bool:
 
 def can_manage_billing(role: Optional[str]) -> bool:
     return normalize_role(role) in BILLING_ROLES
+
+
+def owner_may_add_license(plan: Optional[str]) -> bool:
+    """Checkout opens a license only while the workspace has none.
+
+    Trial, demo, and an empty plan can take the first one. A plan that is
+    already set, including one the platform granted, does not take another
+    from the owner. Unknown plan names stay closed.
+    """
+    p = (plan or "trial").strip().lower()
+    return p in {"", "trial", "demo", "none"}
 
 
 def can_manage_team(role: Optional[str]) -> bool:

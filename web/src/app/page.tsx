@@ -269,8 +269,9 @@ export default function HomePage() {
 
       <p className="mt-16 max-w-2xl text-base leading-relaxed text-slate-600">
         The public demo prefers the sample file. A custom upload is capped at 10 rows, scanned for
-        sensitive headers, and limited to five a week from one address. Tracker and Closer stay on
-        synthetic data. Do not upload a real employee or candidate file.
+        sensitive headers, and limited to five a week from one address. A paid workspace holds
+        25,000 rows. Tracker and Closer stay on synthetic data. Do not upload a real employee or
+        candidate file.
       </p>
     </div>
   );

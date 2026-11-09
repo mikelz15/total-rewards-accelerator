@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -13,7 +14,7 @@ from app.auth.deps import CurrentUser, ensure_user_org, get_current_user
 from app.db.models import Subscription
 from app.db.session import bind_rls, get_session
 from app.services.access import perms_for, require_billing_admin
-from app.services.entitlements import catalog
+from app.services.entitlements import catalog, owner_may_add_license
 
 router = APIRouter(prefix="/api/v1/billing", tags=["saas-billing"])
 
@@ -148,6 +149,11 @@ def create_checkout(body: CheckoutBody, user: CurrentUser = Depends(get_current_
     with get_session() as session:
         ctx = ensure_user_org(session, user)
         require_billing_admin(ctx.membership.role)
+        if not owner_may_add_license(ctx.org.plan):
+            raise HTTPException(
+                status_code=409,
+                detail="This workspace already has a plan. Another license is not added from here.",
+            )
         sub = session.scalar(select(Subscription).where(Subscription.org_id == ctx.org.id))
         customer_id = sub.stripe_customer_id if sub else None
         if not customer_id:
@@ -212,6 +218,8 @@ def customer_portal(user: CurrentUser = Depends(get_current_user)) -> Dict[str, 
         portal = stripe.billing_portal.Session.create(
             customer=sub.stripe_customer_id,
             return_url=f"{site}/app/billing",
+            # Payment method only. The default portal can change the subscription.
+            flow_data={"type": "payment_method_update"},
         )
         return {"url": portal["url"]}
 
@@ -247,6 +255,7 @@ async def stripe_webhook(request: Request) -> Dict[str, Any]:
                 org = session.get(Organization, UUID(org_id))
                 if org:
                     org.plan = plan
+                    org.access_until = None
                     sub = session.scalar(
                         select(Subscription).where(Subscription.org_id == org.id)
                     )
@@ -284,6 +293,7 @@ async def stripe_webhook(request: Request) -> Dict[str, Any]:
                 org = session.get(Organization, sub.org_id)
                 if org:
                     org.plan = "trial"
+                    org.access_until = datetime.now(timezone.utc)
                     org.entitlements_json = None
         elif etype == "customer.subscription.updated":
             sub_id = data.get("id")
@@ -301,6 +311,7 @@ async def stripe_webhook(request: Request) -> Dict[str, Any]:
 
                     org = session.get(Organization, sub.org_id)
                     if org and status in ("active", "trialing"):
+                        org.access_until = None
                         if plan:
                             org.plan = plan
                         if product == "suite":
@@ -316,5 +327,6 @@ async def stripe_webhook(request: Request) -> Dict[str, Any]:
                     org = session.get(Organization, sub.org_id)
                     if org:
                         org.plan = "trial"
+                        org.access_until = datetime.now(timezone.utc)
                         org.entitlements_json = None
     return {"received": True}

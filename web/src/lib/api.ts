@@ -412,6 +412,7 @@ export const api = {
     records?: Record<string, unknown>[];
     envelope_pct?: number;
     confirm_exceptions?: Record<string, boolean>;
+    team_name?: string;
   }) =>
     request<CycleLockResult>("/api/cycle-lock/run", {
       method: "POST",

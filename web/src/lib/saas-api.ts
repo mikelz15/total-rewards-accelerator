@@ -235,6 +235,21 @@ export const saasApi = {
       body: JSON.stringify(body),
     }),
 
+  cycleRun: (
+    token: string,
+    body: {
+      dataset_id?: string;
+      records?: Record<string, unknown>[];
+      envelope_pct?: number;
+      confirm_exceptions?: Record<string, boolean>;
+      team_name?: string;
+    }
+  ) =>
+    saasRequest<import("@/lib/api").CycleLockResult>("/api/v1/cycle/run", token, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
   remediationRun: (
     token: string,
     body: {
@@ -392,6 +407,25 @@ export const saasApi = {
       body: JSON.stringify({ role }),
     }),
 
+  adminIssueLicense: (
+    token: string,
+    orgId: string,
+    body: { role: string; starts_at: string; ends_at: string; email?: string | null }
+  ) =>
+    saasRequest<{
+      id: string;
+      org_id: string;
+      role: string;
+      starts_at: string;
+      ends_at: string;
+      email: string | null;
+      accept_path: string | null;
+      note: string;
+    }>(`/api/v1/admin/orgs/${orgId}/licenses`, token, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
   adminPatchOrg: (
     token: string,
     orgId: string,
@@ -407,6 +441,26 @@ export const saasApi = {
       method: "PATCH",
       body: JSON.stringify(body),
     }),
+
+  workbook: (token: string) =>
+    saasRequest<{ items: WorkbookItem[] }>("/api/v1/workbook", token),
+
+  workbookNote: (token: string, id: string, body: { note: string; status?: string }) =>
+    saasRequest<WorkbookItem>(`/api/v1/workbook/${id}`, token, {
+      method: "PATCH",
+      body: JSON.stringify(body),
+    }),
+};
+
+export type WorkbookItem = {
+  id: string;
+  seat: string;
+  step_key: string;
+  title: string;
+  note: string;
+  assignee_role: string | null;
+  status: string;
+  updated_at: string | null;
 };
 
 export async function getAccessToken(): Promise<string> {

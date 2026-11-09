@@ -106,11 +106,13 @@ The public paths page is /paths. The modules stay the same. The seat decides
 which door a person opens. Ask TRA is the public demo chat. It is not a tool
 inside the signed-in workspace.
 
-Rewards is the owner, admin, or member. That door is Cleaner, Datasets,
-Equity + Merit, Cycle Lock, Philosophy Check, and Rules. The owner holds
-billing and the team. An admin holds the team. A member does the work.
+Rewards is Owner, Admin, or Member. That door is Cleaner, Datasets,
+Equity + Merit, Cycle Lock, Philosophy Check, and Rules. Owner holds
+billing and the team. Admin can change a door for someone already in the
+workspace. A new seat is issued from the platform, and only when a license
+is already open. The license has a start and an end. Member does the work.
 
-Talent is the TA seat. That door is Tracker, resume tally, and Closer.
+Talent opens Tracker, the resume tally, and Closer.
 
 HRBP places one person, hands off the four-year page, and reads one line about
 the group.
@@ -118,7 +120,7 @@ the group.
 Executive is a read: offers, Cycle Lock, Philosophy Check, and the rules in
 force. That seat does not edit.
 
-A viewer reads whatever the plan includes and cannot upload or confirm.
+Viewer reads whatever the plan includes and cannot upload or confirm.
 
 # Datasets, Rules, and Muse
 

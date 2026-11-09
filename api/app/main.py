@@ -41,6 +41,7 @@ from app.routers.saas import formula_evaluator as saas_formula_evaluator
 from app.routers.saas import governance as saas_governance
 from app.routers.saas import me as saas_me
 from app.routers.saas import team as saas_team
+from app.routers.saas import workbook as saas_workbook
 from app.routers import job_match as job_match_router
 from app.routers import muse as muse_router
 from app.routers import resume_credit as resume_credit_router
@@ -119,6 +120,7 @@ app.include_router(resume_credit_router.saas_router)
 app.include_router(job_match_router.public_router)
 app.include_router(job_match_router.saas_router)
 app.include_router(saas_formula_evaluator.router)
+app.include_router(saas_workbook.router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -181,6 +183,7 @@ class CycleLockRequest(BaseModel):
     records: Optional[List[Dict[str, Any]]] = None
     envelope_pct: float = Field(0.032, ge=0, le=0.2)
     confirm_exceptions: Optional[Dict[str, bool]] = None
+    team_name: Optional[str] = None
 
 
 class PhilosophyRequest(BaseModel):
@@ -500,6 +503,7 @@ def cycle_lock_run(payload: CycleLockRequest) -> Dict[str, Any]:
         payload.records,
         envelope_pct=payload.envelope_pct,
         confirm_exceptions=payload.confirm_exceptions,
+        team_name=payload.team_name,
     )
 
 

@@ -20,7 +20,7 @@ export const SEAT_PATHS: SeatPath[] = [
   {
     id: "rewards",
     title: "Rewards",
-    who: "Owner, admin, or member",
+    who: "Owner, Admin, and Member",
     line: "Clean the file, keep it, then design the cycle.",
     steps: [
       {
@@ -63,7 +63,7 @@ export const SEAT_PATHS: SeatPath[] = [
   {
     id: "talent",
     title: "Talent",
-    who: "TA seat",
+    who: "Talent seat",
     line: "Credit the resume, then show the four years.",
     steps: [
       {
@@ -147,9 +147,17 @@ const ROLE_NAV: Record<string, string[] | null> = {
   admin: null,
   member: null,
   viewer: null,
-  ta: ["/app", "/app/candidates", "/app/closer"],
-  hrbp: ["/app", "/app/equity", "/app/closer"],
-  executive: ["/app", "/app/equity", "/app/cycle", "/app/philosophy", "/app/closer"],
+  ta: ["/app", "/app/start", "/app/workbook", "/app/candidates", "/app/closer"],
+  hrbp: ["/app", "/app/start", "/app/workbook", "/app/equity", "/app/closer"],
+  executive: [
+    "/app",
+    "/app/start",
+    "/app/workbook",
+    "/app/equity",
+    "/app/cycle",
+    "/app/philosophy",
+    "/app/closer",
+  ],
 };
 
 export function pathForRole(role?: string | null): SeatPath {
@@ -199,6 +207,43 @@ export type BoardCard = {
   /** Roles that open this card. Every seat still sees the card. */
   roles: string[];
 };
+
+/** What a client should see. Four doors. Rewards is one door with three keys. */
+export const CLIENT_DOORS = [
+  {
+    title: "Rewards",
+    line: "One door. Owner, Admin, and Member all walk it.",
+    keys: [
+      { role: "owner", name: "Owner", note: "Holds the bill and the team." },
+      { role: "admin", name: "Admin", note: "The team. Not the bill." },
+      { role: "member", name: "Member", note: "The work. Not the team or the bill." },
+    ],
+  },
+  {
+    title: "Talent",
+    line: "Tracker, the resume tally, and Closer.",
+    keys: [{ role: "ta", name: "Talent", note: "No pay file, Equity, Cycle, or Rules." }],
+  },
+  {
+    title: "HRBP",
+    line: "One person, then one line for the group.",
+    keys: [{ role: "hrbp", name: "HRBP", note: "No team, no bill, and no cycle." }],
+  },
+  {
+    title: "Executive",
+    line: "A read of the offers, the cycle, and the rules.",
+    keys: [{ role: "executive", name: "Executive", note: "Read only." }],
+  },
+] as const;
+
+export const INVITE_ROLES = [
+  { role: "member", label: "Rewards · Member" },
+  { role: "admin", label: "Rewards · Admin" },
+  { role: "ta", label: "Talent" },
+  { role: "hrbp", label: "HRBP" },
+  { role: "executive", label: "Executive" },
+  { role: "viewer", label: "Viewer · read only" },
+] as const;
 
 const REWARDS = ["owner", "admin", "member", "viewer"];
 

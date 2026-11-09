@@ -125,7 +125,7 @@ export default function PricingPage() {
             <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Seats on top of the plan</h2>
             <p className="mt-4 text-lg leading-relaxed text-slate-600">
               The invoice unlocks modules for the workspace. The seat decides which of those a
-              person opens. A talent workspace can hold Tracker and Closer together. That is
+              person opens. A Talent workspace can hold Tracker and Closer together. That is
               those two prices, not a new product.
             </p>
           </div>
@@ -147,8 +147,8 @@ export default function PricingPage() {
           ))}
         </div>
         <p className="mt-6 text-base leading-relaxed text-slate-600">
-          Owner holds billing and the team. Admin holds the team. A member does the rewards work.
-          A viewer reads the plan and cannot upload or confirm. An executive reads offers, the
+          A paid workspace holds 25,000 rows. The public demo holds 10. Owner holds billing and the team. Admin holds the team. Member does the rewards work.
+          Viewer reads the plan and cannot upload or confirm. Executive reads offers, the
           cycle, philosophy, and the rules in force.
         </p>
       </section>

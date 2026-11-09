@@ -8,6 +8,7 @@ export type WorkspaceState = {
   me: MeResponse | null;
   permissions: Permissions | null;
   error: string | null;
+  loading: boolean;
   reload: () => void;
 };
 
@@ -15,6 +16,7 @@ export const WorkspaceContext = createContext<WorkspaceState>({
   me: null,
   permissions: null,
   error: null,
+  loading: true,
   reload: () => undefined,
 });
 

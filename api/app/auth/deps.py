@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 import uuid
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from typing import Optional
 
 from fastapi import Depends, Header, HTTPException
@@ -12,8 +13,15 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.auth.supabase_jwt import verify_supabase_token
-from app.db.models import Membership, Organization, Workspace
+from app.db.models import Membership, Organization, SeatLicense, Workspace
 from app.db.session import get_session, saas_enabled
+from app.services.seat_license import (
+    LICENSE_OUTSIDE,
+    TRIAL_ENDED,
+    new_trial_until,
+    seat_window_open,
+    trial_passage_open,
+)
 
 
 @dataclass
@@ -102,6 +110,14 @@ def ensure_user_org(session: Session, user: CurrentUser) -> OrgContext:
         org = session.get(Organization, membership.org_id)
         if not org:
             raise HTTPException(status_code=500, detail="Membership org missing")
+        now = datetime.now(timezone.utc)
+        if not trial_passage_open(org.plan, org.access_until, now):
+            raise HTTPException(status_code=403, detail=TRIAL_ENDED)
+        held = session.scalar(
+            select(SeatLicense).where(SeatLicense.membership_id == membership.id)
+        )
+        if held is not None and not seat_window_open(held.starts_at, held.ends_at, now):
+            raise HTTPException(status_code=403, detail=LICENSE_OUTSIDE)
         workspace = session.scalar(
             select(Workspace).where(Workspace.org_id == org.id).order_by(Workspace.created_at.asc()).limit(1)
         )
@@ -121,6 +137,7 @@ def ensure_user_org(session: Session, user: CurrentUser) -> OrgContext:
             plan="trial",
             max_upload_rows=5000,
             suspended=False,
+            access_until=new_trial_until(),
         )
         session.add(org)
         session.flush()
