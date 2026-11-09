@@ -466,8 +466,18 @@ export type WorkbookItem = {
 export async function getAccessToken(): Promise<string> {
   const { createClient } = await import("@/lib/supabase/client");
   const supabase = createClient();
-  const { data } = await supabase.auth.getSession();
-  const token = data.session?.access_token;
-  if (!token) throw new Error("Not signed in");
-  return token;
+  // Right after sign-in (router.replace + refresh) the browser client can
+  // briefly report no session while it reads the auth cookie. Give it a short
+  // window before calling the user signed out.
+  for (let attempt = 0; attempt < 6; attempt++) {
+    try {
+      const { data } = await supabase.auth.getSession();
+      const token = data.session?.access_token;
+      if (token) return token;
+    } catch {
+      /* transient auth lock / refresh error: retry */
+    }
+    await new Promise((r) => setTimeout(r, 250 * (attempt + 1)));
+  }
+  throw new Error("Not signed in");
 }

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getAccessToken, saasApi } from "@/lib/saas-api";
 import { Button, Card, Stat } from "@/components/ModuleShell";
 import { roleLabel } from "@/lib/permissions";
+import { useWorkspace } from "@/lib/workspace-context";
 
 export default function BillingPage() {
   const [status, setStatus] = useState<Awaited<ReturnType<typeof saasApi.billingStatus>> | null>(
@@ -15,16 +16,44 @@ export default function BillingPage() {
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
+  const [loadingStatus, setLoadingStatus] = useState(true);
+  const { me } = useWorkspace();
 
   async function load() {
-    const token = await getAccessToken();
-    const [s, c] = await Promise.all([saasApi.billingStatus(token), saasApi.billingCatalog(token)]);
-    setStatus(s);
-    setCatalog(c);
+    setLoadingStatus(true);
+    setError(null);
+    try {
+      const token = await getAccessToken();
+      // Status and catalog are independent. One failing must not blank the other
+      // (Promise.all used to drop both and the page fell back to
+      // "Stripe not configured / 0 modules unlocked").
+      const [s, c] = await Promise.allSettled([
+        saasApi.billingStatus(token),
+        saasApi.billingCatalog(token),
+      ]);
+      if (s.status === "fulfilled") setStatus(s.value);
+      if (c.status === "fulfilled") setCatalog(c.value);
+      const failed = [s, c].find((r) => r.status === "rejected") as PromiseRejectedResult | undefined;
+      if (failed) {
+        const reason = failed.reason instanceof Error ? failed.reason.message : "Load failed";
+        setError(`Could not load billing details: ${reason}`);
+      }
+    } catch (e) {
+      setError(`Could not load billing details: ${e instanceof Error ? e.message : "Load failed"}`);
+    } finally {
+      setLoadingStatus(false);
+    }
   }
 
+  // If the first load ran before the session was ready, try again once the
+  // workspace profile arrives.
   useEffect(() => {
-    load().catch((e) => setError(e instanceof Error ? e.message : "Load failed"));
+    if (me?.org.id && !status && !loadingStatus) void load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [me?.org.id]);
+
+  useEffect(() => {
+    void load();
     if (typeof window !== "undefined") {
       const q = new URLSearchParams(window.location.search);
       if (q.get("checkout") === "success") {
@@ -67,7 +96,8 @@ export default function BillingPage() {
   }
 
   const mods = status?.permissions?.modules || [];
-  const plan = (status?.plan || "trial").trim().toLowerCase();
+  const pending = loadingStatus && !status;
+  const plan = (status?.plan || me?.org.plan || "trial").trim().toLowerCase();
   const mayAddLicense = plan === "" || plan === "trial" || plan === "demo" || plan === "none";
 
   return (
@@ -85,20 +115,29 @@ export default function BillingPage() {
       </div>
 
       {error && (
-        <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>
+        <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">
+          {error}{" "}
+          <button type="button" onClick={() => void load()} className="font-medium underline">
+            Retry
+          </button>
+        </p>
       )}
       {info && (
         <p className="rounded-lg bg-teal-50 px-3 py-2 text-sm text-teal-900">{info}</p>
       )}
 
       <div className="grid gap-3 sm:grid-cols-3">
-        <Stat label="Current plan" value={status?.plan || "—"} />
+        <Stat label="Current plan" value={pending ? "Loading…" : status?.plan || me?.org.plan || "—"} />
         <Stat
           label="Status"
           value={status?.suspended ? "Suspended" : "Active"}
           tone={status?.suspended ? "bad" : "good"}
         />
-        <Stat label="Modules unlocked" value={String(mods.length)} tone="good" />
+        <Stat
+          label="Modules unlocked"
+          value={pending ? "…" : status ? String(mods.length) : "—"}
+          tone="good"
+        />
       </div>
 
       <Card>
@@ -139,7 +178,11 @@ export default function BillingPage() {
             </h2>
             <p className="mt-1 text-sm text-slate-500">
               {mayAddLicense
-                ? catalog?.stripe_enabled
+                ? !catalog
+                  ? pending
+                    ? "Loading plans…"
+                    : "Plans could not be loaded. Use Retry above."
+                  : catalog.stripe_enabled
                   ? catalog?.promo?.enabled
                     ? "Start with a free trial — Stripe Checkout collects your card securely."
                     : "Checkout opens Stripe securely."

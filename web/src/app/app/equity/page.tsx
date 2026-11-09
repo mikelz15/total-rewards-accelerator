@@ -14,11 +14,12 @@ import {
   ZAxis,
   ReferenceLine,
 } from "recharts";
-import { getAccessToken, saasApi, type DatasetSummary } from "@/lib/saas-api";
+import { getAccessToken, saasApi } from "@/lib/saas-api";
 import { money, ratio } from "@/lib/format";
 import { Button, Card, Stat } from "@/components/ModuleShell";
 import { ModuleGate } from "@/components/ModuleGate";
 import { useWorkspace } from "@/lib/workspace-context";
+import { useSavedDatasets } from "@/lib/use-datasets";
 import { downloadCsv, stamp } from "@/lib/export";
 
 const FLAG_COLOR: Record<string, string> = {
@@ -117,7 +118,12 @@ type RemResult = {
 
 export default function AppEquityPage() {
   const { permissions } = useWorkspace();
-  const [datasets, setDatasets] = useState<DatasetSummary[]>([]);
+  const {
+    datasets,
+    loading: datasetsLoading,
+    error: datasetsError,
+    reload: reloadDatasets,
+  } = useSavedDatasets();
   const [datasetId, setDatasetId] = useState("");
   const [meritPool, setMeritPool] = useState(250000);
   const [targetCompa, setTargetCompa] = useState(1.0);
@@ -130,23 +136,10 @@ export default function AppEquityPage() {
   const [audit, setAudit] = useState<AuditResult | null>(null);
   const [remediation, setRemediation] = useState<RemResult | null>(null);
 
+  // Default to the first saved dataset once the list arrives.
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const token = await getAccessToken();
-        const res = await saasApi.listDatasets(token);
-        if (cancelled) return;
-        setDatasets(res.datasets);
-        if (res.datasets[0]) setDatasetId(res.datasets[0].id);
-      } catch (err) {
-        if (!cancelled) setError(err instanceof Error ? err.message : "Could not load datasets");
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    if (!datasetId && datasets[0]) setDatasetId(datasets[0].id);
+  }, [datasets, datasetId]);
 
   const scatterData = useMemo(() => {
     if (!audit?.scatter) return [];
@@ -258,7 +251,9 @@ export default function AppEquityPage() {
                 className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm"
               >
                 {datasets.length === 0 ? (
-                  <option value="">No datasets yet</option>
+                  <option value="">
+                    {datasetsLoading ? "Loading saved datasets…" : "No datasets yet"}
+                  </option>
                 ) : (
                   datasets.map((d) => (
                     <option key={d.id} value={d.id}>
@@ -271,7 +266,23 @@ export default function AppEquityPage() {
             <p className="mt-2 text-xs text-slate-500">
               {selected
                 ? `${selected.row_count} rows · ${selected.source_filename || "upload"}`
-                : "Run Cleaner in the workspace to save a dataset."}
+                : datasetsLoading
+                  ? "Loading your saved datasets…"
+                  : datasetsError
+                    ? `Could not load datasets: ${datasetsError}`
+                    : "Run Cleaner in the workspace to save a dataset."}
+              {datasetsError && !datasetsLoading ? (
+                <>
+                  {" · "}
+                  <button
+                    type="button"
+                    onClick={reloadDatasets}
+                    className="font-medium text-teal-800 hover:underline"
+                  >
+                    Retry
+                  </button>
+                </>
+              ) : null}
               {" · "}
               <Link href="/app/cleaner" className="font-medium text-teal-800 hover:underline">
                 Open Cleaner
