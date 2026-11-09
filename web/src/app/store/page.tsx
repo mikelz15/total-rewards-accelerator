@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ProductImage } from "@/components/ProductImage";
 
 const products = [
   {
@@ -6,7 +7,7 @@ const products = [
     price: "$129",
     blurb: "Gap tables by family and level, LINEST regression on log salary, per-employee flags. Framed as a first-pass screening tool, not a legal audit.",
     gumroad: "https://mikezll.gumroad.com/l/rocvf",
-    image: "/brand/product-equity.jpg",
+    image: "/brand/equity-product.jpg",
   },
   {
     name: "4-Year Total Wealth Projector",
@@ -71,14 +72,7 @@ export default function StorePage() {
               className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
             >
               <div className="relative mb-4 h-40 overflow-hidden rounded-xl bg-slate-100">
-                <img
-                  src={p.image}
-                  alt={p.name}
-                  className="h-full w-full object-cover"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = "/brand/product-placeholder.jpg";
-                  }}
-                />
+                <ProductImage src={p.image} alt={p.name} />
               </div>
               <h3 className="text-xl font-medium tracking-tight text-slate-900">{p.name}</h3>
               <div className="mt-4 text-3xl font-semibold tabular-nums tracking-tight text-slate-900">
