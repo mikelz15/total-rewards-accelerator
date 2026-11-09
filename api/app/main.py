@@ -122,6 +122,26 @@ app.include_router(job_match_router.saas_router)
 app.include_router(saas_formula_evaluator.router)
 app.include_router(saas_workbook.router)
 
+@app.middleware("http")
+async def json_errors_inside_cors(request, call_next):  # type: ignore[no-untyped-def]
+    """Turn an unhandled error into a JSON 500 *inside* CORSMiddleware.
+
+    Starlette's default 500 is produced outside every middleware, so it
+    carries no Access-Control-Allow-Origin header and the browser shows a
+    CORS failure instead of the real error. Registered before CORS so CORS
+    wraps it.
+    """
+    try:
+        return await call_next(request)
+    except Exception:  # noqa: BLE001
+        import logging
+
+        from fastapi.responses import JSONResponse
+
+        logging.getLogger("app").exception("Unhandled error on %s", request.url.path)
+        return JSONResponse(status_code=500, content={"detail": "Internal server error"})
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors["allow_origins"],

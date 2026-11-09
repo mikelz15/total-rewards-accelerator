@@ -5,9 +5,12 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional
 from uuid import UUID
 
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
+from sqlalchemy.exc import SQLAlchemyError
 
 from app.auth.deps import CurrentUser, ensure_user_org, get_current_user
 from app.db.models import AnalysisRun, Dataset
@@ -20,6 +23,8 @@ from app.services.flight_risk import assess_flight_risk
 from app.services.cycle_lock import lock_cycle
 from app.services.philosophy_check import check_philosophy
 from app.services.remediation import remediate
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/v1", tags=["saas-analysis"])
 
@@ -112,17 +117,29 @@ def _save_run(
     params: dict,
     result: dict,
 ) -> Optional[str]:
-    run = AnalysisRun(
-        org_id=org_id,
-        dataset_id=dataset_id,
-        kind=kind,
-        params_json=params,
-        result_json=result,
-        created_by=user_id,
-    )
-    session.add(run)
-    session.flush()
-    return str(run.id)
+    """Save a run row. A failed save never fails the analysis itself.
+
+    The insert runs inside a savepoint. If the database refuses it (for
+    example an analysis_runs kind CHECK that predates this kind), the
+    savepoint rolls back, the error is logged, and the caller still returns
+    the result with run_id None.
+    """
+    try:
+        with session.begin_nested():
+            run = AnalysisRun(
+                org_id=org_id,
+                dataset_id=dataset_id,
+                kind=kind,
+                params_json=params,
+                result_json=result,
+                created_by=user_id,
+            )
+            session.add(run)
+            session.flush()
+            return str(run.id)
+    except SQLAlchemyError:
+        logger.exception("analysis_runs save failed (kind=%s); returning result unsaved", kind)
+        return None
 
 
 @router.post("/auditor/run")
