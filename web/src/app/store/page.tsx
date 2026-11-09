@@ -6,30 +6,35 @@ const products = [
     price: "$129",
     blurb: "Gap tables by family and level, LINEST regression on log salary, per-employee flags. Framed as a first-pass screening tool, not a legal audit.",
     gumroad: "https://mikezll.gumroad.com/l/rocvf",
+    image: "/brand/product-equity.jpg",
   },
   {
     name: "4-Year Total Wealth Projector",
     price: "$99",
     blurb: "One offer in, four-year trajectory and a one-page summary out. Does not test against internal equity or ranges.",
     gumroad: "https://mikezll.gumroad.com/l/ekxdhs",
+    image: "/brand/product-closer.jpg",
   },
   {
     name: "Merit and Bonus Workbook",
     price: "$99",
     blurb: "21-point checklist, editable 5x3 merit matrix, merit model with equity-risk flags, bonus model with proration.",
     gumroad: "https://mikezll.gumroad.com/l/ysdqcwe",
+    image: "/brand/product-merit.jpg",
   },
   {
     name: "Market Data Cleaner Template",
     price: "$79",
     blurb: "Rules-and-formulas layer only (title/location maps, FX, aging, QC flags). Practitioner-run layer, not the TRA Cleaner engine.",
     gumroad: "https://mikezll.gumroad.com/l/kwshs",
+    image: "/brand/product-cleaner.jpg",
   },
   {
     name: "Clean Your HRIS Extract Before a Cycle",
     price: "$49",
     blurb: "5-page PDF guide plus a 2:54 narrated walkthrough film teaching the five cleaning passes.",
     gumroad: "https://mikezll.gumroad.com/l/bbfqc",
+    image: "/brand/product-guide.jpg",
   },
 ];
 
@@ -65,6 +70,16 @@ export default function StorePage() {
               key={p.name}
               className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
             >
+              <div className="relative mb-4 h-40 overflow-hidden rounded-xl bg-slate-100">
+                <img
+                  src={p.image}
+                  alt={p.name}
+                  className="h-full w-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "/brand/product-placeholder.jpg";
+                  }}
+                />
+              </div>
               <h3 className="text-xl font-medium tracking-tight text-slate-900">{p.name}</h3>
               <div className="mt-4 text-3xl font-semibold tabular-nums tracking-tight text-slate-900">
                 {p.price}

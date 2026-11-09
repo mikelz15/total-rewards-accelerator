@@ -20,10 +20,13 @@ export default function AppCyclePage() {
   async function load(next: Record<string, boolean>) {
     setBusy(true);
     setError(null);
+    const timeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Cycle lock timed out. Check your connection or try again.")), 20000)
+    );
     try {
       const token = await getAccessToken();
       if (!datasetId.current) {
-        const list = await saasApi.listDatasets(token);
+        const list = await Promise.race([saasApi.listDatasets(token), timeout]) as Awaited<ReturnType<typeof saasApi.listDatasets>>;
         const file = list.datasets[0];
         if (!file) {
           setError("Save a staff file from Cleaner first.");
@@ -33,11 +36,14 @@ export default function AppCyclePage() {
       }
       let res: CycleLockResult;
       try {
-        res = await saasApi.cycleRun(token, {
-          dataset_id: datasetId.current,
-          envelope_pct: 0.032,
-          confirm_exceptions: next,
-        });
+        res = await Promise.race([
+          saasApi.cycleRun(token, {
+            dataset_id: datasetId.current,
+            envelope_pct: 0.032,
+            confirm_exceptions: next,
+          }),
+          timeout,
+        ]) as CycleLockResult;
       } catch (err) {
         const message = err instanceof Error ? err.message : "";
         if (!/not found/i.test(message) || /dataset/i.test(message)) throw err;

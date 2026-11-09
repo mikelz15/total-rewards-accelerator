@@ -41,6 +41,43 @@ export default function ContestPage() {
           <p className="mt-3">
             Guidance for the paragraph: TRA is built so no comp action takes more than three clicks. Tell us where the time you save on merit cycles, data cleanup, or equity work will go instead. Be specific (coaching managers, fixing job architecture, closing pay gaps, improving offers, etc.). We are looking for real plans. Your answer may be quoted, with permission, if selected.
           </p>
+          <form
+            className="mt-8 space-y-4 rounded-2xl border border-slate-200 bg-slate-50 p-6"
+            action="mailto:mikez.lopez15@gmail.com"
+            method="post"
+            encType="text/plain"
+          >
+            <h3 className="text-lg font-semibold text-slate-900">Application form</h3>
+            <p className="text-sm text-slate-600">Applications open December 1. Submitting now sends an email so we have your interest on file.</p>
+            <div>
+              <label className="block text-sm font-medium text-slate-700">Company name</label>
+              <input name="company" required className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700">Sponsor name and title</label>
+              <input name="sponsor" required className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700">Top problem</label>
+              <select name="problem" required className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2">
+                <option value="">Select…</option>
+                <option>Merit cycle hours</option>
+                <option>Pay equity or EPA readiness</option>
+                <option>Messy HRIS data</option>
+                <option>Offer competitiveness</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700">What will you do with the extra time? (100–150 words)</label>
+              <textarea name="paragraph" required rows={5} className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2" />
+            </div>
+            <button
+              type="submit"
+              className="rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-slate-800"
+            >
+              Submit application interest
+            </button>
+          </form>
         </section>
 
         <section>
