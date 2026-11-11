@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DesignPartnerForm } from "@/components/DesignPartnerForm";
 
 export const metadata: Metadata = {
   title: "Design Partner Year · Total Rewards Accelerator",
@@ -28,56 +29,22 @@ export default function ContestPage() {
           <h2 className="text-2xl font-semibold tracking-tight text-slate-900">To apply</h2>
           <p className="mt-2">Submit the following:</p>
           <ul className="mt-4 list-disc space-y-2 pl-5">
-            <li>Company name, headcount, industry, and HQ location</li>
-            <li>Name and title of the decision-maker who will sponsor the work (comp, Total Rewards, or HR leader)</li>
-            <li>Your HRIS and how you handle comp today (spreadsheets, tools, or both)</li>
-            <li>Your top problem: merit cycle hours, pay equity or EPA readiness, messy HRIS data, or offer competitiveness</li>
-            <li>When your next merit cycle or comp review happens</li>
-            <li>How you will measure success (hours saved, cycle time, or audit readiness)</li>
-            <li>Whether you would consider a paid or custom build if the year goes well</li>
-            <li>Confirmation that you have tried the sample-data demo at totalrewardsaccelerator.com</li>
+            <li>Company name, industry, HQ or primary work state(s), and approximate headcount in scope</li>
+            <li>Your name, title, work email, and role in the decision (decision-maker, influencer, or researcher); phone is optional</li>
+            <li>Name and title of the executive sponsor (comp, Total Rewards, or HR leader)</li>
+            <li>Your primary HRIS or payroll system, how you handle comp today (spreadsheets, tools, or both), and how messy your exports are</li>
+            <li>Your top problem: merit cycle hours, pay equity or EPA readiness, messy HRIS data, offer competitiveness, or job architecture</li>
+            <li>When your next merit cycle or comp review happens (month or quarter)</li>
+            <li>How you will measure success (hours saved, cycle time, audit readiness, or your own measure)</li>
+            <li>Whether you would consider a paid Design Partnership or a short pilot if not selected</li>
+            <li>Optional: budget path in the next 90 days, which module you would start with, and Denver / Front Range presence</li>
+            <li>Confirmation that you have tried the sample-data demo at totalrewardsaccelerator.com, and that you commit to the winner obligations below if selected</li>
             <li><strong>A short paragraph (100–150 words) answering: “What will you do with the extra time TRA saves you?”</strong></li>
           </ul>
           <p className="mt-3">
             Guidance for the paragraph: TRA is built so no comp action takes more than three clicks. Tell us where the time you save on merit cycles, data cleanup, or equity work will go instead. Be specific (coaching managers, fixing job architecture, closing pay gaps, improving offers, etc.). We are looking for real plans. Your answer may be quoted, with permission, if selected.
           </p>
-          <form
-            className="mt-8 space-y-4 rounded-2xl border border-slate-200 bg-slate-50 p-6"
-            action="mailto:mikez.lopez15@gmail.com"
-            method="post"
-            encType="text/plain"
-          >
-            <h3 className="text-lg font-semibold text-slate-900">Application form</h3>
-            <p className="text-sm text-slate-600">Applications open December 1. Submitting now sends an email so we have your interest on file.</p>
-            <div>
-              <label className="block text-sm font-medium text-slate-700">Company name</label>
-              <input name="company" required className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700">Sponsor name and title</label>
-              <input name="sponsor" required className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700">Top problem</label>
-              <select name="problem" required className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2">
-                <option value="">Select…</option>
-                <option>Merit cycle hours</option>
-                <option>Pay equity or EPA readiness</option>
-                <option>Messy HRIS data</option>
-                <option>Offer competitiveness</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700">What will you do with the extra time? (100–150 words)</label>
-              <textarea name="paragraph" required rows={5} className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2" />
-            </div>
-            <button
-              type="submit"
-              className="rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-slate-800"
-            >
-              Submit application interest
-            </button>
-          </form>
+          <DesignPartnerForm />
         </section>
 
         <section>
