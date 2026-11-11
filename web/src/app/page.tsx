@@ -137,9 +137,18 @@ export default function HomePage() {
           >
             Try the demo
           </Link>
+          <Link
+            href="/contest"
+            className="rounded-full border border-teal-600 bg-teal-50 px-6 py-3 text-base font-medium text-teal-800 hover:bg-teal-100"
+          >
+            Design Partner Year
+          </Link>
         </div>
         <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-slate-600">
           First 30 days free. Card required. Cancel anytime. The films use the sample file.
+        </p>
+        <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-500">
+          Applications for the free Design Partner Year open December 1, 2026.
         </p>
       </section>
 
