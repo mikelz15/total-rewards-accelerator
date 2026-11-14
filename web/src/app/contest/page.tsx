@@ -79,7 +79,7 @@ export default function ContestPage() {
         <section>
           <h2 className="text-2xl font-semibold tracking-tight text-slate-900">Design Partnership (available now)</h2>
           <p className="mt-2">
-            Separate from the contest: a limited number of Design Partnerships are open now for teams that want a custom system built on their data, grades, and merit rules (starting around $50,000). The same three-click, explainable approach applies.
+            The Design Partnership (starting at $50,000) is a custom build: a version of Total Rewards Accelerator configured to your workflows and scenarios, integrated into your HRIS and HCM platforms. Projects run three to six months — organizations with 10,000 or more employees should plan on six — and most of that time goes to the work that makes the system stick: your workflows and processes, documented and approved across every persona and stakeholder. That front-loaded alignment is what makes the build-out itself quick.
           </p>
         </section>
 
