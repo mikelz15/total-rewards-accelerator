@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 
 export default function ContestPage() {
   return (
-    <div className="mx-auto max-w-3xl px-5 py-20">
-      <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
+    <div className="mx-auto max-w-3xl px-5 py-10">
+      <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
         Design Partner Year
       </h1>
-      <p className="mt-6 text-xl leading-relaxed text-slate-600">Applications open December 1, 2026. Winners announced January 2, 2027.</p>
+      <p className="mt-1 text-sm leading-relaxed text-slate-500">Applications open December 1, 2026. Winners announced January 2, 2027.</p>
 
       <div className="mt-12 space-y-10 text-lg leading-relaxed text-slate-700">
         <section>

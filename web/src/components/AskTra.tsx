@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { isWorkspaceTool, useSignedIn } from "@/lib/use-signed-in";
 
 /**
  * Ask TRA — public-site chat bubble.
@@ -47,11 +48,13 @@ export function AskTra() {
   const [hQuestion, setHQuestion] = useState("");
   const [hState, setHState] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
+  const signedIn = useSignedIn();
   const hidden =
     pathname.startsWith("/app") ||
     pathname === "/login" ||
     pathname === "/signup" ||
-    pathname.startsWith("/auth");
+    pathname.startsWith("/auth") ||
+    (isWorkspaceTool(pathname) && Boolean(signedIn));
 
   useEffect(() => {
     if (hidden) return;

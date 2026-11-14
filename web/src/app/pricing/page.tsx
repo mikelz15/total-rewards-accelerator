@@ -48,12 +48,12 @@ const oneTime = [
 
 export default function PricingPage() {
   return (
-    <div className="mx-auto max-w-6xl px-5 py-20">
+    <div className="mx-auto max-w-6xl px-5 py-10">
       <div className="max-w-2xl">
-        <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
+        <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
           Modules you can buy separately — or as a suite
         </h1>
-        <p className="mt-6 text-lg leading-relaxed text-slate-600">
+        <p className="mt-1 text-sm leading-relaxed text-slate-500">
           First 30 days free. Card required. You won’t be charged until day 31. Cancel anytime from Billing.
         </p>
         <p className="mt-4 text-lg leading-relaxed text-slate-600">

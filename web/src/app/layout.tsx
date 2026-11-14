@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import localFont from "next/font/local";
 import { AuthReturn } from "@/components/AuthReturn";
-import { Nav } from "@/components/Nav";
 import { AskTra } from "@/components/AskTra";
 import { SiteFooter } from "@/components/SiteFooter";
+import { SiteFrame } from "@/components/SiteFrame";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -51,8 +51,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
         <AuthReturn />
-        <Nav />
-        <main>{children}</main>
+        <SiteFrame>{children}</SiteFrame>
         <SiteFooter />
         <AskTra />
         <Analytics />

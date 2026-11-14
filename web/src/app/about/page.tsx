@@ -9,11 +9,11 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-3xl px-5 py-20">
-      <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
+    <div className="mx-auto max-w-3xl px-5 py-10">
+      <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
         The practice, then the toolkit
       </h1>
-      <p className="mt-6 text-xl leading-relaxed text-slate-600">
+      <p className="mt-1 text-sm leading-relaxed text-slate-500">
         Mikez L.L. Enterprise is a compensation practice. The work is the system that pays people.
         Total Rewards Accelerator is that system, taken out of the workbook.
       </p>

@@ -18,12 +18,12 @@ const invoices = [
 
 export default function PathsPage() {
   return (
-    <div className="mx-auto max-w-5xl px-5 py-20 sm:py-24">
+    <div className="mx-auto max-w-5xl px-5 py-10">
       <div className="max-w-2xl">
-        <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
+        <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
           Same modules. The seat chooses the door.
         </h1>
-        <p className="mt-6 text-xl leading-relaxed text-slate-600">
+        <p className="mt-1 text-sm leading-relaxed text-slate-500">
           A plan decides what the workspace paid for. A seat decides which of those modules
           this person opens, and whether they can change anything.
         </p>
@@ -33,7 +33,7 @@ export default function PathsPage() {
         {SEAT_PATHS.map((path) => (
           <section key={path.id} id={path.id} className="scroll-mt-24">
             <div className="flex flex-wrap items-baseline justify-between gap-4">
-              <h2 className="text-3xl font-semibold tracking-tight text-slate-900">{path.title}</h2>
+              <h2 className="text-2xl font-semibold tracking-tight text-slate-900">{path.title}</h2>
               <p className="text-base text-slate-500">{path.who}</p>
             </div>
             <p className="mt-3 text-lg text-slate-600">{path.line}</p>

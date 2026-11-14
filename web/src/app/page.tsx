@@ -114,13 +114,13 @@ const after = [
 
 export default function HomePage() {
   return (
-    <div className="mx-auto max-w-5xl overflow-x-hidden px-5 py-20 sm:py-28">
+    <div className="mx-auto max-w-5xl overflow-x-hidden px-5 py-12">
       <section className="text-center">
-        <h1 className="mx-auto max-w-3xl text-5xl font-semibold tracking-tight text-slate-900 sm:text-6xl">
+        <h1 className="mx-auto max-w-3xl text-balance text-3xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
           Stop crunching rows.
           <span className="mt-3 block text-ember">Start designing strategy.</span>
         </h1>
-        <p className="mx-auto mt-8 max-w-xl text-xl leading-relaxed text-slate-600">
+        <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-600">
           The sample file, from a messy extract to a cycle, an offer, and a credited resume.
         </p>
         <HeroFilm />
@@ -152,8 +152,8 @@ export default function HomePage() {
         </p>
       </section>
 
-      <section className="mt-28">
-        <h2 className="text-center text-3xl font-semibold tracking-tight text-slate-900">
+      <section className="mt-16">
+        <h2 className="text-center text-2xl font-semibold tracking-tight text-slate-900">
           The same two people
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-center text-lg leading-relaxed text-slate-600">
@@ -205,16 +205,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ol className="mx-auto mt-20 grid max-w-4xl grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-5">
-        {workflow.map((step) => (
-          <li key={step.n}>
-            <p className="text-2xl font-semibold tracking-tight text-slate-900">{step.label}</p>
-            <p className="mt-2 text-base text-slate-600">{step.detail}</p>
+      <ol className="mx-auto mt-16 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-5">
+        {workflow.map((step, index) => (
+          <li key={step.n} className="rounded-2xl border border-slate-200/80 bg-white p-4">
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-800 text-xs font-semibold text-white">
+              {index + 1}
+            </span>
+            <p className="mt-3 text-sm font-semibold text-slate-900">{step.label}</p>
+            <p className="mt-1 text-sm text-slate-500">{step.detail}</p>
           </li>
         ))}
       </ol>
 
-      <section className="mt-28 grid gap-12 sm:grid-cols-3">
+      <section className="mt-16 grid gap-12 sm:grid-cols-3">
         {edges.map((edge) => (
           <div key={edge.title}>
             <h2 className="text-xl font-medium tracking-tight text-slate-900">{edge.title}</h2>
@@ -223,10 +226,10 @@ export default function HomePage() {
         ))}
       </section>
 
-      <section className="mt-28">
+      <section className="mt-16">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Four ways in</h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-slate-900">Four ways in</h2>
             <p className="mt-4 max-w-xl text-lg text-slate-600">
               The modules stay the same. The seat decides the door.
             </p>
@@ -242,8 +245,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mt-28">
-        <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Tools</h2>
+      <section className="mt-16">
+        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">Tools</h2>
         <p className="mt-4 max-w-2xl text-lg text-slate-600">
           Cycle Lock and Philosophy Check ship with Equity. Four invoices.
         </p>
@@ -263,8 +266,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mt-28 max-w-2xl">
-        <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
+      <section className="mt-16 max-w-2xl">
+        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
           The company, and the person who built it
         </h2>
         <p className="mt-5 text-lg leading-relaxed text-slate-600">
