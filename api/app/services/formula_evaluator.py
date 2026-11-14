@@ -22,8 +22,24 @@ class Issue:
     employee_ids: list[str] = field(default_factory=list)
 
 
+class UnreadableMeritFile(Exception):
+    """The upload is not a CSV or XLSX this check can open."""
+
+
 def _safe_numeric(series: pd.Series) -> pd.Series:
     return pd.to_numeric(series, errors="coerce")
+
+
+def load_merit_frame(filename: str | None, contents: bytes) -> pd.DataFrame:
+    """Read an uploaded merit file. Raise UnreadableMeritFile instead of crashing."""
+    try:
+        buffer = pd.io.common.BytesIO(contents)
+        name = (filename or "").lower()
+        if name.endswith(".xlsx"):
+            return pd.read_excel(buffer)
+        return pd.read_csv(buffer)
+    except Exception as exc:
+        raise UnreadableMeritFile("This file could not be read. Upload a CSV or XLSX merit file.") from exc
 
 
 def run_checks(df: pd.DataFrame, mapping: dict[str, str] | None = None) -> dict[str, Any]:
@@ -82,37 +98,40 @@ def run_checks(df: pd.DataFrame, mapping: dict[str, str] | None = None) -> dict[
                 )
             )
 
-    # Increase % bounds
+    # Increase % bounds. Blanks and text are not numbers, and they used to crash the mean below.
     if "merit_increase_pct" in df.columns:
         pct = _safe_numeric(df["merit_increase_pct"])
-        outliers = df[(pct < -0.10) | (pct > 0.30)]
+        outliers = df[(pct.isna() | (pct < -0.10) | (pct > 0.30)).fillna(False)]
         if len(outliers):
             issues.append(
                 Issue(
                     code="increase_bounds",
                     severity="High",
                     title="Increase % outside realistic bounds",
-                    explanation=f"{len(outliers)} rows have increases below –10% or above 30%.",
+                    explanation=(
+                        f"{len(outliers)} rows have a blank or non-numeric increase, "
+                        "or an increase below –10% or above 30%."
+                    ),
                     affected_count=len(outliers),
                     suggested_action="Review outliers for data entry or special-case justification.",
                     employee_ids=outliers.get("employee_id", pd.Series()).astype(str).tolist()[:50],
                 )
             )
 
-    # Merit by rating inversion (simple)
+    # Merit by rating inversion (simple). Average only the numeric increases.
     if {"merit_increase_pct", "performance_rating"}.issubset(df.columns):
-        grp = df.groupby("performance_rating")["merit_increase_pct"].mean()
-        # Heuristic: flag if a higher rating has lower average (very rough)
-        if len(grp) >= 2:
-            sorted_means = grp.sort_index()
-            if not sorted_means.is_monotonic_increasing:
+        rated = df.assign(_merit_pct=_safe_numeric(df["merit_increase_pct"])).dropna(subset=["_merit_pct"])
+        if not rated.empty:
+            grp = rated.groupby("performance_rating")["_merit_pct"].mean()
+            # Heuristic: flag if a higher rating has lower average (very rough)
+            if len(grp) >= 2 and not grp.sort_index().is_monotonic_increasing:
                 issues.append(
                     Issue(
                         code="merit_rating_inversion",
                         severity="High",
                         title="Merit increase does not rise with rating",
                         explanation="Average increase is not higher for higher performance ratings.",
-                        affected_count=len(df),
+                        affected_count=len(rated),
                         suggested_action="Review the merit matrix or rating distribution.",
                     )
                 )
@@ -140,7 +159,7 @@ def run_checks(df: pd.DataFrame, mapping: dict[str, str] | None = None) -> dict[
         rmin = _safe_numeric(df["range_min"])
         rmax = _safe_numeric(df["range_max"])
         pen = (base - rmin) / (rmax - rmin).replace(0, pd.NA)
-        extreme = df[(pen > 1.2) | (pen < -0.2)]
+        extreme = df[((pen > 1.2) | (pen < -0.2)).fillna(False)]
         if len(extreme):
             issues.append(
                 Issue(

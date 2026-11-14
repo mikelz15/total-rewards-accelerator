@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 from fastapi import APIRouter, File, Form, UploadFile
+from fastapi.responses import JSONResponse
 from typing import Any
 
-import pandas as pd
-
-from app.services.formula_evaluator import run_checks
+from app.services.formula_evaluator import UnreadableMeritFile, load_merit_frame, run_checks
 
 router = APIRouter(prefix="/formula-evaluator", tags=["formula-evaluator"])
 
@@ -18,10 +19,10 @@ async def run_evaluator(
     First-pass only. File is not retained.
     """
     contents = await file.read()
-    if file.filename and file.filename.lower().endswith(".xlsx"):
-        df = pd.read_excel(pd.io.common.BytesIO(contents))
-    else:
-        df = pd.read_csv(pd.io.common.BytesIO(contents))
+    try:
+        df = load_merit_frame(file.filename, contents)
+    except UnreadableMeritFile as exc:
+        return JSONResponse(status_code=400, content={"detail": str(exc)})
 
     # Basic sensitive header refusal (align with existing demo guard)
     sensitive = {"ssn", "social", "email", "phone", "dob", "birth"}
