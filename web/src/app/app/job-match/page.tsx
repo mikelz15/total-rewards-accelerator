@@ -98,13 +98,10 @@ export default function JobMatchPage() {
     <ModuleGate module="job_match" permissions={permissions}>
       <div className="space-y-6">
         <div className="max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
-            Workspace · Job Match
-          </p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
             One internal job. Three external matches.
           </h1>
-          <p className="mt-2 text-slate-600">
+          <p className="mt-1 text-sm text-slate-500">
             The match uses the description, the duties, the family, and the level. Title is not
             enough. Same family and level is full. Same family, different level, is half. A
             different family is dropped. Included with Cleaner or Equity. The catalog is a short

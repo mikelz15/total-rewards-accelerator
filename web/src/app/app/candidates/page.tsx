@@ -112,13 +112,10 @@ export default function AppCandidatesPage() {
     <ModuleGate module="tracker" permissions={permissions}>
     <div className="space-y-6">
       <div className="max-w-2xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
-          Workspace · Candidates
-        </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
           Candidate tracker
         </h1>
-        <p className="mt-2 text-slate-600">
+        <p className="mt-1 text-sm text-slate-500">
           Org-scoped pipeline that survives restarts — open any offer stage in Closer for total
           wealth.
         </p>

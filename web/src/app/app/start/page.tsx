@@ -32,11 +32,10 @@ export default function StartPage() {
   return (
     <div className="space-y-8">
       <div className="max-w-2xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">Get started</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
           {path.title}
         </h1>
-        <p className="mt-2 text-slate-600">{path.line}</p>
+        <p className="mt-1 text-sm text-slate-500">{path.line}</p>
       </div>
 
       <Card>

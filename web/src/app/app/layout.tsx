@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AppNav } from "@/components/AppNav";
+import { useWorkspaceTheme } from "@/components/workspace-theme";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { getAccessToken, saasApi, type MeResponse } from "@/lib/saas-api";
 import { brandImageUrl } from "@/lib/branding";
@@ -52,19 +53,24 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }, [load, pathname]);
 
   const permissions = (me?.permissions as Permissions | undefined) || null;
+  const { theme, setTheme } = useWorkspaceTheme();
 
   return (
     <WorkspaceContext.Provider
       value={{ me, permissions, error, loading, reload: () => void load() }}
     >
-      <div className="min-h-screen bg-[#e6eef0]">
+      <div className="tra-workspace min-h-screen bg-[#e6eef0]" data-theme={theme}>
         <AppNav
           orgName={me?.org.name}
           email={me?.user.email}
           permissions={permissions}
           isSystemAdmin={Boolean(me?.user.is_system_admin)}
           brandImageUrl={brandImageUrl(me?.org.brand_image_path)}
+          plan={me?.org.plan}
+          theme={theme}
+          onTheme={setTheme}
         />
+        <main>
         {error && (
           <div className="mx-auto max-w-6xl px-4 pt-4">
             <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
@@ -80,6 +86,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         )}
         <div className="mx-auto max-w-6xl px-4 py-8">{children}</div>
+        </main>
       </div>
     </WorkspaceContext.Provider>
   );

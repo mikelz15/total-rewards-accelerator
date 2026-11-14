@@ -121,13 +121,10 @@ export default function PlatformAdminPage() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-rose-700">
-          System admin console
-        </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
           Platform control plane
         </h1>
-        <p className="mt-2 max-w-2xl text-slate-600">
+        <p className="mt-1 max-w-2xl text-sm text-slate-500">
           This is <strong>your</strong> operator console (not a customer screen). Grant pilot/suite
           plans, issue a seat license, suspend an org, and adjust row limits. A customer
           workspace cannot add a seat.

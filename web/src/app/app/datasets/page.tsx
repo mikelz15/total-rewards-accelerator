@@ -32,13 +32,10 @@ export default function AppDatasetsPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div className="max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
-            Workspace · Datasets
-          </p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
             Saved cleaned data
           </h1>
-          <p className="mt-2 text-slate-600">
+          <p className="mt-1 text-sm text-slate-500">
             Org-scoped only. Equity, Cycle Lock, and Philosophy open this file. You do not upload it again.
           </p>
         </div>
