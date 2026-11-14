@@ -36,3 +36,61 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Signed-in shell. Light stays the cool desk. Dark follows the approved mock. */
+.tra-workspace[data-theme="dark"] {
+  background: #0f1b26;
+  color: #e7eef3;
+}
+
+.tra-workspace[data-theme="dark"] main .bg-white,
+.tra-workspace[data-theme="dark"] main .bg-white\/95 {
+  background-color: #162636;
+}
+
+.tra-workspace[data-theme="dark"] main .bg-slate-900 {
+  background-color: #e8eef2;
+  color: #0f1b26;
+}
+
+.tra-workspace[data-theme="dark"] main .bg-slate-50,
+.tra-workspace[data-theme="dark"] main .bg-slate-100,
+.tra-workspace[data-theme="dark"] main .bg-teal-50,
+.tra-workspace[data-theme="dark"] main .bg-teal-50\/80 {
+  background-color: #1c3142;
+}
+
+.tra-workspace[data-theme="dark"] main .text-slate-900 {
+  color: #eef4f7;
+}
+
+.tra-workspace[data-theme="dark"] main .text-slate-800,
+.tra-workspace[data-theme="dark"] main .text-slate-700 {
+  color: #d5e1e8;
+}
+
+.tra-workspace[data-theme="dark"] main .text-slate-600 {
+  color: #b7c6d0;
+}
+
+.tra-workspace[data-theme="dark"] main .text-slate-500,
+.tra-workspace[data-theme="dark"] main .text-slate-400 {
+  color: #93a6b2;
+}
+
+.tra-workspace[data-theme="dark"] main .text-teal-800,
+.tra-workspace[data-theme="dark"] main .text-teal-700,
+.tra-workspace[data-theme="dark"] main .text-teal-950 {
+  color: #7ec8c4;
+}
+
+.tra-workspace[data-theme="dark"] main .border-slate-200,
+.tra-workspace[data-theme="dark"] main .border-slate-200\/80,
+.tra-workspace[data-theme="dark"] main .border-slate-300,
+.tra-workspace[data-theme="dark"] main .border-teal-200 {
+  border-color: #2a4154;
+}
+
+.tra-workspace[data-theme="dark"] main .bg-slate-300 {
+  background-color: #2a4154;
+}

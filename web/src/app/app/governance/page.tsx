@@ -86,11 +86,8 @@ export default function GovernancePage() {
   return (
     <div className="space-y-6">
       <div className="max-w-2xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
-          Workspace · not a module
-        </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">Governance</h1>
-        <p className="mt-2 text-slate-600">
+        <p className="mt-1 text-sm text-slate-500">
           Rules for the places on the latest file. Federal cards ride along once any place is present.
           A card chips inside the time window. This is not a module. {data?.disclaimer || "Not legal advice."}
         </p>

@@ -80,11 +80,10 @@ export default function WorkbookPage() {
   return (
     <div className="space-y-8">
       <div className="max-w-2xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">Playbook</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
           {SEAT_LABEL[seat] || "Chair"}
         </h1>
-        <p className="mt-2 text-slate-600">
+        <p className="mt-1 text-sm text-slate-500">
           The file sits next to the steps. A note saved here is the chair’s own, and the other chairs can read it.
         </p>
       </div>

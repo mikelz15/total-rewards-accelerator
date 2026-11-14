@@ -63,13 +63,10 @@ function TeamInner() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
-          Settings · Team
-        </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
           People &amp; roles
         </h1>
-        <p className="mt-2 max-w-2xl text-slate-600">
+        <p className="mt-1 max-w-2xl text-sm text-slate-500">
           A person already here can change doors. A new seat is not added from this page.
           The platform issues a license first. That license has a start and an end.
         </p>

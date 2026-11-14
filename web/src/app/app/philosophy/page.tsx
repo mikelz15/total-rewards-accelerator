@@ -68,13 +68,10 @@ export default function AppPhilosophyPage() {
     <ModuleGate module="equity" permissions={permissions}>
       <div className="space-y-6">
         <div className="max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
-            Workspace · Philosophy Check
-          </p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
             Does this file match what you said you pay for?
           </h1>
-          <p className="mt-2 text-slate-600">
+          <p className="mt-1 text-sm text-slate-500">
             Same three claims as the public sample. This run uses a saved dataset and keeps the
             score with the organization. There is no ten-row cap.
           </p>

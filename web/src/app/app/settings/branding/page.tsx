@@ -137,13 +137,10 @@ export default function BrandingSettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
-          Settings · Branding
-        </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
           Organization image
         </h1>
-        <p className="mt-2 max-w-2xl text-slate-600">
+        <p className="mt-1 max-w-2xl text-sm text-slate-500">
           One logo or banner for {me?.org.name || "this organization"}. It replaces the TRA mark in
           the app header for everyone in the org. Optional.
         </p>

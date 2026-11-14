@@ -225,13 +225,10 @@ export default function AppEquityPage() {
     <ModuleGate module="equity" permissions={permissions}>
     <div className="space-y-6">
       <div className="max-w-2xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
-          Workspace · Equity + Merit
-        </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
           Pay equity &amp; merit remediation
         </h1>
-        <p className="mt-2 text-slate-600">
+        <p className="mt-1 text-sm text-slate-500">
           Dual-lens equity (market mid + YOE/education placement) on a saved dataset. Flight risk
           is a 0–100 score from under-market pay, a strong performer under the range, and tenure.
           The pool can fund to mid, expected placement, or the max of both.

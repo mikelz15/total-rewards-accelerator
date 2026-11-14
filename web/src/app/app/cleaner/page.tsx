@@ -62,13 +62,10 @@ export default function AppCleanerPage() {
     <ModuleGate module="cleaner" permissions={permissions}>
     <div className="space-y-6">
       <div className="max-w-2xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
-          Workspace · Cleaner
-        </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
           Market data cleaner
         </h1>
-        <p className="mt-2 text-slate-600">
+        <p className="mt-1 text-sm text-slate-500">
           Messy HRIS becomes analysis-ready rows, then stays in this workspace.
           {rowCap ? ` This workspace holds ${rowCap.toLocaleString("en-US")} rows.` : ""} Prefer a
           scrubbed file.

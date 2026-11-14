@@ -223,13 +223,10 @@ export default function AppCloserPage() {
     <ModuleGate module="closer" permissions={permissions}>
     <div className="space-y-6">
       <div className="max-w-2xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">
-          Workspace · Closer
-        </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
           Candidate closer
         </h1>
-        <p className="mt-2 text-slate-600">
+        <p className="mt-1 text-sm text-slate-500">
           Turn base, bonus, and LTI into a four-year total and a one-page PDF. Resume tally
           credits the resume against this job, then confirm fills Years of experience.
         </p>
