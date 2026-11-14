@@ -21,12 +21,12 @@ const included = [
 
 export default function TrialPage() {
   return (
-    <div className="mx-auto max-w-5xl px-5 py-20 sm:py-24">
+    <div className="mx-auto max-w-5xl px-5 py-10">
       <div className="max-w-2xl">
-        <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
+        <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
           Try the full suite free for 30 days
         </h1>
-        <p className="mt-6 text-xl leading-relaxed text-slate-600">
+        <p className="mt-1 text-sm leading-relaxed text-slate-500">
           First 30 days free. Every module included. Card required at checkout. You won&apos;t be
           charged until day 31. Cancel anytime from Billing.
         </p>

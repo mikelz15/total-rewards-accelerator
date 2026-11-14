@@ -41,18 +41,18 @@ const products = [
 
 export default function StorePage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12">
-      <div className="relative mb-10 overflow-hidden rounded-2xl bg-slate-900">
+    <div className="mx-auto max-w-6xl px-4 py-10">
+      <div className="relative mb-8 overflow-hidden rounded-2xl bg-slate-900">
         <img
           src="/brand/store-hero.jpg"
           alt="TRA Store"
-          className="h-64 w-full object-cover opacity-80 sm:h-80"
+          className="h-48 w-full object-cover opacity-80 sm:h-56"
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-t from-slate-900/70 to-transparent px-6 text-center">
-          <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+          <h1 className="text-3xl font-semibold tracking-tight text-white">
             Standalone tools and templates
           </h1>
-          <p className="mt-4 max-w-xl text-lg text-white/90">
+          <p className="mt-1 max-w-xl text-sm text-white/90">
             Instant download. No subscription required.
           </p>
         </div>

@@ -59,8 +59,8 @@ export function Nav() {
 
   function itemClass(active: boolean) {
     return active
-      ? "text-base font-medium text-slate-900"
-      : "text-base text-slate-600 hover:text-slate-900";
+      ? "rounded-full bg-slate-900 px-3 py-1.5 text-sm font-medium text-white"
+      : "rounded-full px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100";
   }
 
   function closeAll() {
@@ -68,38 +68,41 @@ export function Nav() {
     setToolsOpen(false);
   }
 
-  const toolPanel = (
-    <div id="site-tools" className="border-t border-slate-200/80 bg-white">
-      <div className="mx-auto grid max-w-6xl gap-x-10 gap-y-6 px-6 py-8 sm:grid-cols-2 lg:grid-cols-4">
-        {tools.map((tool) => (
-          <Link
-            key={tool.href}
-            href={tool.href}
-            className="block rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-            onClick={closeAll}
-          >
-            <span className="block text-lg font-medium tracking-tight text-slate-900">{tool.label}</span>
-            <span className="mt-1 block text-base text-slate-600">{tool.line}</span>
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-
   return (
-    <header className="sticky top-0 z-50 border-b border-[#0f6b6d]/40 bg-white/90 backdrop-blur-md">
-      <div className="mx-auto flex min-h-[4.25rem] max-w-6xl items-center justify-between gap-6 px-5">
+    <header className="sticky top-0 z-50 border-b-2 border-[#0f6b6d] bg-white/95 backdrop-blur">
+      <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5">
         <BrandLogo variant="nav" priority />
-        <nav className="hidden items-center gap-7 lg:flex">
-          <button
-            type="button"
-            className={itemClass(tools.some((tool) => pathname === tool.href))}
-            aria-expanded={toolsOpen}
-            aria-controls="site-tools"
-            onClick={() => setToolsOpen((value) => !value)}
-          >
-            Tools
-          </button>
+        <nav className="ml-auto hidden items-center gap-1 lg:flex">
+          <div className="relative">
+            <button
+              type="button"
+              className={itemClass(toolsOpen || tools.some((tool) => pathname === tool.href))}
+              aria-expanded={toolsOpen}
+              aria-haspopup="menu"
+              onClick={() => setToolsOpen((value) => !value)}
+            >
+              Tools
+            </button>
+            {toolsOpen && (
+              <div
+                role="menu"
+                className="absolute left-0 z-20 mt-2 w-64 rounded-xl border border-slate-200 bg-white p-1 shadow-lg"
+              >
+                {tools.map((tool) => (
+                  <Link
+                    key={tool.href}
+                    href={tool.href}
+                    role="menuitem"
+                    className="block rounded-lg px-3 py-2 text-sm text-slate-800 hover:bg-slate-50"
+                    onClick={closeAll}
+                  >
+                    <span className="block font-medium">{tool.label}</span>
+                    <span className="block text-slate-500">{tool.line}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
           {primary.map((link) => (
             <Link
               key={link.href}
@@ -111,45 +114,44 @@ export function Nav() {
             </Link>
           ))}
         </nav>
-        <div className="hidden items-center gap-6 lg:flex">
+        <div className="hidden items-center gap-1 lg:flex">
           <button
             type="button"
             onClick={handleResetDemo}
             disabled={resetting}
-            className="text-base text-slate-500 hover:text-slate-900 disabled:opacity-50"
+            className="rounded-full px-3 py-1.5 text-sm text-slate-500 hover:bg-slate-100 hover:text-slate-900 disabled:opacity-50"
             title="Clear session data and reload the messy HRIS sample"
           >
             {resetting ? "Resetting…" : "Reset"}
           </button>
-          <Link href="/app" className="text-base text-slate-600 hover:text-slate-900">
+          <Link href="/app" className="rounded-full px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100">
             Open app
           </Link>
           <Link
             href="/signup"
-            className="rounded-full bg-ember px-5 py-2.5 text-base font-medium text-white hover:bg-ember-deep"
+            className="rounded-full bg-ember px-3 py-1.5 text-sm font-medium text-white hover:bg-ember-deep"
           >
             Start free trial
           </Link>
         </div>
         <button
           type="button"
-          className="text-base font-medium text-slate-800 lg:hidden"
+          className="ml-auto text-sm font-medium text-slate-800 lg:hidden"
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
         >
           {open ? "Close" : "Menu"}
         </button>
       </div>
-      {toolsOpen && <div className="hidden lg:block">{toolPanel}</div>}
       {open && (
-        <div className="border-t border-slate-200 bg-white px-5 py-6 lg:hidden">
-          <div className="flex flex-col gap-5">
-            <p className="text-base text-slate-500">Tools</p>
+        <div className="border-t border-slate-200 bg-white px-4 py-4 lg:hidden">
+          <div className="flex flex-col gap-1">
+            <p className="px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Tools</p>
             {tools.map((tool) => (
               <Link
                 key={tool.href}
                 href={tool.href}
-                className="text-lg font-medium text-slate-900"
+                className="rounded-lg px-3 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50"
                 onClick={closeAll}
               >
                 {tool.label}
@@ -170,14 +172,14 @@ export function Nav() {
               type="button"
               onClick={handleResetDemo}
               disabled={resetting}
-              className="text-left text-base text-slate-500"
+              className="rounded-lg px-3 py-2 text-left text-sm text-slate-500"
             >
               {resetting ? "Resetting…" : "Reset demo"}
             </button>
-            <Link href="/app" className="text-base text-slate-600" onClick={closeAll}>
+            <Link href="/app" className="rounded-lg px-3 py-2 text-sm text-slate-600" onClick={closeAll}>
               Open app
             </Link>
-            <Link href="/signup" className="text-base font-medium text-ember" onClick={closeAll}>
+            <Link href="/signup" className="rounded-lg px-3 py-2 text-sm font-medium text-ember" onClick={closeAll}>
               Start free trial
             </Link>
           </div>

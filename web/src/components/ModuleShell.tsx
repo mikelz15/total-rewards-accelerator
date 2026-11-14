@@ -1,24 +1,20 @@
 import { ReactNode } from "react";
 
 export function ModuleShell({
-  eyebrow,
   title,
   description,
   children,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   description: string;
   children: ReactNode;
 }) {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12">
-      <div className="mb-12 max-w-2xl">
-        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <h1 className="text-4xl font-semibold tracking-tight text-slate-900">{title}</h1>
-          <p className="text-base text-teal-800">{eyebrow}</p>
-        </div>
-        <p className="mt-5 text-lg leading-relaxed text-slate-600">{description}</p>
+    <div className="mx-auto max-w-6xl px-4 py-8">
+      <div className="mb-8 max-w-2xl">
+        <h1 className="text-3xl font-semibold tracking-tight text-slate-900">{title}</h1>
+        <p className="mt-1 text-sm leading-relaxed text-slate-500">{description}</p>
       </div>
       {children}
     </div>

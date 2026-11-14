@@ -31,7 +31,7 @@ export function SeatPathCard({ path }: { path: SeatPath }) {
 
   return (
     <div
-      className={`group rounded-3xl border bg-white p-7 transition-colors motion-reduce:transition-none ${
+      className={`group rounded-2xl border bg-white p-6 transition-colors motion-reduce:transition-none ${
         open ? "border-slate-300" : "border-slate-200/80"
       } [@media(hover:hover)]:hover:border-slate-300 focus-within:border-slate-300`}
     >
@@ -40,9 +40,9 @@ export function SeatPathCard({ path }: { path: SeatPath }) {
           href={`/paths#${path.id}`}
           className="-m-1 block min-w-0 flex-1 rounded-lg p-1 outline-none focus-visible:ring-2 focus-visible:ring-ember focus-visible:ring-offset-2"
         >
-          <h3 className="text-2xl font-medium tracking-tight text-slate-900">{path.title}</h3>
-          <p className="mt-3 text-base leading-relaxed text-slate-600">{path.line}</p>
-          <p className="mt-3 text-base text-slate-500">{path.who}</p>
+          <h3 className="text-xl font-semibold tracking-tight text-slate-900">{path.title}</h3>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">{path.line}</p>
+          <p className="mt-2 text-sm text-slate-500">{path.who}</p>
         </Link>
         <button
           type="button"
