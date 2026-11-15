@@ -7,35 +7,35 @@ const products = [
     price: "$129",
     blurb: "Gap tables by family and level, LINEST regression on log salary, per-employee flags. Framed as a first-pass screening tool, not a legal audit.",
     gumroad: "https://mikezll.gumroad.com/l/rocvf",
-    image: "/brand/equity-product.jpg",
+    image: "/store/pay-equity.png",
   },
   {
     name: "4-Year Total Wealth Projector",
     price: "$99",
     blurb: "One offer in, four-year trajectory and a one-page summary out. Does not test against internal equity or ranges.",
     gumroad: "https://mikezll.gumroad.com/l/ekxdhs",
-    image: "/brand/product-closer.jpg",
+    image: "/store/projector.png",
   },
   {
     name: "Merit and Bonus Workbook",
     price: "$99",
     blurb: "21-point checklist, editable 5x3 merit matrix, merit model with equity-risk flags, bonus model with proration.",
     gumroad: "https://mikezll.gumroad.com/l/ysdqcwe",
-    image: "/brand/product-merit.jpg",
+    image: "/store/merit-workbook.png",
   },
   {
     name: "Market Data Cleaner Template",
     price: "$79",
     blurb: "Rules-and-formulas layer only (title/location maps, FX, aging, QC flags). Practitioner-run layer, not the TRA Cleaner engine.",
     gumroad: "https://mikezll.gumroad.com/l/kwshs",
-    image: "/brand/product-cleaner.jpg",
+    image: "/store/cleaner.png",
   },
   {
     name: "Clean Your HRIS Extract Before a Cycle",
     price: "$49",
     blurb: "5-page PDF guide plus a 2:54 narrated walkthrough film teaching the five cleaning passes.",
     gumroad: "https://mikezll.gumroad.com/l/bbfqc",
-    image: "/brand/product-guide.jpg",
+    image: "/store/hris-bundle.png",
   },
 ];
 
@@ -44,7 +44,7 @@ export default function StorePage() {
     <div className="mx-auto max-w-6xl px-4 py-10">
       <div className="relative mb-8 overflow-hidden rounded-2xl bg-slate-900">
         <img
-          src="/brand/store-hero.jpg"
+          src="/store/comp-toolkit.png"
           alt="TRA Store"
           className="h-48 w-full object-cover opacity-80 sm:h-56"
         />
