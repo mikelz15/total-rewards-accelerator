@@ -14,7 +14,7 @@ export default function ContestPage() {
       <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
         Design Partner Year
       </h1>
-      <p className="mt-1 text-sm leading-relaxed text-slate-500">Applications open December 1, 2026. Winners announced January 2, 2027.</p>
+      <p className="mt-1 text-sm leading-relaxed text-slate-500">Applications open December 1, 2026. Applications close December 31, 2026. Winners are announced January 2, 2027.</p>
 
       <video
         className="mt-8 w-full rounded-xl border border-slate-200 shadow-sm"
@@ -29,7 +29,7 @@ export default function ContestPage() {
           <h2 className="text-2xl font-semibold tracking-tight text-slate-900">The offer</h2>
           <p className="mt-2">
             Three companies will receive one year of Total Rewards Accelerator free, with up to 5 licenses each.
-            This is a selective program, not a raffle. Applications open December 1, 2026. Winners are announced January 2, 2027.
+            This is a selective program, not a raffle. Applications open December 1, 2026. Applications close December 31, 2026. Winners are announced January 2, 2027.
           </p>
         </section>
 
