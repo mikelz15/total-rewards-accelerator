@@ -16,6 +16,14 @@ export default function ContestPage() {
       </h1>
       <p className="mt-1 text-sm leading-relaxed text-slate-500">Applications open December 1, 2026. Winners announced January 2, 2027.</p>
 
+      <video
+        className="mt-8 w-full rounded-xl border border-slate-200 shadow-sm"
+        controls
+        preload="metadata"
+        playsInline
+        src="/contest-clip.mp4"
+      />
+
       <div className="mt-12 space-y-10 text-lg leading-relaxed text-slate-700">
         <section>
           <h2 className="text-2xl font-semibold tracking-tight text-slate-900">The offer</h2>
