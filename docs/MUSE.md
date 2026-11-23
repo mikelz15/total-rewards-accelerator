@@ -10,10 +10,18 @@ Propose-only compensation connector for agents (Meta Muse or others). Reuses TRA
 - PHI header scan rejects sensitive columns (SSN, DOB, address, etc.).
 - In-memory job store (max 32 jobs / 500 rows). Not a system of record.
 
-## Auth
+## Auth & key management
 
-Bearer API key (`Authorization: Bearer <key>`).  
-Keys from `MUSE_API_KEYS` (comma-separated). Default test key: `tra_test_review`.
+Bearer API key (`Authorization: Bearer <key>`).
+
+Keys from env `MUSE_API_KEYS` (comma-separated). Default test key if unset: `tra_test_review`.
+
+**Production:**
+1. Generate strong keys (e.g. `openssl rand -hex 24`).
+2. Set `MUSE_API_KEYS=key1,key2` on the Render service.
+3. Rotate by adding a new key, deploying, then removing the old key after clients update.
+4. Never commit live keys. Document rotation in the runbook; prefer short-lived review keys over long-lived ones.
+5. Health endpoint does not expose keys.
 
 ## Endpoints
 
@@ -32,11 +40,20 @@ Base: `https://tra-api-starter.onrender.com/v1`
 
 All analysis steps except `/closer` require a prior `job_id` from `/clean`.
 
+## OpenAPI
+
+FastAPI auto-generates OpenAPI at `https://tra-api-starter.onrender.com/openapi.json`.
+
+Muse paths appear under the `muse` tag. Request/response models are the Pydantic classes in the router. For polish:
+- Add response examples via `responses=` or schema examples on models.
+- Ensure tags and descriptions stay accurate.
+- Client snippets can be generated from the live OpenAPI.
+
 ## Code
 
 - Router: `api/app/routers/muse.py`
 - Mounted in `api/app/main.py`
-- Tests: `api/tests/test_muse_clean.py` (blank-file / parse guards)
+- Tests: `api/tests/test_muse_clean.py` (blank/parse) and `api/tests/test_muse_endpoints.py` (full flow, PHI, act, auth)
 - Public page: `web/src/app/muse/page.tsx`
 
 ## Relation to TRA
@@ -45,10 +62,8 @@ Reuses the same services as the public demo and SaaS routes (`cleaner`, `placeme
 
 ## Next build items
 
-- Expand test coverage (place / audit / fund / closer / brief / PHI rejection).
-- Production key rotation and key management.
 - Optional durable job store if review workflows grow.
 - Stripe entitlements for paid Muse usage (if desired).
-- OpenAPI polish and example client snippets.
+- Example client snippets in this doc.
 
 See also the live `/muse` page and `docs/STRIPE-SETUP.md` for related commercial groundwork.
