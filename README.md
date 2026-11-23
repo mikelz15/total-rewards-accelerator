@@ -2,12 +2,11 @@
 
 **Stop crunching rows. Start designing strategy.**
 
-Mikéz Comp Engineering Toolkit — a thin full-stack MVP of the portfolio program in  
-`Michael L Lopez Portfolio 2025 / 7. Total Rewards Accelerator *Program Created*`.
+Mikéz Comp Engineering Toolkit — modular compensation engines for market data cleaning, pay equity + merit, candidate tracking, and four-year total wealth projection. Public demo is open; SaaS workspace is live at https://totalrewardsaccelerator.com.
 
 ## Modules
 
-Canonical list. If this table changes, follow [docs/SYSTEM-CHANGE-PROTOCOL.md](docs/SYSTEM-CHANGE-PROTOCOL.md) before the commit is done.
+Canonical list. If this table changes, follow [docs/SYSTEM-CHANGE-PROTOCOL.md](docs/SYSTEM-CHANGE-PROTOCOL.md).
 
 | # | Module | Route | Commercial |
 |---|--------|-------|------------|
@@ -16,113 +15,49 @@ Canonical list. If this table changes, follow [docs/SYSTEM-CHANGE-PROTOCOL.md](d
 | 03 | **Cycle Lock** | `/cycle` | Not a separate invoice |
 | 04 | **Candidate Tracker** | `/candidates` | Own price |
 | 05 | **Candidate Closer** | `/closer` | Own price |
+| — | **Muse connector** | `/muse` | Propose-only API for agents |
 
 Full suite is $499/mo or $4,990/year and includes Cycle Lock.
 
 **Three-Click Philosophy:** no action, analysis, or remediation should take more than three clicks.
 
+## Muse connector (propose-only)
+
+Agent-facing API at `https://tra-api-starter.onrender.com/v1` (Bearer key). Verbs: clean, place, audit, fund, closer, brief. No writeback, no email, no system-of-record. Humans post pay. See `/muse` page and `api/app/routers/muse.py`.
+
 ## Stack
 
-- **Web:** Next.js 14 (App Router) + TypeScript + Tailwind + Recharts  
-- **Mobile:** Expo (React Native) + Expo Router — see `mobile/`  
-- **API:** FastAPI + pandas + ReportLab  
-- **Path:** `~/Desktop/Total_Rewards_Accelerator`
+- **Web:** Next.js 14 (App Router) + TypeScript + Tailwind + Recharts (Vercel)
+- **API:** FastAPI + pandas + ReportLab (Render)
+- **Auth / data:** Supabase (SaaS) + in-memory demo
+- **Billing:** Stripe (groundwork in code; setup pending)
 
-### Mobile
+## Live
 
-```bash
-cd ~/Desktop/Total_Rewards_Accelerator/mobile
-npm install
-npx expo start
-```
+- Public site: https://totalrewardsaccelerator.com
+- API health: https://tra-api-starter.onrender.com/health (v0.6.7)
+- Contest / design-partner page live on main
 
-Tabs: Home · Cleaner · Equity · Tracker · Closer. Details in `mobile/README.md`.
+## Status
 
-## Prerequisites
+Production demo + SaaS scaffold live. Muse connector implemented (propose-only). Stripe billing code present; env + products still to finish. Job Matching module in progress. CI/CD secrets open.
 
-- Node.js 20+ (this machine uses nvm: `export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh"`)
-- Python 3.9+ with packages from `api/requirements.txt`
+See `docs/SAAS-ROADMAP.md`, `docs/STRIPE-SETUP.md`, `docs/PRODUCTION-SAAS.md`.
 
 ## Run locally
 
-### 1. API (port 8000)
-
+API:
 ```bash
-cd ~/Desktop/Total_Rewards_Accelerator/api
-python3 -m pip install --user -r requirements.txt
+cd api
+python3 -m pip install -r requirements.txt
 PYTHONPATH=. python3 -m uvicorn app.main:app --reload --port 8000
 ```
 
-API docs: http://127.0.0.1:8000/docs
-
-### 2. Web (port 3000)
-
+Web:
 ```bash
-export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh"
-cd ~/Desktop/Total_Rewards_Accelerator/web
+cd web
 npm install
 npm run dev
 ```
 
-App: http://localhost:3000
-
-### Demo path (three clicks)
-
-1. Open **Market Data Cleaner** → **Load sample HRIS**  
-2. Click **Send to Pay Equity Auditor** → **Run equity audit**  
-3. Open **Candidate Closer** → **Project total wealth** / **Download PDF**
-
-## Project layout
-
-```
-Total_Rewards_Accelerator/
-├── api/
-│   ├── app/
-│   │   ├── main.py              # FastAPI routes
-│   │   ├── data/sample_hris.csv
-│   │   └── services/
-│   │       ├── cleaner.py
-│   │       ├── auditor.py
-│   │       └── closer.py
-│   └── requirements.txt
-├── web/                         # Next.js frontend
-└── README.md
-```
-
-## Environment
-
-Optional web override:
-
-```bash
-# web/.env.local
-NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
-```
-
-## Status (v0.3.1)
-
-MVP demo-ready — domain logic and UI wired end-to-end with sample data.
-
-**Included now**
-- Cleaner → Auditor/Flight risk → Merit remediation → Candidates → Closer PDF
-- Placement engine (YOE + education) shared across modules
-- **Reset demo** (nav) + one-click sample path
-- **CSV export pack** (cleaned / audit / merit allocations)
-- Optional **demo password** (`DEMO_PASSWORD` on web; optional API header)
-
-**SaaS (in progress, v0.5):** Supabase Auth + Postgres multi-tenant scaffold — `/app` + `/api/v1/*`.  
-See `docs/SAAS-ROADMAP.md`. Public demo remains open.
-
-**Not yet:** Stripe billing, full `/app` Equity+Closer parity, real ML flight-risk, HRIS connectors.
-
-### Hosting
-See `deploy/README.md` (Render blueprint, Vercel web + API, Docker).
-
-### Demo password (optional)
-
-```bash
-# web/.env.local
-DEMO_PASSWORD=pilot2026
-# NEXT_PUBLIC_API_DEMO_PASSWORD=pilot2026   # only if API also sets DEMO_PASSWORD
-```
-
-Built to match the portfolio product narrative (Cleaner · Auditor · Closer · intelligence layer later).
+Demo path: Cleaner → Auditor → Closer.
