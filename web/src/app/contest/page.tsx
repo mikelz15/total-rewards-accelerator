@@ -16,13 +16,28 @@ export default function ContestPage() {
       </h1>
       <p className="mt-1 text-sm leading-relaxed text-slate-500">Applications open December 1, 2026. Applications close December 31, 2026. Winners are announced January 2, 2027.</p>
 
-      <video
-        className="mt-8 w-full rounded-xl border border-slate-200 shadow-sm"
-        controls
-        preload="metadata"
-        playsInline
-        src="/contest-clip.mp4"
-      />
+      <figure className="mt-8">
+        <video
+          className="w-full rounded-xl border border-slate-200 shadow-sm"
+          controls
+          preload="metadata"
+          playsInline
+          poster="/films/tra-hero-contest-v1.jpg"
+          src="/films/tra-hero-contest-v1.mp4"
+        />
+        <figcaption className="mt-2 text-sm text-slate-500">What TRA does, in about 70 seconds.</figcaption>
+      </figure>
+
+      <figure className="mt-8">
+        <video
+          className="w-full rounded-xl border border-slate-200 shadow-sm"
+          controls
+          preload="metadata"
+          playsInline
+          src="/contest-clip.mp4"
+        />
+        <figcaption className="mt-2 text-sm text-slate-500">The Design Partner Year, explained.</figcaption>
+      </figure>
 
       <div className="mt-12 space-y-10 text-lg leading-relaxed text-slate-700">
         <section>
