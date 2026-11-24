@@ -10,6 +10,7 @@ import { BrandLogo } from "@/components/BrandLogo";
 const primary = [
   { href: "/paths", label: "Paths" },
   { href: "/pricing", label: "Pricing" },
+  { href: "/connector-build", label: "Connectors" },
   { href: "/store", label: "Store" },
   { href: "/about", label: "About" },
 ];
