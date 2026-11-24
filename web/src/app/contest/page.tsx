@@ -22,8 +22,8 @@ export default function ContestPage() {
           controls
           preload="metadata"
           playsInline
-          poster="/films/tra-hero-contest-v1.jpg"
-          src="/films/tra-hero-contest-v1.mp4"
+          poster="/films/tra-hero-contest-v2.jpg"
+          src="/films/tra-hero-contest-v2.mp4"
         />
         <figcaption className="mt-2 text-sm text-slate-500">What TRA does, in about 70 seconds.</figcaption>
       </figure>
