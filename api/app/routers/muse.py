@@ -27,7 +27,12 @@ _MAX_ROWS = 500
 
 
 def _keys() -> set[str]:
-    raw = os.environ.get("MUSE_API_KEYS", "tra_test_review").strip()
+    """Accepted Muse API keys from MUSE_API_KEYS (comma-separated).
+
+    Fails closed: when MUSE_API_KEYS is unset or blank, no key is accepted and
+    every keyed route returns 401. There is no built-in default key.
+    """
+    raw = os.environ.get("MUSE_API_KEYS", "").strip()
     return {k.strip() for k in raw.split(",") if k.strip()}
 
 
@@ -262,5 +267,7 @@ def brief(payload: BriefRequest, authorization: Optional[str] = Header(default=N
 
 
 @router.post("/act")
-def act() -> None:
+def act(authorization: Optional[str] = Header(default=None, include_in_schema=False)) -> None:
+    # Authenticate first (401 on missing/invalid key), then hard-block (403).
+    require_key(authorization)
     raise HTTPException(status_code=403, detail="Confirm-chip: Muse may propose. Humans post pay.")
