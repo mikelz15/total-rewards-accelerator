@@ -15,10 +15,16 @@ from app.main import app
 from app.routers.muse import _JOBS, CleanRequest, dataframe_for_clean
 
 
+_TEST_KEY = "unit_test_key_not_for_production"
+
+
 class MuseEndpointTests(unittest.TestCase):
     def setUp(self) -> None:
+        self._env = patch.dict(os.environ, {"MUSE_API_KEYS": _TEST_KEY})
+        self._env.start()
+        self.addCleanup(self._env.stop)
         self.client = TestClient(app)
-        self.headers = {"Authorization": "Bearer tra_test_review"}
+        self.headers = {"Authorization": f"Bearer {_TEST_KEY}"}
         _JOBS.clear()
 
     def test_missing_key_is_401(self) -> None:
@@ -84,6 +90,37 @@ class MuseEndpointTests(unittest.TestCase):
     def test_act_blocked(self) -> None:
         r = self.client.post("/v1/act", headers=self.headers)
         self.assertEqual(r.status_code, 403)
+
+    def test_act_requires_key(self) -> None:
+        r = self.client.post("/v1/act")
+        self.assertEqual(r.status_code, 401)
+        r = self.client.post("/v1/act", headers={"Authorization": "Bearer wrong"})
+        self.assertEqual(r.status_code, 401)
+
+    def test_old_default_key_rejected(self) -> None:
+        r = self.client.get("/v1/me", headers={"Authorization": "Bearer tra_test_review"})
+        self.assertEqual(r.status_code, 401)
+
+    def test_fails_closed_when_keys_unset(self) -> None:
+        with patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("MUSE_API_KEYS", None)
+            for token in ("tra_test_review", _TEST_KEY, ""):
+                r = self.client.get("/v1/me", headers={"Authorization": f"Bearer {token}"})
+                self.assertEqual(r.status_code, 401, token)
+            r = self.client.post("/v1/act", headers={"Authorization": "Bearer tra_test_review"})
+            self.assertEqual(r.status_code, 401)
+
+    def test_fails_closed_when_keys_blank(self) -> None:
+        with patch.dict(os.environ, {"MUSE_API_KEYS": " , "}):
+            r = self.client.get("/v1/me", headers={"Authorization": "Bearer tra_test_review"})
+            self.assertEqual(r.status_code, 401)
+
+    def test_multiple_keys_accepted(self) -> None:
+        with patch.dict(os.environ, {"MUSE_API_KEYS": f"other_key, {_TEST_KEY}"}):
+            r = self.client.get("/v1/me", headers=self.headers)
+            self.assertEqual(r.status_code, 200)
+            r = self.client.get("/v1/me", headers={"Authorization": "Bearer other_key"})
+            self.assertEqual(r.status_code, 200)
 
     def test_unknown_job_404(self) -> None:
         r = self.client.post("/v1/place", json={"job_id": "job_missing"}, headers=self.headers)

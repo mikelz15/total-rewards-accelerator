@@ -14,7 +14,7 @@ Propose-only compensation connector for agents (Meta Muse or others). Reuses TRA
 
 Bearer API key (`Authorization: Bearer <key>`).
 
-Keys from env `MUSE_API_KEYS` (comma-separated). Default test key if unset: `tra_test_review`.
+Keys from env `MUSE_API_KEYS` (comma-separated). There is no default key: if `MUSE_API_KEYS` is unset or blank, every `/v1` route (including `POST /v1/act`) returns 401. `POST /v1/act` checks the key first (401), then is always hard-blocked (403).
 
 **Production:**
 1. Generate strong keys (e.g. `openssl rand -hex 24`).
