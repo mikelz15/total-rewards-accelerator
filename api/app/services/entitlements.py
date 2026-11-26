@@ -6,9 +6,9 @@ from typing import Any, Dict, Iterable, List, Optional, Set
 
 MODULES = ("cleaner", "equity", "tracker", "closer", "job_match")
 
-# Public demo stays at 10 rows. A paid plan holds this many. Trial stays 5,000.
-PAID_MAX_ROWS = 25000
-TRIAL_MAX_ROWS = 5000
+# Public demo stays at 10 rows. Paid plans and trial have no practical cap.
+PAID_MAX_ROWS = 10_000_000
+TRIAL_MAX_ROWS = 10_000_000
 PAID_PLANS = frozenset({"starter", "suite", "pilot"})
 
 ALL_MODULES: Set[str] = set(MODULES)
